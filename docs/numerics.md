@@ -6,6 +6,8 @@
 `project_draft_m` to set design metadata explicitly after scaling the mesh. When
 omitted, stored dimensions scale with the geometry. Setting metadata does not
 make actual waterline dimensions equal to the design values.
+The optional `x_offset_m` translates mesh points and, when enabled, markers after
+scaling. It does not move the aft-perpendicular coordinate reference or existing sections.
 
 The native model axes are x longitudinal (forward), y transverse and z upward.
 The adapter assumes the aft perpendicular is x=0, consistent with FreeShip project
