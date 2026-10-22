@@ -60,7 +60,8 @@ def create_server(engine: Engine) -> MCPServer:
     async def scale_model(model_path: str, output_path: str, x_factor: float, y_factor: float,
                           z_factor: float, allow_locked: bool = False, scale_markers: bool = True,
                           encoding: str = "cp1252", project_length_m: float | None = None,
-                          project_beam_m: float | None = None, project_draft_m: float | None = None) -> dict:
+                          project_beam_m: float | None = None, project_draft_m: float | None = None,
+                          x_offset_m: float = 0) -> dict:
         """Native XYZ scaling. Optional project dimensions explicitly set design metadata after geometry scaling.
         Otherwise stored dimensions scale with the mesh. Existing sections remain fixed; regenerate explicitly.
         """
@@ -70,9 +71,11 @@ def create_server(engine: Engine) -> MCPServer:
                     ("project_beam_m", project_beam_m), ("project_draft_m", project_draft_m)) if value is not None}
         for name, value in settings.items():
             finite(value, name, positive=True)
+        finite(x_offset_m, "x_offset_m")
         return await engine.call("scale_model", model_path, output_path=output_path,
                                  x_factor=x_factor, y_factor=y_factor, z_factor=z_factor,
-                                 allow_locked=allow_locked, scale_markers=scale_markers, encoding=encoding, **settings)
+                                 allow_locked=allow_locked, scale_markers=scale_markers, encoding=encoding,
+                                 x_offset_m=x_offset_m, **settings)
 
     @safe_tool()
     async def rebuild_hull(model_path: str, output_path: str, displacement_t: float, lcb_value: float,

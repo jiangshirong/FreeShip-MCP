@@ -65,11 +65,14 @@ def test_scale_invariants_and_layers(engine):
 def test_explicit_project_dimensions_after_scale(engine):
     run(engine.call("scale_model", "箱体-Корпус.fbm", output_path="settings.fbm",
                     x_factor=1.5, y_factor=1, z_factor=2,
-                    project_length_m=20, project_beam_m=6, project_draft_m=4))
+                    project_length_m=20, project_beam_m=6, project_draft_m=4, x_offset_m=3))
     info = run(engine.call("inspect_model", "settings.fbm"))
     assert (info["length_m"], info["beam_m"], info["draft_m"]) == (20, 6, 4)
     h = run(engine.call("calculate_hydrostatics", "settings.fbm", draft_m=4))
     assert h["volume_geometry_m3"] == pytest.approx(30 * 6 * 4, rel=2e-6)
+    assert h["lcb_ap_m"] == pytest.approx(18, abs=2e-4)
+    assert h["waterline_min_m"][0] == pytest.approx(3, abs=2e-4)
+    assert h["waterline_max_m"][0] == pytest.approx(33, abs=2e-4)
 
 
 def test_appendage_and_imperial_conversion(engine):

@@ -1,4 +1,5 @@
 .gitattributes
+.github/workflows/publish.yml
 .github/workflows/windows.yml
 .gitignore
 LICENSE

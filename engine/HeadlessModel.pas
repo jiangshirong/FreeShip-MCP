@@ -115,6 +115,8 @@ begin
     Result.Add('vcb_m',D.CenterOfBuoyancy.Z*F);
     Result.Add('lcb_midship_fraction',D.CenterOfBuoyancy.X/M.ProjectSettings.ProjectLength-0.5);
     Result.Add('waterline_length_m',D.LengthWaterline*F); Result.Add('waterline_beam_m',D.BeamWaterline*F);
+    Result.Add('waterline_min_m',CoordinateJSON(D.WlMin,F));
+    Result.Add('waterline_max_m',CoordinateJSON(D.WlMax,F));
     Result.Add('waterplane_area_m2',D.Waterplanearea*F*F); Result.Add('lcf_ap_m',D.WaterplaneCOG.X*F);
     Result.Add('bm_transverse_m',(D.KMtransverse-D.CenterOfBuoyancy.Z)*F);
     Result.Add('bm_longitudinal_m',(D.KMlongitudinal-D.CenterOfBuoyancy.Z)*F);
@@ -343,6 +345,23 @@ begin
           for I:=0 to M.Surface.NumberOfControlPoints-1 do
             if M.Surface.ControlPoint[I].Locked then raise Exception.Create('Model has locked points; allow_locked must be explicit');
         M.Edit.Model_Scale(P,Request.Get('allow_locked',False),Request.Get('scale_markers',True)); M.Built:=False;
+        if Request.Get('x_offset_m',0.0)<>0 then
+        begin
+          for I:=0 to M.Surface.NumberOfControlPoints-1 do
+          begin
+            P:=M.Surface.ControlPoint[I].Coordinate;
+            P.X:=P.X+Request.Get('x_offset_m',0.0)/F;
+            M.Surface.ControlPoint[I].Coordinate:=P;
+          end;
+          if Request.Get('scale_markers',True) then
+            for I:=0 to M.NumberOfMarkers-1 do
+              for J:=0 to M.Marker[I].NumberOfPoints-1 do
+              begin
+                P:=M.Marker[I].Point[J]; P.X:=P.X+Request.Get('x_offset_m',0.0)/F;
+                M.Marker[I].Point[J]:=P;
+              end;
+          M.Built:=False;
+        end;
         if Request.Find('project_length_m')<>nil then
         begin
           if Request.Get('project_length_m',0.0)<=0 then raise Exception.Create('Project length must be positive');
