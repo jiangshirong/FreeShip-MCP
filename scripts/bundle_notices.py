@@ -10,11 +10,11 @@ out = root / "src/freeship_mcp/licenses"
 out.mkdir(exist_ok=True)
 
 def copy_notice(package: str, source: Path):
-    content = source.read_bytes()
+    content = source.read_bytes().replace(b"\r\n", b"\n")
     # Wheel RECORD ordering differs between installers. Reuse a committed notice
     # with identical contents instead of naming it by its RECORD entry number.
     for existing in sorted(out.glob(f"{package}-*")):
-        if existing.is_file() and existing.read_bytes() == content:
+        if existing.is_file() and existing.read_bytes().replace(b"\r\n", b"\n") == content:
             return
     digest = hashlib.sha256(content).hexdigest()[:12]
     (out / f"{package}-{digest}-{source.name}").write_bytes(content)
