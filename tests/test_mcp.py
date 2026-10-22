@@ -32,7 +32,7 @@ def test_real_stdio_full_chain(tmp_path, runtime):
             async with ClientSession(reader, writer) as client:
                 await client.initialize()
                 tools = await client.list_tools()
-                assert len(tools.tools) == 11
+                assert len(tools.tools) == 13
                 async def call(name, **kwargs):
                     result = await client.call_tool(name, kwargs)
                     assert not result.is_error, result
@@ -46,6 +46,12 @@ def test_real_stdio_full_chain(tmp_path, runtime):
                 await call("save_model", model_path="hull.fbm", output_path="saved.ftm")
                 await call("scale_model", model_path="saved.ftm", output_path="scaled.fbm", x_factor=1.1, y_factor=1.1, z_factor=1.1)
                 h = await call("calculate_hydrostatics", model_path="scaled.fbm", draft_m=3.3)
+                check = await call("verify_model_targets", model_path="scaled.fbm", draft_m=3.3,
+                    targets=[{"metric":"project_length_m", "expected":44, "absolute_tolerance":.001},
+                             {"metric":"displacement_t", "expected":h["displacement_t"], "absolute_tolerance":.001},
+                             {"metric":"section_top_above_keel_m", "section_x_m":22, "expected":6.6, "absolute_tolerance":.01}])
+                assert check["status"] == "passed", check
+                assert check["checks"][0]["basis"]["geometry_verified"] is False
                 await call("rebuild_hull", model_path="scaled.fbm", output_path="rebuilt.fbm",
                            displacement_t=h["displacement_t"] * 1.01, lcb_value=h["lcb_ap_m"],
                            lcb_reference="aft_perpendicular_m", layer_indices=[0])
@@ -60,6 +66,14 @@ def test_real_stdio_full_chain(tmp_path, runtime):
                 series = await call("calculate_hydrostatics_series", model_path="sections.fbm", drafts_m=[0, 1, 2, 3.3])
                 await call("export_hydrostatics", model_path="sections.fbm", output_path="hydro.xlsx", drafts_m=[0, 1, 2, 3.3])
                 await call("export_hydrostatics", model_path="sections.fbm", output_path="hydro.csv", drafts_m=[0, 1, 2, 3.3])
+                for exported in ("hydro.xlsx", "hydro.csv", "lines.dxf"):
+                    check = await call("check_export_source", model_path="sections.fbm", export_path=exported)
+                    assert check["status"] == "current"
+                wrong = await call("check_export_source", model_path="hull.fbm", export_path="hydro.xlsx")
+                assert wrong["status"] == "stale_or_modified" and not wrong["model_matches"]
+                with (tmp_path/"hydro.csv").open("a",encoding="utf-8") as stream:stream.write("tampered")
+                wrong = await call("check_export_source", model_path="sections.fbm", export_path="hydro.csv")
+                assert wrong["status"] == "stale_or_modified" and not wrong["artifact_matches"]
                 bad = await client.call_tool("inspect_model", {"model_path": "../outside.fbm"})
                 assert bad.is_error
                 return series["rows"]
@@ -69,11 +83,14 @@ def test_real_stdio_full_chain(tmp_path, runtime):
     for i, row in enumerate(rows, 2):
         for j, field in enumerate(FIELDS, 1):
             actual = book["Hydrostatics"].cell(i, j).value
-            expected = row[field]
+            expected = row.get(field)
             if isinstance(expected, bool):
                 assert actual == expected
-            else:
+            elif expected is not None:
                 assert actual == pytest.approx(expected, rel=1e-14, abs=1e-14)
+            else:
+                assert actual is None
+    assert book['Provenance']['A2'].value == 'schema_version'
     for chart in book["Curves"]._charts:
         assert chart.series[0].xVal.numRef.f == "'Hydrostatics'!$A$2:$A$5"
     assert book["Hydrostatics"].print_title_rows == "$1:$1"

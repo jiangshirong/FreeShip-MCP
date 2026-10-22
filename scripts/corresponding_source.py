@@ -2,12 +2,14 @@
 from pathlib import Path
 import argparse
 import tarfile
+import tomllib
 
 ROOT = Path(__file__).resolve().parents[1]
 parser = argparse.ArgumentParser()
 parser.add_argument("--lazarus-dir", type=Path, default=ROOT/".toolchain/lazarus")
 args = parser.parse_args()
-source_package = ROOT/"dist/freeship_mcp-0.1.0.tar.gz"
+version = tomllib.loads((ROOT/"pyproject.toml").read_text(encoding="utf-8"))["project"]["version"]
+source_package = ROOT/f"dist/freeship_mcp-{version}.tar.gz"
 if not source_package.is_file():
     raise SystemExit("Build the application sdist first")
 output = ROOT/"dist/FreeShip-MCP-corresponding-source.tar.gz"

@@ -29,8 +29,8 @@ or deletes the original project.
 
 ## Outputs
 
-- `dist/freeship_mcp-0.1.0-py3-none-win_amd64.whl`: Python MCP package with engine and notices.
-- `dist/freeship_mcp-0.1.0.tar.gz`: matching application source, vendored FreeShip and build scripts.
+- `dist/freeship_mcp-0.2.0-py3-none-win_amd64.whl`: Python MCP package with engine and notices.
+- `dist/freeship_mcp-0.2.0.tar.gz`: matching application source, vendored FreeShip and build scripts.
 - `dist/FreeShip-MCP-Windows-x64.zip`: standalone program, bundled Python runtime and native engine.
 - `dist/standalone/freeship-mcp/freeship-mcp.exe`: unpacked standalone entry point.
 - `dist/FreeShip-MCP-corresponding-source.tar.gz`: matching application archive plus the
@@ -56,9 +56,9 @@ New tools belong in `server.py`; model mathematics belongs in the Pascal adapter
 `engine.py` confines paths, runs one subprocess per call and publishes outputs only after
 successful native reload. Timeout, cancellation and failed iterations remove temporary outputs.
 
-源码公开清单由 `scripts/audit_public.py` 检查。课程模型、课程数值、私人验收报告、构建日志、
-工具链与发布包不进入 Git 源码仓库。首次发布前检查完整暂存清单；本项目脚本不创建远程仓库、
-不上传附件、不执行 push。
+The public source allowlist is checked by `scripts/audit_public.py`. Local model data,
+private reports, build logs, toolchains and release packages are excluded from the source
+repository. Inspect the staged allowlist before publishing.
 
 ## Troubleshooting / 故障排查
 

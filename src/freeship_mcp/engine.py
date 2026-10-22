@@ -4,6 +4,7 @@ from __future__ import annotations
 import asyncio
 import json
 import math
+import hashlib
 import os
 from pathlib import Path
 import subprocess
@@ -11,7 +12,12 @@ import tempfile
 from typing import Any, Awaitable, Callable
 
 UPSTREAM_COMMIT = "1de17e99fb2b1cc559cdf27c5cafb595a627a641"
-PROTOCOL_VERSION = 1
+PROTOCOL_VERSION = 2
+
+
+def file_identity(path: Path) -> dict:
+    data = path.read_bytes()
+    return {"file_name": path.name, "sha256": hashlib.sha256(data).hexdigest(), "size_bytes": len(data)}
 
 
 class EngineError(RuntimeError):
@@ -115,9 +121,24 @@ class Engine:
         if encoding not in {"cp1251", "cp1252", "utf8"}:
             raise ValueError("encoding must be cp1251, cp1252, or utf8")
         model = self.path(model_path)
+        identity = file_identity(model)
+        executable_identity = file_identity(self.executable)
+        provenance = {"schema_version": 1, "model": identity,
+                      "engine": executable_identity, "protocol_version": PROTOCOL_VERSION,
+                      "upstream_commit": UPSTREAM_COMMIT,
+                      "request": {"operation": operation, "encoding": encoding, **params}}
+
+        def verified(result):
+            if file_identity(model) != identity:
+                raise EngineError("Input model changed during calculation; retry using a stable model file")
+            if file_identity(self.executable) != executable_identity:
+                raise EngineError("Engine changed during calculation; restart with a matching package")
+            result["provenance"] = provenance
+            return result
+
         request = dict(operation=operation, model_path=str(model), encoding=encoding, **params)
         if output_path is None:
-            return await self.raw(request, progress)
+            return verified(await self.raw(request, progress))
         target = self.path(output_path, output=True)
         if target == model:
             raise ValueError("Input cannot be overwritten")
@@ -134,6 +155,8 @@ class Engine:
             identical = operation == "save_model" and model.read_bytes() == temp.read_bytes()
             if passthrough and not identical:
                 raise EngineError("Unmodified native write is not byte-identical; refusing a potentially lossy save")
+            verified(result)
+            provenance["output_model"] = {**file_identity(temp), "file_name": target.name}
             # Windows rename fails rather than overwriting if another call won the name.
             temp.rename(target)
             result["output_path"] = str(target)

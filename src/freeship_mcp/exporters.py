@@ -1,6 +1,7 @@
 """Portable report writers consuming only native engine results."""
 from __future__ import annotations
 import csv
+import json
 from pathlib import Path
 import ezdxf
 from openpyxl import Workbook
@@ -14,12 +15,14 @@ FIELDS = [
     "waterline_length_m", "waterline_beam_m", "waterplane_area_m2",
     "block_coefficient", "waterplane_coefficient", "prismatic_coefficient",
     "midship_coefficient", "wetted_surface_m2", "trim_m", "heel_degrees", "no_immersion",
+    "block_coefficient_project_geometry", "waterplane_coefficient_project",
+    "minimum_open_boundary_z_m", "minimum_freeboard_m",
 ]
 CHART_FIELDS = ["displacement_t", "lcb_ap_m", "vcb_m", "lcf_ap_m",
                 "bm_transverse_m", "bm_longitudinal_m", "waterline_length_m", "waterplane_area_m2"]
 
 
-def hydrostatics_report(path: Path, rows: list[dict], display_decimals: int = 2) -> dict:
+def hydrostatics_report(path: Path, rows: list[dict], display_decimals: int = 2, provenance: dict | None = None) -> dict:
     if not rows:
         raise ValueError("At least one hydrostatics row is required")
     if not 0 <= display_decimals <= 8:
@@ -69,6 +72,16 @@ def hydrostatics_report(path: Path, rows: list[dict], display_decimals: int = 2)
         chart.series.append(Series(y, x, title=field))
         chart.width, chart.height = 19, 10
         plots.add_chart(chart, f"{'A' if i % 2 == 0 else 'L'}{1 + (i // 2) * 21}")
+    metadata = book.create_sheet("Provenance")
+    metadata.append(["field", "JSON value"])
+    for key, value in (provenance or {}).items():
+        encoded = json.dumps(value, ensure_ascii=False, allow_nan=False)
+        for start in range(0, len(encoded), 16000):
+            metadata.append([key if start == 0 else key+" (continued)", encoded[start:start+16000]])
+    metadata.append(["coefficient_basis", json.dumps(rows[0].get("coefficient_basis", {}), ensure_ascii=False)])
+    metadata.column_dimensions["A"].width = 25
+    metadata.column_dimensions["B"].width = 100
+    metadata.freeze_panes = "A2"
     book.save(path)
     return {"rows": len(rows), "charts": len(CHART_FIELDS)}
 

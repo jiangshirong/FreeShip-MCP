@@ -14,10 +14,12 @@ from mcp.server.mcpserver import Context
 from mcp.server.mcpserver.exceptions import ToolError
 from .engine import Engine, EngineError, finite, positions
 from .exporters import hydrostatics_report, linesplan_dxf
+from .verification import Target, verify_targets
+from .engine import file_identity
 
 
 def create_server(engine: Engine) -> MCPServer:
-    mcp = MCPServer("FreeShip MCP", version="0.1.0", instructions=(
+    mcp = MCPServer("FreeShip MCP", version="0.2.0", instructions=(
         "Native FreeShip geometry and hydrostatics on Windows. All public physical inputs use metres, "
         "metric tonnes and degrees. All paths are confined to the configured workspace. "
         "Do not infer empirical values or LCB targets. Outputs never overwrite existing files."))
@@ -42,14 +44,46 @@ def create_server(engine: Engine) -> MCPServer:
         return await engine.check()
 
     @safe_tool()
-    async def inspect_model(model_path: str, encoding: str = "cp1252") -> dict:
+    async def inspect_model(model_path: str, encoding: str = "cp1252", include_control_net: bool = False) -> dict:
         """Read FBM/FTM. Separate project dimensions, geometry bounds and layer flags. encoding affects legacy FBM text."""
-        return await engine.call("inspect_model", model_path, encoding=encoding)
+        return await engine.call("inspect_model", model_path, encoding=encoding, include_control_net=include_control_net)
 
     @safe_tool()
     async def validate_model(model_path: str, encoding: str = "cp1252") -> dict:
         """Check topology, adjacent normals and native open-boundary leak candidates. Open deck above water is not automatically a defect."""
         return await engine.call("validate_model", model_path, encoding=encoding)
+
+    @safe_tool()
+    async def verify_model_targets(model_path: str, draft_m: float, targets: list[Target],
+                                   trim_m: float = 0, heel_degrees: float = 0,
+                                   encoding: str = "cp1252") -> dict:
+        """Check explicit targets and absolute tolerances: passed/failed/not_checked.
+        Project settings do not verify geometry. Coefficient metrics explicitly select native or project basis.
+        section_top_above_keel_m requires section_x_m; it is the highest point on hydrostatics surfaces,
+        not automatic main-deck identification. Does not alter the model or infer missing targets.
+        """
+        return await verify_targets(engine, model_path, draft_m, targets, trim_m, heel_degrees, encoding)
+
+    @safe_tool()
+    async def check_export_source(model_path: str, export_path: str) -> dict:
+        """Compare an export's manifest hashes with the current model and artifact. Missing manifest is unverified."""
+        model = engine.path(model_path)
+        artifact = engine.path(export_path, suffixes=(".dxf", ".xlsx", ".csv"))
+        sidecar = engine.path(str(artifact)+".manifest.json", output=False, suffixes=(".json",)) if Path(str(artifact)+".manifest.json").exists() else None
+        if sidecar is None:
+            return {"ok": True, "status": "unverified", "reason": "No provenance manifest; regenerate the export"}
+        if sidecar.stat().st_size > 16*1024*1024:
+            raise ValueError("Manifest exceeds 16 MiB")
+        manifest = json.loads(sidecar.read_text(encoding="utf-8"))
+        try:
+            model_match = manifest["provenance"]["model"]["sha256"] == file_identity(model)["sha256"]
+            artifact_match = manifest["artifact"]["sha256"] == file_identity(artifact)["sha256"]
+        except (KeyError, TypeError):
+            raise ValueError("Invalid provenance manifest; regenerate the export")
+        return {"ok": True, "status": "current" if model_match and artifact_match else "stale_or_modified",
+                "model_matches": model_match, "artifact_matches": artifact_match,
+                "provenance": manifest["provenance"],
+                "scope": "Hash consistency only; not proof of geometry validity or manifest authenticity"}
 
     @safe_tool()
     async def save_model(model_path: str, output_path: str, output_version: int = 0, encoding: str = "cp1252") -> dict:
@@ -61,9 +95,15 @@ def create_server(engine: Engine) -> MCPServer:
                           z_factor: float, allow_locked: bool = False, scale_markers: bool = True,
                           encoding: str = "cp1252", project_length_m: float | None = None,
                           project_beam_m: float | None = None, project_draft_m: float | None = None,
-                          x_offset_m: float = 0) -> dict:
+                          x_offset_m: float = 0, z_cut_m: float | None = None,
+                          z_above_factor: float | None = None, project_name: str | None = None,
+                          project_designer: str | None = None, project_comment: str | None = None,
+                          point_updates: list[dict] | None = None) -> dict:
         """Native XYZ scaling. Optional project dimensions explicitly set design metadata after geometry scaling.
-        Otherwise stored dimensions scale with the mesh. Existing sections remain fixed; regenerate explicitly.
+        Otherwise stored dimensions scale with the mesh. x_offset_m translates the scaled mesh along x.
+        Existing sections remain fixed; regenerate explicitly.
+        Optional z_cut_m/z_above_factor scale control-point heights above an explicit plane.
+        This edits geometry; all hydrostatics must be recalculated. Native coefficients remain unchanged.
         """
         for name, value in (("x", x_factor), ("y", y_factor), ("z", z_factor)):
             finite(value, name, positive=True)
@@ -72,6 +112,31 @@ def create_server(engine: Engine) -> MCPServer:
         for name, value in settings.items():
             finite(value, name, positive=True)
         finite(x_offset_m, "x_offset_m")
+        if (z_cut_m is None) != (z_above_factor is None):
+            raise ValueError("Provide z_cut_m and z_above_factor together")
+        if z_above_factor is not None:
+            finite(z_cut_m, "z_cut_m"); finite(z_above_factor, "z_above_factor", positive=True)
+            settings.update(z_cut_m=z_cut_m, z_above_factor=z_above_factor)
+        for name, value in (("project_name", project_name), ("project_designer", project_designer),
+                            ("project_comment", project_comment)):
+            if value is not None:
+                if "\x00" in value or len(value)>4096:
+                    raise ValueError(f"Invalid {name}")
+                settings[name]=value
+        if point_updates is not None:
+            if len(point_updates)>100000:
+                raise ValueError("Too many point updates")
+            seen=set()
+            for point in point_updates:
+                if set(point)-{"index","x_m","y_m","z_m"} or "index" not in point:
+                    raise ValueError("Point updates require index and explicit x_m/y_m/z_m coordinates")
+                index=point["index"]
+                if type(index) is not int or index<0 or index in seen:
+                    raise ValueError("Point indices must be unique nonnegative integers")
+                seen.add(index)
+                for key,value in point.items():
+                    if key!="index":finite(value,key)
+            settings["point_updates"]=point_updates
         return await engine.call("scale_model", model_path, output_path=output_path,
                                  x_factor=x_factor, y_factor=y_factor, z_factor=z_factor,
                                  allow_locked=allow_locked, scale_markers=scale_markers, encoding=encoding,
@@ -158,7 +223,7 @@ def create_server(engine: Engine) -> MCPServer:
         """Export metre-based 2D profile/plan/body views of native intersection splines, sampled exactly as the upstream DXF exporter."""
         target = engine.path(output_path, output=True, suffixes=(".dxf",))
         geometry = await engine.call("linesplan_geometry", model_path, encoding=encoding)
-        return await write_export(target, lambda p: linesplan_dxf(p, geometry))
+        return await write_export(target, lambda p: linesplan_dxf(p, geometry), geometry["provenance"])
 
     @safe_tool()
     async def export_hydrostatics(model_path: str, output_path: str, ctx: Context,
@@ -170,22 +235,43 @@ def create_server(engine: Engine) -> MCPServer:
         target = engine.path(output_path, output=True, suffixes=(".csv", ".xlsx"))
         result = await calculate_hydrostatics_series(model_path, ctx=ctx, drafts_m=drafts_m,
             draft_range_m=draft_range_m, trim_m=trim_m, heel_degrees=heel_degrees, encoding=encoding)
-        return await write_export(target, lambda p: hydrostatics_report(p, result["rows"], display_decimals))
+        provenance = {**result["provenance"], "export": {"format": target.suffix.lower(), "display_decimals": display_decimals},
+            "coefficient_basis_by_draft": [{"draft_m": row["draft_m"], "basis": row["coefficient_basis"]} for row in result["rows"]]}
+        return await write_export(target, lambda p: hydrostatics_report(p, result["rows"], display_decimals, provenance), provenance)
 
     return mcp
 
 
-async def write_export(target: Path, writer) -> dict:
+async def write_export(target: Path, writer, provenance: dict) -> dict:
+    sidecar = Path(str(target)+".manifest.json")
+    if sidecar.exists():
+        raise FileExistsError("Export manifest exists; choose a new filename")
     fd, name = tempfile.mkstemp(prefix=".freeship-", suffix=target.suffix, dir=target.parent)
     os.close(fd)
     temporary = Path(name)
+    manifest_temp = None
+    published = False
     try:
         # Writers are finite local serialization; native calculation has already completed.
         result = writer(temporary)
+        manifest = {"schema_version": 1, "provenance": provenance,
+                    "artifact": {**file_identity(temporary), "file_name": target.name}}
+        fd, manifest_name = tempfile.mkstemp(prefix=".freeship-", suffix=".json", dir=target.parent)
+        os.close(fd)
+        manifest_temp = Path(manifest_name)
+        manifest_temp.write_text(json.dumps(manifest, ensure_ascii=False, indent=2, allow_nan=False), encoding="utf-8")
         temporary.rename(target)
-        return {"ok": True, "output_path": str(target), **result}
+        published = True
+        manifest_temp.rename(sidecar)
+        return {"ok": True, "output_path": str(target), "manifest_path": str(sidecar), "provenance": provenance, **result}
+    except BaseException:
+        if published:
+            target.unlink(missing_ok=True)
+        raise
     finally:
         temporary.unlink(missing_ok=True)
+        if manifest_temp is not None:
+            manifest_temp.unlink(missing_ok=True)
 
 
 def main():

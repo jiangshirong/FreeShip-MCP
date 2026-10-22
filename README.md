@@ -11,7 +11,7 @@ intersection, hydrostatic and Lackenby mathematics with a nonvisual entry point.
 
 ## Installation
 
-**Preview release:** [v0.1.0 downloads](https://github.com/jiangshirong/FreeShip-MCP/releases/tag/v0.1.0).
+**Preview release:** [v0.2.0 downloads](https://github.com/jiangshirong/FreeShip-MCP/releases/tag/v0.2.0).
 The standalone `FreeShip-MCP-Windows-x64.zip` needs no Python installation. Extract it,
 point your MCP `command` at `freeship-mcp.exe` and pass `--workspace C:\HullWork`.
 It includes the Python runtime and native engine.
@@ -21,7 +21,7 @@ the engine** from a release or a local build:
 
 ```powershell
 py -3.11 -m venv .venv
-.venv\Scripts\python -m pip install .\freeship_mcp-0.1.0-py3-none-win_amd64.whl
+.venv\Scripts\python -m pip install .\freeship_mcp-0.2.0-py3-none-win_amd64.whl
 .venv\Scripts\freeship-mcp --workspace C:\HullWork --check
 ```
 
@@ -55,6 +55,8 @@ all output files must remain inside that workspace, including resolved junction 
 | `engine_info` | Check engine version and capabilities |
 | `inspect_model` | Stored dimensions, actual geometry bounds, layers, units and sections |
 | `validate_model` | Topology, adjacent face normals and native leak candidates |
+| `verify_model_targets` | Explicit tolerances, geometry/settings separation and coefficient bases |
+| `check_export_source` | Detect an export made from a different model or a modified artifact |
 | `save_model` | New FBM/FTM; preserve version or explicitly select 335/462 |
 | `scale_model` | Native XYZ mesh and project scaling |
 | `rebuild_hull` | Lackenby with explicit displacement, LCB and selected layer indices |
@@ -68,10 +70,17 @@ Physical API values use **metres, metric tonnes, m², m³ and degrees**, even fo
 models. Legacy model text encoding is explicit (`cp1252`, `cp1251` or `utf8`).
 See [units and numerical semantics](docs/numerics.md) before setting transform targets.
 
+`scale_model` accepts explicit `project_length_m`, `project_beam_m`, and `project_draft_m`
+overrides after geometry scaling, plus `x_offset_m` for longitudinal translation.
+Existing section positions remain fixed and must be regenerated. Hydrostatics separately
+reports the actual waterline bounds; project metadata are not geometry verification.
+Explicit control-point and upper-plane edits, deck-edge clearance and separate
+project-basis coefficients are described in [numerical semantics](docs/numerics.md).
+
 ## Example workflow
 
 Generate the original synthetic examples with `python scripts/create_examples.py --output-dir C:\HullWork`
-after building the engine. Example model data are self-created; no course or private model is included.
+after building the engine. Examples include a rectangular box and a synthetic hull.
 
 1. Inspect and validate a model.
 2. Scale its actual mesh to desired dimensions; regenerate section positions afterward.
@@ -85,6 +94,9 @@ Section and hydrostatic-series tools also accept ranges `[start_m, end_m, step_m
 The endpoint is included when the step lands on it; an off-grid endpoint is not appended.
 
 ## Scope
+
+See [target verification and export provenance](docs/target-verification.md) for
+the 0.2.0 acceptance API and export manifest format. Keep manifests beside exports.
 
 This is an early preview. Synthetic numerical tests and local Windows integration tests
 are provided; broader real-hull validation is ongoing. Review dimensions, coefficient

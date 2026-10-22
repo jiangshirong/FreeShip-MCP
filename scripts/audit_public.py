@@ -1,4 +1,4 @@
-"""Reviewable source allowlist; no broad git add, private course data or local binaries."""
+"""Reviewable source allowlist excluding private data and local binaries."""
 from pathlib import Path
 import argparse
 import json

@@ -29,8 +29,8 @@ ASCII 路径的目录联接，实际源码仍在原项目中，不移动原文�
 
 | 文件 | 内容 |
 |---|---|
-| `dist/freeship_mcp-0.1.0-py3-none-win_amd64.whl` | Python MCP 包、原生引擎和许可证 |
-| `dist/freeship_mcp-0.1.0.tar.gz` | 对应应用源码、上游源码及构建脚本 |
+| `dist/freeship_mcp-0.2.0-py3-none-win_amd64.whl` | Python MCP 包、原生引擎和许可证 |
+| `dist/freeship_mcp-0.2.0.tar.gz` | 对应应用源码、上游源码及构建脚本 |
 | `dist/FreeShip-MCP-Windows-x64.zip` | 可直接运行的程序，包含 Python 运行环境及引擎 |
 | `dist/FreeShip-MCP-corresponding-source.tar.gz` | 应用源码及构建所用 Lazarus/LCL、FPC 运行库与包源码 |
 
@@ -59,7 +59,7 @@ ASCII 路径的目录联接，实际源码仍在原项目中，不移动原文�
 ## 准备公开仓库
 
 运行 `python scripts/audit_public.py --write-manifest` 生成公开清单，检查后使用
-`--stage` 只暂存清单中的文件。课程模型、私人结果、构建日志和工具链不进入源码仓库。
+`--stage` 只暂存清单中的文件。本地模型、私人结果、构建日志和工具链不进入源码仓库。
 脚本不创建远程仓库，也不上传或推送。CI 定义保存在 `.github/workflows/windows.yml`，
 但只有在 GitHub 实际运行后才能作为远程构建通过的证据。
 

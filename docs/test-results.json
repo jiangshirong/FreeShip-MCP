@@ -1,6 +1,6 @@
 {
   "date": "2026-10-22",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "status": "preview_local_validation_passed",
   "test_platform": "Windows 11 x64",
   "python": "3.11",
@@ -9,7 +9,7 @@
   "widgetset": "nogui",
   "mcp_sdk": "2.3.0",
   "tests": {
-    "passed": 14,
+    "passed": 22,
     "failed": 0,
     "skipped": 0
   },
@@ -21,20 +21,28 @@
     "native_byte_identical_roundtrip": true,
     "original_numerical_sources_unchanged": true,
     "lackenby_native_convergence_and_separate_hydro_residuals": true,
-    "real_mcp_stdio_all_11_tools": true,
     "standalone_stdio_without_development_tools_on_path": true,
     "dxf_reread_and_positions": true,
     "xlsx_values_and_chart_ranges": true,
     "unicode_paths": true,
     "failure_timeout_cancellation_cleanup": true,
-    "public_source_snapshot_clean_build": true,
-    "standalone_installer_smoke": true,
-    "explicit_project_dimensions_after_scale": true
+    "explicit_project_dimensions_after_scale": true,
+    "real_mcp_stdio_all_13_tools": true,
+    "explicit_geometry_target_failure": true,
+    "distinct_coefficient_bases": true,
+    "missing_measurements_not_passed": true,
+    "changed_input_rejected": true,
+    "export_provenance_and_stale_detection": true
   },
   "pending_external_acceptance": [
     "Broader real-hull target validation; inspect returned convergence and 3D hydrostatic residuals",
     "Separate clean Windows 10 and Windows 11 VM validation",
     "GitHub CI to be checked after publication"
   ],
-  "native_engine_sha256": "9dc924c96b26042b190f6ff8b603484b0ff6078be5f8a2b207c68e5e7eefc341"
+  "native_engine_sha256": "28ebccd2655434c634d21085ff82559f701c40e9f0c6236d6955e202cc6d7d31",
+  "protocol_version": 2,
+  "prior_version_checks_not_repeated": [
+    "0.1.0 clean-source snapshot build",
+    "0.1.0 standalone installer smoke test"
+  ]
 }

@@ -69,6 +69,9 @@ begin
   Result.Add('length_m',M.ProjectSettings.ProjectLength*F);
   Result.Add('beam_m',M.ProjectSettings.ProjectBeam*F);
   Result.Add('draft_m',M.ProjectSettings.ProjectDraft*F);
+  Result.Add('project_name',M.ProjectSettings.ProjectName);
+  Result.Add('project_designer',M.ProjectSettings.ProjectDesigner);
+  Result.Add('project_comment',M.ProjectSettings.ProjectComment);
   Result.Add('split_section_m',M.ProjectSettings.ProjectSplitSectionLocation*F);
   Result.Add('density_model_units',M.ProjectSettings.ProjectWaterDensity);
   if M.ProjectSettings.ProjectUnits=fuImperial then
@@ -95,6 +98,7 @@ begin
 end;
 function Hydrostatics(M: TFreeShip; DraftM,TrimM,Heel: Double): TJSONObject;
 var H: TFreeHydrostaticCalc; D: TFreeHydrostaticsData; F,MF,VF,App: Double;
+    Basis,NativeBasis,ProjectBasis: TJSONObject;
 begin
   Result:=TJSONObject.Create; H:=TFreeHydrostaticCalc.Create(M);
   try
@@ -124,7 +128,66 @@ begin
     Result.Add('block_coefficient',D.BlockCoefficient); Result.Add('waterplane_coefficient',D.WaterplaneCoeff);
     Result.Add('prismatic_coefficient',D.PrismCoefficient); Result.Add('midship_coefficient',D.MidshipCoeff);
     Result.Add('wetted_surface_m2',D.WettedSurface*F*F);
+    Result.Add('minimum_open_boundary_z_m',D.Z_min_board*F);
+    Result.Add('minimum_freeboard_m',(D.Z_min_board-M.FindLowestHydrostaticsPoint)*F-DraftM);
+    Result.Add('submerged_min_m',CoordinateJSON(D.SubMin,F));
+    Result.Add('submerged_max_m',CoordinateJSON(D.SubMax,F));
+    Basis:=TJSONObject.Create; NativeBasis:=TJSONObject.Create; ProjectBasis:=TJSONObject.Create;
+    NativeBasis.Add('reference',GetEnumName(TypeInfo(TFreeHydrostaticCoeff),Ord(M.ProjectSettings.ProjectCoefficients)));
+    NativeBasis.Add('block_volume_basis','volume_corrected_m3');
+    NativeBasis.Add('block_formula','corrected_volume / (length * beam * requested_draft)');
+    NativeBasis.Add('waterplane_formula','waterplane_area / (length * beam)');
+    if M.ProjectSettings.ProjectCoefficients=fcActualData then
+    begin
+      NativeBasis.Add('length_m',(D.SubMax.X-D.SubMin.X)*F);
+      NativeBasis.Add('beam_m',(D.SubMax.Y-D.SubMin.Y)*F);
+      NativeBasis.Add('waterplane_length_m',(D.SubMax.X-D.SubMin.X)*F);
+      NativeBasis.Add('waterplane_beam_m',(D.SubMax.Y-D.SubMin.Y)*F);
+    end else begin
+      NativeBasis.Add('length_m',M.ProjectSettings.ProjectLength*F);
+      NativeBasis.Add('beam_m',M.ProjectSettings.ProjectBeam*F);
+      NativeBasis.Add('waterplane_length_m',D.LengthWaterline*F);
+      NativeBasis.Add('waterplane_beam_m',D.BeamWaterline*F);
+    end;
+    NativeBasis.Add('draft_m',DraftM);
+    NativeBasis.Add('volume_m3',D.Volume*VF);
+    NativeBasis.Add('waterplane_area_m2',D.Waterplanearea*F*F);
+    ProjectBasis.Add('block_volume_basis','volume_geometry_m3');
+    ProjectBasis.Add('block_formula','raw_geometry_volume / (project_length * project_beam * requested_draft)');
+    ProjectBasis.Add('waterplane_formula','waterplane_area / (project_length * project_beam)');
+    ProjectBasis.Add('length_m',M.ProjectSettings.ProjectLength*F);
+    ProjectBasis.Add('beam_m',M.ProjectSettings.ProjectBeam*F); ProjectBasis.Add('draft_m',DraftM);
+    ProjectBasis.Add('volume_m3',D.Volume*VF/App);
+    ProjectBasis.Add('waterplane_area_m2',D.Waterplanearea*F*F);
+    Basis.Add('native',NativeBasis); Basis.Add('project_geometry',ProjectBasis);
+    Result.Add('coefficient_basis',Basis);
+    if (M.ProjectSettings.ProjectLength>0) and (M.ProjectSettings.ProjectBeam>0) and (DraftM>0) then
+    begin
+      Result.Add('block_coefficient_project_geometry',D.Volume*VF/App/
+        (M.ProjectSettings.ProjectLength*F*M.ProjectSettings.ProjectBeam*F*DraftM));
+      Result.Add('waterplane_coefficient_project',D.Waterplanearea/
+        (M.ProjectSettings.ProjectLength*M.ProjectSettings.ProjectBeam));
+    end;
   finally H.Free; end;
+end;
+function MeasureSection(M: TFreeShip; X: Double): TJSONObject;
+var S: TFreeIntersection; MinP,MaxP: T3DCoordinate; F: Double;
+begin
+  Result:=TJSONObject.Create; F:=LengthFactor(M);
+  S:=TFreeIntersection.Create(M);
+  try
+    S.IntersectionType:=fiStation; S.Plane:=SetPlane(1,0,0,-X/F);
+    S.UseHydrostaticsSurfacesOnly:=True; S.Rebuild;
+    Result.Add('section_x_m',X); Result.Add('curve_count',S.Count);
+    Result.Add('scope','Highest section point on hydrostatics-enabled surfaces; caller identifies this as main deck when appropriate');
+    if S.Count>0 then
+    begin
+      S.Extents(MinP,MaxP);
+      Result.Add('section_min_m',CoordinateJSON(MinP,F));
+      Result.Add('section_max_m',CoordinateJSON(MaxP,F));
+      Result.Add('section_top_above_keel_m',(MaxP.Z-M.FindLowestHydrostaticsPoint)*F);
+    end;
+  finally S.Free; end;
 end;
 function Validate(M: TFreeShip): TJSONObject;
 var I,J,BadNormals,NonManifold,Degenerate: Integer; E: TFreeSubdivisionControlEdge;
@@ -301,18 +364,18 @@ begin
   end;
 end;
 function ExecuteRequest(Request: TJSONObject): TJSONObject;
-var M: TFreeShip; Op,Path: String; I,J: Integer; F,TargetVol,TargetMass,LCB: Double;
+var M: TFreeShip; Op,Path: String; I,J: Integer; F,TargetVol,TargetMass,LCB,UpperCut,UpperFactor: Double;
     A: TJSONArray; Selected: array of Boolean; Transform: THeadlessLackenby; Success: Boolean;
-    P: T3DCoordinate; H: TJSONObject; Results: TJSONArray;
+    P: T3DCoordinate; H,PointUpdate: TJSONObject; Results: TJSONArray;
 begin
   Op:=Request.Get('operation','');
   if Op='engine_info' then
   begin
-    Result:=TJSONObject.Create; Result.Add('version','0.1.0'); Result.Add('protocol_version',1);
+    Result:=TJSONObject.Create; Result.Add('version','0.2.0'); Result.Add('protocol_version',2);
     Result.Add('upstream_commit','1de17e99fb2b1cc559cdf27c5cafb595a627a641'); Result.Add('headless',True);
     Result.Add('float_type','IEEE 754 single (upstream)');
     Result.Add('operations',TJSONArray.Create(['inspect_model','validate_model','save_model','scale_model',
-      'rebuild_hull','generate_sections','calculate_hydrostatics','calculate_hydrostatics_series','linesplan_geometry','create_box','create_mesh'])); Exit;
+      'rebuild_hull','generate_sections','calculate_hydrostatics','calculate_hydrostatics_series','measure_section','linesplan_geometry','create_box','create_mesh'])); Exit;
   end;
   M:=TFreeShip.Create(nil);
   try
@@ -320,7 +383,8 @@ begin
     else if Op='create_mesh' then MakeMesh(M,Request)
     else LoadModel(M,Request.Get('model_path',''),Request.Get('encoding','cp1252'));
     F:=LengthFactor(M);
-    if Op='calculate_hydrostatics' then
+    if Op='measure_section' then Result:=MeasureSection(M,Request.Get('section_x_m',M.ProjectSettings.ProjectLength*F/2))
+    else if Op='calculate_hydrostatics' then
       Result:=Hydrostatics(M,Request.Get('draft_m',M.ProjectSettings.ProjectDraft*F),Request.Get('trim_m',0.0),Request.Get('heel_degrees',0.0))
     else if Op='calculate_hydrostatics_series' then
     begin
@@ -345,6 +409,21 @@ begin
           for I:=0 to M.Surface.NumberOfControlPoints-1 do
             if M.Surface.ControlPoint[I].Locked then raise Exception.Create('Model has locked points; allow_locked must be explicit');
         M.Edit.Model_Scale(P,Request.Get('allow_locked',False),Request.Get('scale_markers',True)); M.Built:=False;
+        if Request.Find('point_updates')<>nil then
+        begin
+          A:=Request.Arrays['point_updates'];
+          for I:=0 to A.Count-1 do
+          begin
+            PointUpdate:=A.Objects[I]; J:=PointUpdate.Get('index',-1);
+            if (J<0) or (J>=M.Surface.NumberOfControlPoints) then raise Exception.Create('Point index out of range');
+            P:=M.Surface.ControlPoint[J].Coordinate;
+            if PointUpdate.Find('x_m')<>nil then P.X:=PointUpdate.Get('x_m',0.0)/F;
+            if PointUpdate.Find('y_m')<>nil then P.Y:=PointUpdate.Get('y_m',0.0)/F;
+            if PointUpdate.Find('z_m')<>nil then P.Z:=PointUpdate.Get('z_m',0.0)/F;
+            M.Surface.ControlPoint[J].Coordinate:=P;
+          end;
+          M.Built:=False;
+        end;
         if Request.Get('x_offset_m',0.0)<>0 then
         begin
           for I:=0 to M.Surface.NumberOfControlPoints-1 do
@@ -377,6 +456,31 @@ begin
           if Request.Get('project_draft_m',0.0)<=0 then raise Exception.Create('Project draft must be positive');
           M.ProjectSettings.ProjectDraft:=Request.Get('project_draft_m',0.0)/F;
         end;
+        if Request.Find('z_above_factor')<>nil then
+        begin
+          if Request.Find('z_cut_m')=nil then raise Exception.Create('z_cut_m is required with z_above_factor');
+          UpperCut:=Request.Get('z_cut_m',0.0)/F;
+          UpperFactor:=Request.Get('z_above_factor',1.0);
+          if UpperFactor<=0 then raise Exception.Create('z_above_factor must be positive');
+          for I:=0 to M.Surface.NumberOfControlPoints-1 do
+          begin
+            P:=M.Surface.ControlPoint[I].Coordinate;
+            if P.Z>UpperCut then P.Z:=UpperCut+(P.Z-UpperCut)*UpperFactor;
+            M.Surface.ControlPoint[I].Coordinate:=P;
+          end;
+          if Request.Get('scale_markers',True) then
+            for I:=0 to M.NumberOfMarkers-1 do
+              for J:=0 to M.Marker[I].NumberOfPoints-1 do
+              begin
+                P:=M.Marker[I].Point[J];
+                if P.Z>UpperCut then P.Z:=UpperCut+(P.Z-UpperCut)*UpperFactor;
+                M.Marker[I].Point[J]:=P;
+              end;
+          M.Built:=False;
+        end;
+        if Request.Find('project_name')<>nil then M.ProjectSettings.ProjectName:=Request.Get('project_name','');
+        if Request.Find('project_designer')<>nil then M.ProjectSettings.ProjectDesigner:=Request.Get('project_designer','');
+        if Request.Find('project_comment')<>nil then M.ProjectSettings.ProjectComment:=Request.Get('project_comment','');
       end
       else if Op='generate_sections' then AddSections(M,Request)
       else if Op='rebuild_hull' then
@@ -411,6 +515,17 @@ begin
       end
       else if (Op<>'inspect_model') and (Op<>'save_model') and (Op<>'create_box') and (Op<>'create_mesh') then raise Exception.Create('Unknown engine operation');
       if Result=nil then Result:=Inspect(M) else Result.Add('model',Inspect(M));
+      if (Op='inspect_model') and Request.Get('include_control_net',False) then
+      begin
+        Results:=TJSONArray.Create;
+        for I:=0 to M.Surface.NumberOfControlPoints-1 do
+        begin
+          H:=TJSONObject.Create;H.Add('index',I);
+          H.Add('coordinate_m',CoordinateJSON(M.Surface.ControlPoint[I].Coordinate,F));
+          H.Add('locked',M.Surface.ControlPoint[I].Locked);Results.Add(H);
+        end;
+        Result.Add('control_net_points',Results);
+      end;
       if Op<>'inspect_model' then
       begin
         Path:=Request.Get('output_path',''); if Path='' then raise Exception.Create('output_path is required');

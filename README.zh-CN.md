@@ -11,7 +11,7 @@ DXF 型线图和 CSV/Excel 导出。计算使用原生 FreeShip 算法，全程�
 
 ## 安装与连接
 
-从 [v0.1.0 下载页](https://github.com/jiangshirong/FreeShip-MCP/releases/tag/v0.1.0)
+从 [v0.2.0 下载页](https://github.com/jiangshirong/FreeShip-MCP/releases/tag/v0.2.0)
 下载 `FreeShip-MCP-Windows-x64.zip`，适用于 Windows 10/11 x64。
 不需要安装 FreeShip、Python 或 Pascal 编译器。解压后，把 MCP 配置中的
 `command` 指向其中的 `freeship-mcp.exe`，参数同样是 `--workspace` 和工作目录。
@@ -41,7 +41,7 @@ DXF 型线图和 CSV/Excel 导出。计算使用原生 FreeShip 算法，全程�
 
 ```powershell
 py -3.11 -m venv .venv
-.venv\Scripts\python -m pip install .\freeship_mcp-0.1.0-py3-none-win_amd64.whl
+.venv\Scripts\python -m pip install .\freeship_mcp-0.2.0-py3-none-win_amd64.whl
 .venv\Scripts\freeship-mcp --workspace C:\HullWork --check
 ```
 
@@ -65,6 +65,11 @@ Python 安装方式的 MCP 配置示例：
 
 1. `engine_info` 检查引擎；`inspect_model` 读取模型；`validate_model` 检查拓扑、相邻法向和破口候选点。
 2. `scale_model` 缩放控制网格和项目尺度。旧交线的位置不会随之移动，需要下一步明确重建。
+
+   可选 `project_length_m`、`project_beam_m`、`project_draft_m` 在几何缩放后明确设置设计尺度；
+   `x_offset_m` 对缩放后的控制网格沿纵向平移。静水力结果另行返回实际水线范围，不能用设计尺度代替。
+   控制点坐标、上部平面高度变换、甲板开口边界及单独的项目基准系数见
+   [数值含义补充](docs/numerics.md#volume-mass-and-imperial-models)。
 3. `rebuild_hull` 输入目标排水量、浮心坐标及基准、参与变换的图层索引。程序不选择经验值。
 4. 查看 Lackenby 剖面积分残差及实际三维静水力残差，再决定是否采用。
 5. `generate_sections` 输入横剖线、水线、纵剖线的位置。11 个理论站位可取 `L*i/10`，`i=0..10`。
@@ -82,14 +87,18 @@ Excel 的小数位设置只影响显示。
 浮心可选距艉垂线的米数 `aft_perpendicular_m`，或相对船中、向艏为正的船长比例
 `midship_forward_fraction`。例如比例 `0.02` 表示船中前方 `0.02L`。
 
-矩形箱体和合成船型由 `scripts/create_examples.py` 生成，公开仓库不包含课程模型。
+矩形箱体和合成船型由 `scripts/create_examples.py` 生成，可用于测试和熟悉接口。
 阻力、推进、螺旋桨及大倾角稳性不在本版范围内。
 
 ## 当前版本
 
+0.2.0 新增统一目标验收和导出来源核对，现有 13 个工具。详见
+[目标验收与导出清单](docs/target-verification.md)。导出成果的 `.manifest.json`
+应一并保留；服务与引擎需要同时更新到协议 2。
+
 本版为预览版，已进行合成模型数值测试和本机 Windows 集成测试，实际船型的验证仍在继续。
 使用变换结果前，要检查实际尺度、系数的计算基准和返回的残差。
-课设中的经验参数与采用值按老师资料确定，程序不会代为选取。
+目标参数及容差由调用者明确提供，程序不会代为选取。
 
 ## 开发资料
 

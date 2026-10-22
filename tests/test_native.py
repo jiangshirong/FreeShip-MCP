@@ -86,6 +86,33 @@ def test_appendage_and_imperial_conversion(engine):
         assert h["displacement_t"] == pytest.approx(480 * 1.005 * 1.025, rel=5e-6)
 
 
+def test_upper_hull_and_explicit_coefficient_bases(engine):
+    run(engine.call("scale_model", "箱体-Корпус.fbm", output_path="upper.fbm",
+        x_factor=1, y_factor=1, z_factor=1, z_cut_m=4, z_above_factor=.5,
+        project_name="Test vessel", project_designer="", project_comment="Synthetic box"))
+    info=run(engine.call("inspect_model", "upper.fbm"))
+    assert info["geometry_max_m"][2]==pytest.approx(6)
+    assert info["project_name"]=="Test vessel" and info["project_designer"]==""
+    h=run(engine.call("calculate_hydrostatics", "upper.fbm", draft_m=4))
+    assert h["volume_geometry_m3"]==pytest.approx(480,rel=2e-6)
+    assert h["minimum_freeboard_m"]==pytest.approx(2,abs=2e-4)
+    assert h["block_coefficient_project_geometry"]==pytest.approx(1,rel=2e-6)
+    assert h["waterplane_coefficient_project"]==pytest.approx(1,rel=1e-4)
+
+
+def test_explicit_control_net_edit(engine):
+    info=run(engine.call("inspect_model", "箱体-Корпус.fbm", include_control_net=True))
+    points=info["control_net_points"]
+    assert len(points)==8
+    updates=[{"index":p["index"],"y_m":p["coordinate_m"][1]*.9} for p in points]
+    run(engine.call("scale_model", "箱体-Корпус.fbm", output_path="edited.fbm",
+        x_factor=1,y_factor=1,z_factor=1,point_updates=updates))
+    h=run(engine.call("calculate_hydrostatics", "edited.fbm", draft_m=4))
+    assert h["volume_geometry_m3"]==pytest.approx(432,rel=2e-6)
+    assert h["waterline_beam_m"]==pytest.approx(5.4,rel=2e-6)
+    assert h["waterplane_coefficient_project"]==pytest.approx(.9,rel=1e-4)
+
+
 def test_dry_and_invalid_inputs(engine):
     h = run(engine.call("calculate_hydrostatics", "箱体-Корпус.fbm", draft_m=-1))
     assert h["no_immersion"] and h["displacement_t"] == 0

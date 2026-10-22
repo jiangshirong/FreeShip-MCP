@@ -12,7 +12,7 @@ The tests use compiled Pascal calculations, not a Python replacement solver.
   hydrostatic residuals and saved-model reload check.
 - Dry hull, malformed file, infeasible target, timeout and cancellation produce no
   falsely successful output. Unicode Chinese/Cyrillic paths are exercised.
-- A real MCP stdio client initializes, discovers all 11 tools and calls the full chain,
+- A real MCP stdio client initializes, discovers all 13 tools and calls the full chain,
   including model conversion/scaling/transformation, sections, DXF and XLSX/CSV export.
 - DXF is reread/audited independently; Excel data and chart references are checked.
 
@@ -23,6 +23,6 @@ The local validation record is generated in `docs/test-results.json`. It identif
 executed checks and records outstanding external acceptance conditions. CI definitions
 are supplied; a workflow file is not evidence that GitHub CI or a separate clean VM has run.
 
-Course-specific inputs and outputs are intentionally absent. A caller must supply an
-LCB target before a course hull can pass its final transformation acceptance. The server
-never infers this target from a graph or silently retains a prototype value.
+Transformation acceptance requires an explicit displacement and LCB target supplied
+by the caller. The server does not infer empirical targets or silently retain a
+prototype value as a design requirement.

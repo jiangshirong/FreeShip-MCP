@@ -32,6 +32,29 @@ For upright/zero-trim calculations, x is the original model x referenced to the 
 
 ## Volume, mass and imperial models
 
+`inspect_model(include_control_net=True)` returns indexed control-point coordinates
+in metres. `scale_model(point_updates=[...])` accepts explicit, unique point indices
+and optional `x_m`, `y_m`, `z_m` coordinates after XYZ scaling. The paired parameters
+`z_cut_m` and `z_above_factor` map points above that plane to
+`z_cut_m + (z - z_cut_m) * z_above_factor`; points below it remain unchanged.
+These are geometric edits, not project-depth metadata. Recompute hydrostatics and
+regenerate sections after editing. Project name, designer and comment can be set
+explicitly; an empty string clears the corresponding field.
+
+`block_coefficient` and `waterplane_coefficient` retain the native FreeShip reference
+setting. Separate `block_coefficient_project_geometry` and
+`waterplane_coefficient_project` report raw volume divided by stored project
+length × beam × requested draft, and waterplane area divided by project length × beam.
+The latter fields do not change the native coefficients. Both references can differ.
+`minimum_open_boundary_z_m` and `minimum_freeboard_m` report the lowest open deck
+edge and its clearance from the requested waterplane; the mesh maximum is not depth.
+
+`include_control_net=True` 可读取带索引的控制点；`point_updates` 按明确索引修改坐标。
+`z_cut_m` 与 `z_above_factor` 成对使用，改变指定平面以上的几何高度。修改后须重新
+计算静水力并生成交线。项目名称、作者、注释可明确设置，空字符串表示清除。
+原生丰满系数沿用模型的基准设置；带 `_project` 的新增指标单独按项目尺度复核，
+不覆盖原生结果。最低开口边界、相应干舷与网格最高点分别报告。
+
 The native hydrostatic routine first integrates raw geometric volume. It calculates
 displacement using density and the appendage coefficient, then stores the **corrected**
 volume in `TFreeHydrostaticsData.Volume`. The API returns both `volume_geometry_m3` and

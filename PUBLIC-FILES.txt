@@ -13,6 +13,7 @@ docs/development.md
 docs/development.zh-CN.md
 docs/numerics.md
 docs/numerics.zh-CN.md
+docs/target-verification.md
 docs/test-results.json
 docs/upstream-changes.md
 docs/verification.md
@@ -173,9 +174,11 @@ src/freeship_mcp/licenses/uvicorn-6-LICENSE.md
 src/freeship_mcp/licenses/uvicorn-metadata.txt
 src/freeship_mcp/licenses/wheel-2-LICENSE.txt
 src/freeship_mcp/server.py
+src/freeship_mcp/verification.py
 tests/test_invariants.py
 tests/test_mcp.py
 tests/test_native.py
+tests/test_verification.py
 vendor-manifest.json
 vendor/freeship/.gitignore
 vendor/freeship/COPYING
