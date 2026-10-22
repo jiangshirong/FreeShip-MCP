@@ -1,0 +1,11 @@
+.toolchain/
+.venv/
+.build/
+dist/
+build/
+*.egg-info/
+__pycache__/
+.pytest_cache/
+*.pyc
+src/freeship_mcp/bin/*.exe
+*.log

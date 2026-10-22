@@ -1,0 +1,8 @@
+{
+  "repository": "https://github.com/markmal/freeship-plus-in-lazarus",
+  "commit": "1de17e99fb2b1cc559cdf27c5cafb595a627a641",
+  "source_directory": "vendor/freeship",
+  "compiler": "Free Pascal 3.2.2",
+  "lazarus": "3.2",
+  "widgetset": "nogui"
+}

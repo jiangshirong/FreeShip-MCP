@@ -1,0 +1,2564 @@
+object MainForm: TMainForm
+  Left = 495
+  Height = 641
+  Top = 182
+  Width = 1132
+  Align = alTop
+  ClientHeight = 641
+  ClientWidth = 1132
+  Color = clAppWorkspace
+  Constraints.MinHeight = 200
+  Constraints.MinWidth = 300
+  Menu = MainMenu1
+  OnActivate = FormActivate
+  OnChangeBounds = FormChangeBounds
+  OnClose = FormClose
+  OnCloseQuery = FormCloseQuery
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnResize = FormResize
+  OnShow = FormShow
+  OnWindowStateChange = FormWindowStateChange
+  Position = poDefault
+  ShowHint = True
+  LCLVersion = '3.2.0.0'
+  object StatusBar: TPanel
+    Left = 0
+    Height = 37
+    Top = 604
+    Width = 1132
+    Align = alBottom
+    AutoSize = True
+    BevelOuter = bvLowered
+    ChildSizing.Layout = cclTopToBottomThenLeftToRight
+    ChildSizing.ControlsPerLine = 1
+    ClientHeight = 37
+    ClientWidth = 1132
+    Color = clMenuBar
+    ParentBackground = False
+    ParentColor = False
+    ParentFont = False
+    TabOrder = 0
+    object StatusPanel2: TPanel
+      Left = 0
+      Height = 36
+      Top = 0
+      Width = 206
+      AutoSize = True
+      BevelOuter = bvLowered
+      ChildSizing.LeftRightSpacing = 10
+      ChildSizing.TopBottomSpacing = 4
+      ChildSizing.EnlargeVertical = crsHomogenousSpaceResize
+      ChildSizing.ControlsPerLine = 1
+      ClientHeight = 36
+      ClientWidth = 206
+      ParentBackground = False
+      ParentFont = False
+      TabOrder = 0
+      object LabelUndoMemory: TLabel
+        Left = 11
+        Height = 26
+        Top = 5
+        Width = 184
+        Caption = 'Undo memory : 0 kb.'
+        Layout = tlCenter
+        ParentColor = False
+        ParentFont = False
+      end
+    end
+    object StatusPanel3: TPanel
+      Left = 206
+      Height = 36
+      Top = 0
+      Width = 110
+      BevelOuter = bvLowered
+      ChildSizing.LeftRightSpacing = 10
+      ChildSizing.TopBottomSpacing = 4
+      ChildSizing.EnlargeVertical = crsHomogenousSpaceResize
+      ChildSizing.Layout = cclLeftToRightThenTopToBottom
+      ChildSizing.ControlsPerLine = 1
+      ClientHeight = 36
+      ClientWidth = 110
+      Constraints.MinWidth = 100
+      ParentBackground = False
+      ParentFont = False
+      TabOrder = 1
+      OnClick = StatusPanel3Click
+      object LabelDistance: TLabel
+        Left = 10
+        Height = 26
+        Top = 5
+        Width = 89
+        Caption = 'distance : '
+        Layout = tlCenter
+        ParentColor = False
+        ParentFont = False
+        OnClick = StatusPanel3Click
+      end
+    end
+    object StatusPanel4: TPanel
+      Left = 316
+      Height = 36
+      Top = 0
+      Width = 150
+      BevelOuter = bvLowered
+      ChildSizing.LeftRightSpacing = 10
+      ChildSizing.TopBottomSpacing = 4
+      ChildSizing.EnlargeVertical = crsHomogenousSpaceResize
+      ChildSizing.Layout = cclLeftToRightThenTopToBottom
+      ChildSizing.ControlsPerLine = 1
+      ClientHeight = 36
+      ClientWidth = 150
+      Constraints.MinWidth = 100
+      ParentBackground = False
+      ParentFont = False
+      TabOrder = 2
+      OnClick = StatusPanel3Click
+      object LabelNumbers: TLabel
+        Left = 10
+        Height = 26
+        Top = 5
+        Width = 129
+        Caption = 'LabelNumbers'
+        Layout = tlCenter
+        ParentColor = False
+        ParentFont = False
+        OnClick = StatusPanel3Click
+      end
+    end
+    object StatusPanel5: TPanel
+      Left = 466
+      Height = 36
+      Top = 0
+      Width = 300
+      BevelInner = bvLowered
+      BevelOuter = bvNone
+      ChildSizing.LeftRightSpacing = 10
+      ChildSizing.HorizontalSpacing = 6
+      ChildSizing.EnlargeVertical = crsHomogenousSpaceResize
+      ChildSizing.Layout = cclLeftToRightThenTopToBottom
+      ChildSizing.ControlsPerLine = 2
+      ClientHeight = 36
+      ClientWidth = 300
+      ParentBackground = False
+      ParentFont = False
+      TabOrder = 3
+      object ProgressBarMain: TProgressBar
+        Left = 10
+        Height = 26
+        Top = 5
+        Width = 150
+        Constraints.MinWidth = 150
+        ParentFont = False
+        TabOrder = 0
+      end
+      object LabelProgress: TLabel
+        Left = 166
+        Height = 26
+        Top = 5
+        Width = 123
+        Caption = 'LabelProgress'
+        Layout = tlCenter
+        ParentColor = False
+        ParentFont = False
+      end
+    end
+  end
+  object PanelMain: TPanel
+    Left = 0
+    Height = 47
+    Top = 0
+    Width = 1132
+    Align = alTop
+    AutoSize = True
+    BevelOuter = bvNone
+    BorderWidth = 1
+    ClientHeight = 47
+    ClientWidth = 1132
+    Color = clMenuBar
+    ParentBackground = False
+    ParentColor = False
+    ParentFont = False
+    TabOrder = 1
+    OnResize = PanelMainResize
+    object ToolBarFile: TToolBar
+      Left = 1
+      Height = 27
+      Top = 1
+      Width = 84
+      Align = alNone
+      ButtonHeight = 16
+      ButtonWidth = 16
+      Caption = 'ToolBarFile'
+      EdgeBorders = [ebLeft]
+      EdgeOuter = esRaised
+      Images = MenuImages
+      Indent = 2
+      ParentFont = False
+      TabOrder = 0
+      Transparent = True
+      object ToolButton20: TToolButton
+        Left = 4
+        Top = 0
+        Action = NewModel
+        AutoSize = True
+      end
+      object ToolButtonOpenFile: TToolButton
+        Tag = 1
+        Left = 24
+        Top = 0
+        Action = LoadFile
+        AutoSize = True
+      end
+      object ToolButton38: TToolButton
+        Tag = 2
+        Left = 44
+        Top = 0
+        Action = FileSave
+        AutoSize = True
+      end
+      object ToolButton3: TToolButton
+        Tag = 3
+        Left = 64
+        Top = 0
+        Action = ExitProgram
+        AutoSize = True
+      end
+    end
+    object ToolBarVisibility: TToolBar
+      Left = 160
+      Height = 44
+      Top = 2
+      Width = 331
+      Align = alNone
+      ButtonHeight = 16
+      ButtonWidth = 16
+      Caption = 'ToolBarFile'
+      Color = clMenuBar
+      EdgeBorders = [ebLeft]
+      EdgeOuter = esRaised
+      Images = MenuImages
+      Indent = 2
+      ParentColor = False
+      ParentFont = False
+      TabOrder = 1
+      Transparent = True
+      object ToolButton8: TToolButton
+        Left = 4
+        Top = 0
+        Action = ShowControlNet
+        AutoSize = True
+      end
+      object ToolButton2: TToolButton
+        Tag = 4
+        Left = 84
+        Top = 0
+        Action = ShowControlCurves
+        AutoSize = True
+      end
+      object ToolButton9: TToolButton
+        Tag = 2
+        Left = 44
+        Top = 0
+        Action = ShowInteriorEdges
+        AutoSize = True
+      end
+      object ToolButton10: TToolButton
+        Tag = 11
+        Left = 224
+        Top = 0
+        Action = BothSides
+        AutoSize = True
+      end
+      object ToolButton31: TToolButton
+        Tag = 14
+        Left = 284
+        Top = 0
+        Action = ShowGrid
+        AutoSize = True
+      end
+      object ToolButton21: TToolButton
+        Tag = 9
+        Left = 184
+        Top = 0
+        Action = ShowStations
+        AllowAllUp = True
+        AutoSize = True
+      end
+      object ToolButton22: TToolButton
+        Tag = 7
+        Left = 144
+        Top = 0
+        Action = ShowButtocks
+        AutoSize = True
+      end
+      object ToolButton23: TToolButton
+        Tag = 8
+        Left = 164
+        Top = 0
+        Action = ShowWaterlines
+        AutoSize = True
+      end
+      object ToolButton35: TToolButton
+        Tag = 10
+        Left = 204
+        Top = 0
+        Action = ShowDiagonals
+        AutoSize = True
+      end
+      object ToolButton46: TToolButton
+        Tag = 13
+        Left = 264
+        Top = 0
+        Action = ShowHydrostatics
+        AutoSize = True
+      end
+      object ToolButton48: TToolButton
+        Tag = 12
+        Left = 244
+        Top = 0
+        Action = ShowFlowlines
+        AutoSize = True
+      end
+      object ToolButton30: TToolButton
+        Tag = 3
+        Left = 64
+        Top = 0
+        Action = ShowNormals
+        AutoSize = True
+      end
+      object ToolButton37: TToolButton
+        Tag = 5
+        Left = 104
+        Top = 0
+        Action = Showcurvature
+        AutoSize = True
+      end
+      object ToolButton36: TToolButton
+        Tag = 6
+        Left = 124
+        Top = 0
+        Action = ShowMarkers
+        AutoSize = True
+      end
+      object SpinEditFontSize: TSpinEdit
+        Tag = 15
+        Left = 4
+        Height = 36
+        Hint = 'Font Size'
+        Top = 16
+        Width = 40
+        Constraints.MinWidth = 40
+        MaxValue = 20
+        MinValue = 3
+        OnChange = SpinEditFontSizeChange
+        ParentFont = False
+        TabOrder = 0
+        Value = 8
+      end
+      object cbPrecision: TComboBox
+        Tag = 16
+        Left = 44
+        Height = 34
+        Hint = 'Precision'
+        Top = 16
+        Width = 100
+        ItemHeight = 0
+        ItemIndex = 1
+        Items.Strings = (
+          'Low'
+          'Medium'
+          'High'
+          'Highest'
+        )
+        ParentFont = False
+        Style = csDropDownList
+        TabOrder = 1
+        Text = 'Medium'
+        OnChange = cbPrecisionChange
+      end
+      object tbShowFreeObjects: TToolButton
+        Tag = 1
+        Left = 24
+        Top = 0
+        Action = ShowFreeObjects
+        Marked = True
+        Style = tbsCheck
+      end
+      object ToolButton39: TToolButton
+        Tag = 17
+        Left = 144
+        Top = 16
+        Action = SplitSectionDialog
+        AutoSize = True
+      end
+    end
+    object ToolBarLayers: TToolBar
+      Left = 504
+      Height = 27
+      Top = 1
+      Width = 264
+      Align = alNone
+      BorderSpacing.Left = 10
+      ButtonHeight = 16
+      ButtonWidth = 16
+      Caption = 'ToolBarFile'
+      EdgeBorders = [ebLeft]
+      EdgeOuter = esRaised
+      Images = MenuImages
+      ParentFont = False
+      TabOrder = 2
+      Transparent = True
+      object ToolButton5: TToolButton
+        Left = 3
+        Top = 0
+        Action = NewLayer
+        AutoSize = True
+      end
+      object ToolButton34: TToolButton
+        Tag = 1
+        Left = 23
+        Top = 0
+        Action = DeleteEmptyLayers
+        AutoSize = True
+      end
+      object ToolButton33: TToolButton
+        Tag = 2
+        Left = 43
+        Top = 0
+        Action = LayerDialog
+        AutoSize = True
+      end
+      object ColorButton1: TColorButton
+        Tag = 3
+        Left = 63
+        Height = 16
+        Hint = 'Change the color of the currently active layer.'
+        Top = 0
+        Width = 25
+        BorderWidth = 2
+        ButtonColorSize = 16
+        ButtonColor = clLime
+        OnClick = ColorButton1Click
+        ParentFont = False
+      end
+      object ToolButton26: TToolButton
+        Tag = 6
+        Left = 108
+        Top = 0
+        Action = IntersectionDialog
+        AutoSize = True
+      end
+      object ToolButton6: TToolButton
+        Tag = 7
+        Left = 128
+        Top = 0
+        Action = LayerAutoGroup
+        AutoSize = True
+      end
+      object LayerBox: TComboBox
+        Tag = 5
+        Left = 148
+        Height = 36
+        Top = 0
+        Width = 100
+        ItemHeight = 0
+        ParentFont = False
+        TabOrder = 0
+        Text = 'LayerBox'
+        OnChange = LayerBoxChange
+      end
+      object ToolButton1: TToolButton
+        Tag = 4
+        Left = 88
+        Top = 0
+        Action = LayerVisibilityDialog
+      end
+    end
+    object ToolBarPoints: TToolBar
+      Left = 800
+      Height = 27
+      Top = 1
+      Width = 143
+      Align = alNone
+      ButtonHeight = 16
+      ButtonWidth = 16
+      Caption = 'ToolBarPoints'
+      Color = clMenuBar
+      EdgeBorders = [ebLeft]
+      EdgeOuter = esRaised
+      Images = MenuImages
+      ParentColor = False
+      ParentFont = False
+      TabOrder = 3
+      Transparent = True
+      object ToolButton45: TToolButton
+        Left = 3
+        Top = 0
+        Action = PointAlign
+        AutoSize = True
+      end
+      object ToolButton18: TToolButton
+        Tag = 1
+        Left = 23
+        Top = 0
+        Action = PointCollapse
+        AutoSize = True
+      end
+      object ToolButton42: TToolButton
+        Tag = 2
+        Left = 43
+        Top = 0
+        Action = PointsLock
+        AutoSize = True
+      end
+      object ToolButton43: TToolButton
+        Tag = 3
+        Left = 63
+        Top = 0
+        Action = PointsUnlock
+        AutoSize = True
+      end
+      object ToolButton44: TToolButton
+        Tag = 4
+        Left = 83
+        Top = 0
+        Action = PointsUnlockAll
+        AutoSize = True
+      end
+      object ToolButton41: TToolButton
+        Tag = 5
+        Left = 103
+        Top = 0
+        Action = InsertPlane
+        AutoSize = True
+      end
+      object ToolButton47: TToolButton
+        Tag = 6
+        Left = 123
+        Top = 0
+        Action = LayerIntersection
+        AutoSize = True
+      end
+    end
+    object ToolBarEdit: TToolBar
+      Left = 80
+      Height = 27
+      Top = 1
+      Width = 83
+      Align = alNone
+      ButtonHeight = 16
+      ButtonWidth = 16
+      Caption = 'ToolBarFile'
+      EdgeBorders = [ebLeft]
+      EdgeOuter = esRaised
+      Images = MenuImages
+      ParentFont = False
+      TabOrder = 4
+      Transparent = True
+      object ToolButtonDelete: TToolButton
+        Tag = 1
+        Left = 23
+        Top = 0
+        Action = Delete
+        AutoSize = True
+      end
+      object ToolButtonUndo: TToolButton
+        Tag = 2
+        Left = 43
+        Top = 0
+        Action = Undo
+        AutoSize = True
+      end
+      object ToolButtonRedo: TToolButton
+        Tag = 3
+        Left = 63
+        Top = 0
+        Action = Redo
+        AutoSize = True
+      end
+      object ToolButtonSelect: TToolButton
+        Left = 3
+        Hint = 'Deselect All'
+        Top = 0
+        Action = DeselectAll
+        AutoSize = True
+      end
+    end
+    object ToolBarEdges: TToolBar
+      Left = 944
+      Height = 27
+      Top = 1
+      Width = 103
+      Align = alNone
+      ButtonHeight = 16
+      ButtonWidth = 16
+      Caption = 'ToolBarFile'
+      Color = clMenuBar
+      EdgeBorders = [ebLeft]
+      EdgeOuter = esRaised
+      Images = MenuImages
+      ParentColor = False
+      ParentFont = False
+      TabOrder = 5
+      Transparent = True
+      object ToolButton27: TToolButton
+        Left = 3
+        Top = 0
+        Action = EdgeExtrude
+        AutoSize = True
+      end
+      object ToolButton29: TToolButton
+        Tag = 2
+        Left = 43
+        Top = 0
+        Action = EdgeSplit
+        AutoSize = True
+      end
+      object ToolButton13: TToolButton
+        Tag = 4
+        Left = 83
+        Top = 0
+        Action = EdgeCollapse
+        AutoSize = True
+      end
+      object ToolButton16: TToolButton
+        Tag = 3
+        Left = 63
+        Top = 0
+        Action = NewEdge
+        AutoSize = True
+      end
+      object ToolButton17: TToolButton
+        Tag = 1
+        Left = 23
+        Top = 0
+        Action = EdgeCrease
+        AutoSize = True
+      end
+    end
+    object ToolBarFaces: TToolBar
+      Left = 1048
+      Height = 27
+      Top = 1
+      Width = 43
+      Align = alNone
+      ButtonHeight = 16
+      ButtonWidth = 16
+      Caption = 'ToolBarFile'
+      EdgeBorders = [ebLeft]
+      EdgeOuter = esRaised
+      Images = MenuImages
+      ParentFont = False
+      TabOrder = 6
+      Transparent = True
+      object ToolButton24: TToolButton
+        Left = 3
+        Top = 0
+        Action = NewFace
+        AutoSize = True
+      end
+      object ToolButton32: TToolButton
+        Tag = 1
+        Left = 23
+        Top = 0
+        Action = InvertFace
+        AutoSize = True
+      end
+    end
+    object ToolBarCurves: TToolBar
+      Left = 1096
+      Height = 27
+      Top = 1
+      Width = 19
+      Align = alNone
+      ButtonHeight = 16
+      ButtonWidth = 16
+      Caption = 'ToolBarFile'
+      Color = clMenuBar
+      EdgeBorders = [ebLeft]
+      EdgeOuter = esRaised
+      Images = MenuImages
+      ParentColor = False
+      ParentFont = False
+      TabOrder = 7
+      Transparent = True
+      object ToolButton40: TToolButton
+        Left = 3
+        Top = 0
+        Action = NewCurve
+        AutoSize = True
+      end
+    end
+  end
+  object MainClientPanel: TPanel
+    Left = 0
+    Height = 557
+    Top = 47
+    Width = 1132
+    Align = alClient
+    BevelOuter = bvNone
+    ParentBackground = False
+    ParentFont = False
+    TabOrder = 2
+    OnClick = MainClientPanelClick
+  end
+  object ActionList1: TActionList
+    Images = MenuImages
+    Left = 112
+    Top = 200
+    object ExportFEF: TAction
+      Category = 'Export'
+      Caption = 'FEF file...'
+      Hint = 'Export to a FEF (Freeship Exchange Format) hull.'
+      OnExecute = ExportFEFExecute
+    end
+    object ImportFEF: TAction
+      Category = 'Import'
+      Caption = 'FEF file...'
+      Hint = 'Import a FEF (Freeship Exchange Format) hull.'
+      OnExecute = ImportFEFExecute
+    end
+    object LoadFile: TAction
+      Category = 'File'
+      Caption = 'Open...'
+      Hint = 'Open a new file.'
+      ImageIndex = 0
+      OnExecute = LoadFileExecute
+    end
+    object ExitProgram: TAction
+      Category = 'File'
+      Caption = 'Exit'
+      Hint = 'Quit FreeShip'
+      ImageIndex = 1
+      OnExecute = ExitProgramExecute
+    end
+    object ImportCarene: TAction
+      Category = 'Import'
+      Caption = 'Carene XYZ file...'
+      ImageIndex = 35
+      OnExecute = ImportCareneExecute
+    end
+    object ExportDXF2DPolylines: TAction
+      Category = 'Export'
+      Caption = 'DXF 2D Polylines...'
+      Hint = 'Export all lines as 2D polylines.'
+      ImageIndex = 27
+      OnExecute = ExportDXF2DPolylinesExecute
+    end
+    object ExportCoordinates: TAction
+      Category = 'Export'
+      Caption = 'Coordinates...'
+      OnExecute = ExportCoordinatesExecute
+    end
+    object ShowControlNet: TAction
+      Category = 'Visibility'
+      Caption = 'Control net'
+      Hint = 'Show control net.'
+      ImageIndex = 2
+      OnExecute = ShowControlNetExecute
+    end
+    object ShowInteriorEdges: TAction
+      Category = 'Visibility'
+      Caption = 'Interior edges'
+      Hint = 'Show interior edges.'
+      ImageIndex = 3
+      OnExecute = ShowInteriorEdgesExecute
+    end
+    object NewWindow: TAction
+      Category = 'Window'
+      Caption = 'New window'
+      ImageIndex = 33
+      OnExecute = NewWindowExecute
+    end
+    object TileWindow: TAction
+      Category = 'Window'
+      Caption = 'Tile'
+      ImageIndex = 32
+      OnExecute = TileWindowExecute
+    end
+    object CascadeWindow: TAction
+      Category = 'Window'
+      Caption = 'Cascade'
+      ImageIndex = 34
+      OnExecute = CascadeWindowExecute
+    end
+    object BothSides: TAction
+      Category = 'Visibility'
+      Caption = 'Show both sides'
+      Hint = 'Show both sides of the model'
+      ImageIndex = 4
+      OnExecute = BothSidesExecute
+    end
+    object FileSaveas: TAction
+      Category = 'File'
+      Caption = 'Save as...'
+      Hint = 'Prompt for filename and save file.'
+      ImageIndex = 39
+      OnExecute = FileSaveasExecute
+    end
+    object DecreaseCurvatureScale: TAction
+      Category = 'Visibility'
+      Caption = 'Decr. curvature scale'
+      Hint = 'Decrease the scale of the curvature plots'
+      OnExecute = DecreaseCurvatureScaleExecute
+      ShortCut = 120
+    end
+    object LayerAutoGroup: TAction
+      Category = 'Layer'
+      Caption = 'Auto group'
+      Hint = 'Automatic grouping of connected controlfaces into a new layer.'
+      ImageIndex = 6
+      OnExecute = LayerAutoGroupExecute
+    end
+    object NewLayer: TAction
+      Category = 'Layer'
+      Caption = 'New'
+      Hint = 'Add a new empty layer to the model.'
+      ImageIndex = 7
+      OnExecute = NewLayerExecute
+    end
+    object Delete: TAction
+      Category = 'Edit'
+      Caption = 'Delete'
+      Hint = 'Delete all selected items.'
+      ImageIndex = 8
+      OnExecute = DeleteExecute
+      ShortCut = 16472
+    end
+    object EdgeCollapse: TAction
+      Category = 'Edge'
+      Caption = 'Collapse'
+      Hint = 'Remove an edge by merging the two connected faces into one new face.'
+      ImageIndex = 9
+      OnExecute = EdgeCollapseExecute
+    end
+    object NewEdge: TAction
+      Category = 'Edge'
+      Caption = 'Insert'
+      Hint = 'Split a face by inserting a new edge between to selected points.'
+      ImageIndex = 10
+      OnExecute = NewEdgeExecute
+      ShortCut = 69
+    end
+    object EdgeCrease: TAction
+      Category = 'Edge'
+      Caption = 'Crease'
+      Hint = 'Switch selected edges between normal or crease edges (knuckle lines).'
+      ImageIndex = 11
+      OnExecute = EdgeCreaseExecute
+    end
+    object DeselectAll: TAction
+      Category = 'Edit'
+      Caption = 'Deselect all'
+      Hint = 'Deselect all'
+      ImageIndex = 59
+      OnExecute = DeselectAllExecute
+    end
+    object PointCollapse: TAction
+      Category = 'Point'
+      Caption = 'Collapse'
+      Hint = 'Merge two selected edges by removing their common controlpoint.'
+      ImageIndex = 12
+      OnExecute = PointCollapseExecute
+    end
+    object ActiveLayerColor: TAction
+      Category = 'Layer'
+      Caption = 'Active layer color'
+      Hint = 'Change the color of the currently active layer.'
+      ImageIndex = 25
+      OnExecute = ActiveLayerColorExecute
+    end
+    object DeleteEmptyLayers: TAction
+      Category = 'Layer'
+      Caption = 'Delete empty'
+      Hint = 'Delete empty layers from the model.'
+      ImageIndex = 29
+      OnExecute = DeleteEmptyLayersExecute
+    end
+    object LayerDialog: TAction
+      Category = 'Layer'
+      Caption = 'Dialog'
+      Hint = 'Show the window with layer properties.'
+      ImageIndex = 24
+      OnExecute = LayerDialogExecute
+      ShortCut = 16460
+    end
+    object NewModel: TAction
+      Category = 'File'
+      Caption = 'New...'
+      Hint = 'Start a new model.'
+      ImageIndex = 13
+      OnExecute = NewModelExecute
+      ShortCut = 16462
+    end
+    object ShowStations: TAction
+      Category = 'Visibility'
+      Caption = 'Stations'
+      Hint = 'Toggle stations visibility on or off.'
+      ImageIndex = 15
+      OnExecute = ShowStationsExecute
+    end
+    object ShowButtocks: TAction
+      Category = 'Visibility'
+      Caption = 'Buttocks'
+      Hint = 'Toggle buttocks visibility on or off.'
+      ImageIndex = 16
+      OnExecute = ShowButtocksExecute
+    end
+    object ShowWaterlines: TAction
+      Category = 'Visibility'
+      Caption = 'Waterlines'
+      Hint = 'Toggle waterlines visibility on or off.'
+      ImageIndex = 17
+      OnExecute = ShowWaterlinesExecute
+    end
+    object NewFace: TAction
+      Category = 'Face'
+      Caption = 'New'
+      Hint = 'Create a new controlface from selected controlpoints.'
+      ImageIndex = 18
+      OnExecute = NewFaceExecute
+    end
+    object IntersectionDialog: TAction
+      Category = 'Edit'
+      Caption = 'Intersections...'
+      Hint = 'Show the window to add stations, buttocks, waterlines and diagonals.'
+      ImageIndex = 14
+      OnExecute = IntersectionDialogExecute
+    end
+    object EdgeExtrude: TAction
+      Category = 'Edge'
+      Caption = 'Extrude...'
+      Hint = 'Create new controlfaces by extruding selected boundary edges.'
+      ImageIndex = 19
+      OnExecute = EdgeExtrudeExecute
+    end
+    object EdgeSplit: TAction
+      Category = 'Edge'
+      Caption = 'Split'
+      Hint = 'Create new controlpoints by splitting an controledge into two.'
+      ImageIndex = 20
+      OnExecute = EdgeSplitExecute
+      ShortCut = 83
+    end
+    object EditProjectSettings: TAction
+      Category = 'Project'
+      Caption = 'Project settings'
+      OnExecute = EditProjectSettingsExecute
+    end
+    object CheckModel: TAction
+      Category = 'Tools'
+      Caption = 'Check model'
+      Hint = 'Check the model for errors and inconsitencies.'
+      OnExecute = CheckModelExecute
+    end
+    object ShowNormals: TAction
+      Category = 'Visibility'
+      Caption = 'Normals'
+      Hint = 'Show normals of selected controlfaces.'
+      ImageIndex = 21
+      OnExecute = ShowNormalsExecute
+    end
+    object DesignHydrostatics: TAction
+      Category = 'Calculate'
+      Caption = 'Design hydrostatics'
+      Hint = 'Calculate hydrostatics for the design condition.'
+      OnExecute = DesignHydrostaticsExecute
+    end
+    object ImportVRML: TAction
+      Category = 'Import'
+      Caption = 'VRML...'
+      Hint = 'Import a VRML 1.0 file.'
+      OnExecute = ImportVRMLExecute
+    end
+    object RemoveNegative: TAction
+      Category = 'Tools'
+      Caption = 'Remove negative'
+      Hint = 'Removes all faces on the starbaordside of the hull.'
+      OnExecute = RemoveNegativeExecute
+    end
+    object RotateModel: TAction
+      Category = 'Transform'
+      Caption = 'Rotate...'
+      Hint = 'Rotate selected items.'
+      OnExecute = RotateModelExecute
+    end
+    object RotateModelM: TAction
+      Category = 'Transform'
+      Caption = 'Heeling and/or trimming...'
+      Hint = 'Rotate all model items.'
+      OnExecute = RotateModelMExecute
+    end
+    object ScaleModel: TAction
+      Category = 'Transform'
+      Caption = 'Scale...'
+      Hint = 'Scale selected items.'
+      OnExecute = ScaleModelExecute
+    end
+    object ShowGrid: TAction
+      Category = 'Visibility'
+      Caption = 'Grid'
+      Hint = 'Show grid of intersections in plan, profile and bodyplan view.'
+      ImageIndex = 22
+      OnExecute = ShowGridExecute
+    end
+    object Undo: TAction
+      Category = 'Edit'
+      Caption = 'Undo'
+      Hint = 'Undo the last modification.'
+      ImageIndex = 56
+      OnExecute = UndoExecute
+      ShortCut = 16474
+    end
+    object HydrostaticsDialog: TAction
+      Category = 'Calculate'
+      Caption = 'Hydrostatics...'
+      Hint = 'Calculate hydrostatics for a range of inputdata.'
+      OnExecute = HydrostaticsDialogExecute
+    end
+    object ExportObj: TAction
+      Category = 'Export'
+      Caption = 'Wavefront file (Obj)...'
+      OnExecute = ExportObjExecute
+    end
+    object InvertFace: TAction
+      Category = 'Face'
+      Caption = 'Invert'
+      Hint = 'Flip the normal direction of the selected controlfaces.'
+      ImageIndex = 23
+      OnExecute = InvertFaceExecute
+    end
+    object Preferences: TAction
+      Category = 'Project'
+      Caption = 'Preferences'
+      OnExecute = PreferencesExecute
+    end
+    object ImportBodyplan: TAction
+      Category = 'Import'
+      Caption = 'Bodyplan...'
+      Hint = 'Import a bodyplan and fit a surface.'
+      OnExecute = ImportBodyplanExecute
+    end
+    object ExportDXF3DPolylines: TAction
+      Category = 'Export'
+      Caption = 'DXF 3D Polylines...'
+      Hint = 'Export all lines as 3D polylines.'
+      ImageIndex = 27
+      OnExecute = ExportDXF3DPolylinesExecute
+    end
+    object ExportDXFFaces: TAction
+      Category = 'Export'
+      Caption = 'DXF 3D mesh...'
+      Hint = 'Export all faces to a 3D DXF file.'
+      ImageIndex = 27
+      OnExecute = ExportDXFFacesExecute
+    end
+    object ImportHullFile: TAction
+      Category = 'Import'
+      Caption = 'Carlson .hul file...'
+      ImageIndex = 28
+      OnExecute = ImportHullFileExecute
+    end
+    object ExportOffsets: TAction
+      Category = 'Export'
+      Caption = 'Offsets...'
+      OnExecute = ExportOffsetsExecute
+    end
+    object MoveModel: TAction
+      Category = 'Transform'
+      Caption = 'Move...'
+      Hint = 'Move the entire model.'
+      OnExecute = MoveModelExecute
+    end
+    object AddPoint: TAction
+      Category = 'Point'
+      Caption = 'Add'
+      Hint = 'Add a new controlpoint to the model.'
+      OnExecute = AddPointExecute
+      ShortCut = 80
+    end
+    object DevelopLayers: TAction
+      Category = 'Tools'
+      Caption = 'Develop plates'
+      OnExecute = DevelopLayersExecute
+    end
+    object ExportArchimedes: TAction
+      Category = 'Export'
+      Caption = 'Archimedes...'
+      Hint = 'Export stations to Arcimedes'
+      ImageIndex = 26
+      OnExecute = ExportArchimedesExecute
+    end
+    object ShowLinesplan: TAction
+      Category = 'Project'
+      Caption = 'Linesplan'
+      ImageIndex = 31
+      OnExecute = ShowLinesplanExecute
+    end
+    object ShowDiagonals: TAction
+      Category = 'Visibility'
+      Caption = 'Diagonals'
+      Hint = 'Toggle diagonals visibility on or off.'
+      ImageIndex = 30
+      OnExecute = ShowDiagonalsExecute
+    end
+    object ShowMarkers: TAction
+      Category = 'Visibility'
+      Caption = 'Markers'
+      Hint = 'Show markers.'
+      ImageIndex = 36
+      OnExecute = ShowMarkersExecute
+    end
+    object DeleteMarkers: TAction
+      Category = 'Tools'
+      Caption = 'Delete all markers'
+      Hint = 'Delete all markers from the model.'
+      ImageIndex = 37
+      OnExecute = DeleteMarkersExecute
+    end
+    object ImportSurface: TAction
+      Category = 'Import'
+      Caption = 'Surface...'
+      OnExecute = ImportSurfaceExecute
+    end
+    object Showcurvature: TAction
+      Category = 'Visibility'
+      Caption = 'Curvature'
+      Hint = 'Show curvature plot of intersectionlines.'
+      ImageIndex = 38
+      OnExecute = ShowcurvatureExecute
+    end
+    object IncreaseCurvatureScale: TAction
+      Category = 'Visibility'
+      Caption = 'Incr. curvature scale'
+      Hint = 'Increase the scale of the curvature plots'
+      OnExecute = IncreaseCurvatureScaleExecute
+      ShortCut = 121
+    end
+    object FileSave: TAction
+      Category = 'File'
+      Caption = 'Save'
+      Hint = 'Save file without prompting for the filename.'
+      ImageIndex = 5
+      OnExecute = FileSaveExecute
+      ShortCut = 16467
+    end
+    object ImportChines: TAction
+      Category = 'Import'
+      Caption = 'Chines...'
+      OnExecute = ImportChinesExecute
+    end
+    object ShowControlCurves: TAction
+      Category = 'Visibility'
+      Caption = 'Control curves'
+      Hint = 'Show control curves.'
+      ImageIndex = 40
+      OnExecute = ShowControlCurvesExecute
+    end
+    object NewCurve: TAction
+      Category = 'Curve'
+      Caption = 'New'
+      Hint = 'Add a new curve to selected edges.'
+      ImageIndex = 41
+      OnExecute = NewCurveExecute
+    end
+    object InsertPlane: TAction
+      Category = 'Point'
+      Caption = 'Insert plane...'
+      Hint = 'Insert multiple new points on a 3D oriented plane.'
+      ImageIndex = 42
+      OnExecute = InsertPlaneExecute
+    end
+    object PointsLock: TAction
+      Category = 'Point'
+      Caption = 'Lock points'
+      Hint = 'Lock all selected controlpoints.'
+      ImageIndex = 44
+      OnExecute = PointsLockExecute
+    end
+    object PointsUnlock: TAction
+      Category = 'Point'
+      Caption = 'Unlock points'
+      Hint = 'Unlock all selected controlpoints.'
+      ImageIndex = 43
+      OnExecute = PointsUnlockExecute
+    end
+    object PointsUnlockAll: TAction
+      Category = 'Point'
+      Caption = 'Unlock all points'
+      Hint = 'Unlock all locked controlpoints.'
+      ImageIndex = 45
+      OnExecute = PointsUnlockAllExecute
+    end
+    object ImportMarkers: TAction
+      Category = 'Tools'
+      Caption = 'Import'
+      ImageIndex = 46
+      OnExecute = ImportMarkersExecute
+    end
+    object ExportMichlet: TAction
+      Category = 'Export'
+      Caption = 'Michlet...'
+      ImageIndex = 47
+      OnExecute = ExportMichletExecute
+    end
+    object ResistanceKaper: TAction
+      Category = 'Calculate'
+      Caption = 'KAPER'
+      OnExecute = ResistanceKaperExecute
+    end
+    object ResistanceDelft: TAction
+      Category = 'Calculate'
+      Caption = 'Delft yacht series'
+      OnExecute = ResistanceDelftExecute
+    end
+    object ResistanceHoltr: TAction
+      Category = 'Calculate'
+      Caption = 'Method Holtrop'
+      OnExecute = ResistanceHoltrExecute
+    end
+    object ResistanceHollen: TAction
+      Category = 'Calculate'
+      Caption = 'Method Hollenbach'
+      OnExecute = ResistanceHollenExecute
+    end
+    object ResistanceOortmer: TAction
+      Category = 'Calculate'
+      Caption = 'Method van Oortmerssen'
+      OnExecute = ResistanceOortmerExecute
+    end
+    object ResistanceFungLeib: TAction
+      Category = 'Calculate'
+      Caption = 'Method Fung-Leibman'
+      OnExecute = ResistanceFungLeibExecute
+    end
+    object ResistanceOST: TAction
+      Category = 'Calculate'
+      Caption = 'OST 5.0181-75 sea vessel series'
+      OnExecute = ResistanceOSTExecute
+    end
+    object ResistanceRBHS: TAction
+      Category = 'Calculate'
+      Caption = 'High Speed Round Bilge ships methods'
+      OnExecute = ResistanceRBHSExecute
+    end
+    object ResistancePlaning: TAction
+      Category = 'Calculate'
+      Caption = 'Planing resistance method'
+      OnExecute = ResistancePlaningExecute
+    end
+    object ResistanceMH: TAction
+      Category = 'Calculate'
+      Caption = 'Multihull ships methods'
+      OnExecute = ResistanceMHExecute
+    end
+    object PropTask5_: TAction
+      Category = 'Calculate'
+      Caption = 'PropTask5'
+      OnExecute = PropTask5Execute
+    end
+    object PropTask4_: TAction
+      Category = 'Calculate'
+      Caption = 'PropTask4'
+      OnExecute = PropTask4Execute
+    end
+    object PropTask1_: TAction
+      Category = 'Calculate'
+      Caption = 'PropTask1'
+      OnExecute = PropTask1Execute
+    end
+    object PropTask2_: TAction
+      Category = 'Calculate'
+      Caption = 'PropTask2'
+      OnExecute = PropTask2Execute
+    end
+    object PropTask3_: TAction
+      Category = 'Calculate'
+      Caption = 'PropTask3'
+      OnExecute = PropTask3Execute
+    end
+    object PropTaskRvrs_: TAction
+      Category = 'Calculate'
+      Caption = 'PropTaskRvrs'
+      OnExecute = PropTaskRvrsExecute
+    end
+    object HydrodynManeuv_: TAction
+      Category = 'Calculate'
+      Caption = 'HydrodynManeuv'
+      OnExecute = HydrodynManeuvExecute
+    end
+    object ExportAddMass: TAction
+      Category = 'Export'
+      Caption = 'Export and calculation Add_Mass'
+      ImageIndex = 57
+      OnExecute = ExportAddMassExecute
+    end
+    object HydrodynTask4_: TAction
+      Category = 'Calculate'
+      Caption = 'Import results of Add_Mass'
+      OnExecute = HydrodynTask4Execute
+    end
+    object HydrodynTask1_: TAction
+      Category = 'Calculate'
+      Caption = 'HydrodynAero'
+      OnExecute = HydrodynTask1Execute
+    end
+    object HydrodynTask2_: TAction
+      Category = 'Calculate'
+      Caption = 'HydrodynPosition'
+      OnExecute = HydrodynTask2Execute
+    end
+    object HydrodynTask3_: TAction
+      Category = 'Calculate'
+      Caption = 'HydrodynRotation'
+      OnExecute = HydrodynTask3Execute
+    end
+    object PointAlign: TAction
+      Category = 'Point'
+      Caption = 'Align'
+      Hint = 'Project selected points on a straight line through the first and last selected point.'
+      ImageIndex = 48
+      OnExecute = PointAlignExecute
+    end
+    object ImportMichletWaves: TAction
+      Category = 'Import'
+      Caption = 'Michlet waves...'
+      ImageIndex = 47
+      OnExecute = ImportMichletWavesExecute
+    end
+    object ShowHydrostatics: TAction
+      Category = 'Visibility'
+      Caption = 'Hydrostatic features'
+      Hint = 'Show certain hydrostatic key properties in the model.'
+      ImageIndex = 49
+      OnExecute = ShowHydrostaticsExecute
+    end
+    object MirrorFace: TAction
+      Category = 'Transform'
+      Caption = 'Mirror...'
+      OnExecute = MirrorFaceExecute
+    end
+    object TransformLackenby: TAction
+      Category = 'Transform'
+      Caption = 'Lackenby...'
+      OnExecute = TransformLackenbyExecute
+    end
+    object ExportIGES: TAction
+      Category = 'Export'
+      Caption = 'IGES'
+      ImageIndex = 60
+      OnExecute = ExportIGESExecute
+    end
+    object ExportPart: TAction
+      Category = 'Export'
+      Caption = 'Part...'
+      OnExecute = ExportPartExecute
+    end
+    object ImportPart: TAction
+      Category = 'Import'
+      Caption = 'Part...'
+      OnExecute = ImportPartExecute
+    end
+    object LayerIntersection: TAction
+      Category = 'Point'
+      Caption = 'Intersect layers...'
+      Hint = 'Find the intersection of two layers.'
+      ImageIndex = 51
+      OnExecute = LayerIntersectionExecute
+    end
+    object KeelRudderWizard: TAction
+      Category = 'Tools'
+      Caption = 'Keel and rudder wizard'
+      Hint = 'Create a default rudder or keel.'
+      ImageIndex = 52
+      OnExecute = KeelRudderWizardExecute
+    end
+    object Redo: TAction
+      Category = 'Edit'
+      Caption = 'Redo'
+      Hint = 'Undo the previous modification.'
+      ImageIndex = 57
+      OnExecute = RedoExecute
+      ShortCut = 16466
+    end
+    object ClearUndo: TAction
+      Category = 'Edit'
+      Caption = 'Clear'
+      OnExecute = ClearUndoExecute
+    end
+    object ShowUndoHistory: TAction
+      Category = 'Edit'
+      Caption = 'Browse...'
+      OnExecute = ShowUndoHistoryExecute
+    end
+    object ImportPolyCad: TAction
+      Category = 'Import'
+      Caption = 'PolyCad'
+      ImageIndex = 53
+      OnExecute = ImportPolyCadExecute
+    end
+    object RemoveUnusedPoints: TAction
+      Category = 'Tools'
+      Caption = 'Remove unused points'
+      OnExecute = RemoveUnusedPointsExecute
+    end
+    object ExportGHS: TAction
+      Category = 'Export'
+      Caption = 'GHS...'
+      ImageIndex = 54
+      OnExecute = ExportGHSExecute
+    end
+    object ExportPAM: TAction
+      Category = 'Export'
+      Caption = 'Add_Mass *.PAM'
+      ImageIndex = 56
+      OnExecute = ExportPAMExecute
+    end
+    object ShowFlowlines: TAction
+      Category = 'Visibility'
+      Caption = 'Flowlines'
+      Hint = 'Show flowlines around the hull.'
+      ImageIndex = 55
+      OnExecute = ShowFlowlinesExecute
+    end
+    object AddCylinder: TAction
+      Category = 'Geometry'
+      Caption = 'Add cylinder...'
+      OnExecute = AddCylinderExecute
+    end
+    object SelectAll: TAction
+      Category = 'Selection'
+      Caption = 'Select all'
+      ImageIndex = 58
+      OnExecute = SelectAllExecute
+      ShortCut = 16449
+    end
+    object ExportSTL: TAction
+      Category = 'Export'
+      Caption = 'STL...'
+      OnExecute = ExportSTLExecute
+    end
+    object CrossCurves: TAction
+      Category = 'Calculate'
+      Caption = 'Cross curves'
+      OnExecute = CrossCurvesExecute
+    end
+    object HelpAction: THelpAction
+      Category = 'Help'
+      Caption = 'HelpAction'
+      OnExecute = Help1Click
+    end
+    object AboutAction: TAction
+      Caption = 'AboutAction'
+      OnExecute = About1Click
+    end
+    object AddPointToGroup: TAction
+      Category = 'Point'
+      Caption = 'Add Point To Group'
+      OnExecute = AddPointToGroupExecute
+    end
+    object PointAlighnPermanently: TAction
+      Category = 'Point'
+      Caption = 'Point Alighn Permanently'
+      ImageIndex = 48
+      OnExecute = PointAlighnPermanentlyExecute
+    end
+    object PointAnchor: TAction
+      Category = 'Point'
+      Caption = 'Anchor'
+      OnExecute = PointAnchorExecute
+    end
+    object SelectAllControlPoints: TAction
+      Category = 'Selection'
+      Caption = 'Select All Control Points'
+      Hint = 'Select All Control Points'
+      OnExecute = SelectAllControlPointsExecute
+    end
+    object SelectLeakPoints: TAction
+      Category = 'Selection'
+      Caption = 'SelectLeakPoints'
+      OnExecute = SelectLeakPointsExecute
+    end
+    object AddFlowLine: TAction
+      Category = 'Tools'
+      Caption = 'Add flow line'
+      OnExecute = AddFlowLineExecute
+    end
+    object ActionCheckUpdates: TAction
+      Category = 'Help'
+      Caption = 'Check for updates'
+      OnExecute = ActionCheckUpdatesExecute
+    end
+    object AddGridPanel: TAction
+      Category = 'Tools'
+      Caption = 'Add grid panel'
+      OnExecute = AddGridPanelExecute
+    end
+    object PointsCoincide: TAction
+      Category = 'Point'
+      Caption = 'Coincide points'
+      Hint = 'Coincide points to the first selected one'
+      OnExecute = PointsCoincideExecute
+    end
+    object PointExtrude: TAction
+      Category = 'Point'
+      Caption = 'Extrude points'
+      OnExecute = PointExtrudeExecute
+    end
+    object ShowFreeObjects: TAction
+      Category = 'Visibility'
+      Caption = 'Show free objects'
+      Hint = 'Show objects not associated with any layer'
+      ImageIndex = 61
+      OnExecute = ShowFreeObjectsExecute
+    end
+    object SplitSectionDialog: TAction
+      Category = 'Visibility'
+      Caption = 'Split Section location'
+      Hint = 'Set Split Section location in Body Plan'
+      ImageIndex = 63
+      OnExecute = SplitSectionDialogExecute
+    end
+    object LayerVisibilityDialog: TAction
+      Category = 'Layer'
+      Caption = 'Layer visibility dialog'
+      Hint = 'Show Layer visibility dialog'
+      ImageIndex = 62
+      OnExecute = LayerVisibilityDialogExecute
+    end
+    object SplitSection50pct: TAction
+      Category = 'Visibility'
+      Caption = 'Split Section middle location'
+      Hint = 'Set Split Section location to middle of length'
+      ImageIndex = 64
+    end
+    object SelectionDialog: TAction
+      Category = 'Selection'
+      Caption = 'Selection Dialog'
+      OnExecute = SelectionDialogExecute
+    end
+    object ImportSTL: TAction
+      Category = 'Import'
+      Caption = 'STL'
+      OnExecute = ImportSTLExecute
+    end
+    object ImportOBJ: TAction
+      Category = 'Import'
+      Caption = 'Wavefront OBJ'
+      OnExecute = ImportOBJExecute
+    end
+  end
+  object MenuImages: TImageList
+    Left = 112
+    Top = 136
+    Bitmap = {
+      4C7A410000001000000010000000543900000000000078DAED5D07581457DB1D
+      5040B1A3A860A5D8101514B160411011C5AE280A2A3650442CA82822D5DE1005
+      44ECD88D3DF646D4D862A2B1F7128DB126D6A889F1FCF79DDD596677672BA6F8
+      FDDE7DCE333377EE79DB7DEFF499E5B87FA4400463B852CBF804F618639F6A5B
+      7090159AAAAC871EB2155CAD532D7C9D5C1D7C0D6DF5872A3739593744F1CB03
+      57E1BF91DCDCFE348ECB1918ABFF72C9AB1FAC3E59E849455EA8410F3E4D8DE5
+      E7E25FE60B6D3F57FBFFBFF3A5B8FAF23571F5E16BE3EAE41B377E7B67ED8580
+      31471EF108DDF0BDA28EE6857A715B815BBD7A750C1A3408A54A9542ABA8193C
+      CAD76E804E9D3AF1A079A19EDA505BE2F45E249343CBB41BA85BB72EDAFA06F1
+      A858DE91AF23D0BC505FAF5E3DBE6EE0C0810A3EC924AEA5A525926297F170AB
+      EBC9EB20D0BC504F6DA82D71884F3E915DDD3A0EC0ACC96B9550DED64EAD8E40
+      6D5B8D9EA18809F17B058421236593122A96B757AB23505B814FB1A5F8547170
+      42330F5FAC58B083C7A0BEA350B85051BE8EE6857A5AA6B6C411FA88624C3121
+      5FED2A39F22852B8A8227E342FD4531BAA238E103F317FFFA6A33CDAFAB457F0
+      695EA857E50BF6BBD67245E7B69D707CF7491E09631350BC5871BE8EE6857A5A
+      76ADE5A2B05F88DFC45113703EE78C129CAAD650AB23505BD5F84F1A1F87DBDF
+      5D5082737527B53A02B515F842FE505E516E3CB9709547EFAEDD15F943F3423D
+      B5A1B642FEA8E6EFDCC4641E8DDDDC14F16BEC565F512F95BFA48396F9F1C3EC
+      22A88D1F793DB5A1B6C2F8E1C720C9914369FCCAEB94C6AFA8AD118708461EC3
+      00B95C4364887986D800C4C7C7C3703F94F549C9A03AF57A293B9565A8F3F48F
+      87B42F803E3191B657B70C559EB4CFD2F234E9CBADD76EAFE1B130243FF4CB9F
+      BCE7BF3179AB4906F270EE601877C18205E8D1A307DAB76FCFC3D1D1919F76EE
+      DC19C3860DD32AAB67684F946E571A0E090E98B57C16DF96B834F5F7DF82AA55
+      D350A1424FCC9D3B574D4E606820A22747C36FAE1F82D283D0624E0BB44A6905
+      37B7CE6CBBBA9BD9B41D0D1BEEC2B871EBD0B66D84928CA1438722243E04BE73
+      7D3167C51CB8CE70C5BCEC7908981FC0B6970198356B03FAF7DFCA783BF8F9FA
+      F5B723343414F3E6CD03F9DB2CA019B257672372612446678DC6C42513517B46
+      6D2C58B980F77DC080ADF0F4DC89F4F4F5E8DA753B3233D763FAF4A5080C0CE4
+      E131C90393964E42E6CA4CD488AD8151D347C137C4176EADDDF8F8D9DA764342
+      C234346EBC18C1C11BB072E55AB468B18D8F29F113D213E010E100FF76FEF0EF
+      E98F121D4B303B55E33712952B0F63FABBA269D32066CF56DE36E2FBF9F9A1F1
+      80C698BC6CB28C932AE3442F8A66FABB62C58AB5888CDC82C993BFE2EBBDBDD7
+      F3BAC936E28F4C1DC9FB2EE62F5AB5085C3C1D2B06C2DB7BA712BF7DFBAF7999
+      356A7461D31568D7B99D1A9FFAD161AA032A55EA8602050EA257AF6D4AFC458B
+      16A34B97407ED969A013DC3ABA6172462EDF7B8E3702D302791F0B153AC8ECDC
+      AEE07B794D663E7765756B14ED235323D1A64F1BD6C76DD128BC115C07BBA245
+      440B346AD488E99FC1E29D84366D06A167CF9E70714964FAD7F132157C667FD8
+      9C30BE7DA1F2856056DC8C8F4D8D1A3558BED467EDEC583FDAB37D6F041F0F31
+      DF27C507A92B52D1747653AC58BD02A3B246A1C1A806AC8F3CF9E385909070B8
+      BA6EE139E3C76F62B1FF1A29291B147CCF399E98B26C0A7ACCEFC1E77C5A761A
+      EACEAC8B915923999F1DF8FC0F0FDF82E4E48D7076DEC372EF2BF8F8ECC4D4A9
+      B2784C5D36151EB33DD06C7633944A2E05CB444B3EFE42FF55AAB48F8DA3DD6C
+      3E87F9B78B8D43B6FFEFBDED935D8F48CEBD36A237E49CDC73976459BDAE226E
+      2B75EEA3175FEAFA5F5EF5FF0FF09393F5E9372DFA0D8106BE361B92F5E0D3FC
+      B163C7F8FC22D0BC00D5769AF87C6ECA97A9FCDDFC4F307E8C2E5E5E80B110F8
+      9A644F99EA046D7AC553DA6EEBC317DA49E917D6095381AF5AAF892FB491E2AB
+      DAA749BF36BE3EFA8D891FB533149FBAFF3E95FF798DBFB1FDFF29F2CFD8F8E5
+      65FCE5B51CD2725FE2908E7B16C27A4DEDF4951D10C0C15084879751F0EFDEF5
+      464E0EA717CE9C2986C78F6BE2CF3F9B28F81F3FC6E2DEBD563872C44C9273F4
+      687E9C385100AF5EB9F13CC0138F1E7928F8E7CE45B1BA78DCBFDF1AE7CF5755
+      E25EBA541A0F1FD6E039847BF71A61FDFA9AEC18CC52C1EFDF3F00A74E8DE465
+      7CF8309E9773FFBE1B83A382474848B083BF7F49A5E3178A235D232219821D32
+      042B786BD638B1E3BE62CAFB90AC2C087DB0F1EE5DF461E743242724240057AF
+      8E91DEEFD0B5AB9818F1B568BEE4B0F955172FA25F78B8E29A159D5B28F1468E
+      04F7FC792E77CD1A053F98C924196BAF5EC5BCDDBB95F9EBD7833B7B369777FC
+      3858C2A8E5558FA828ECF9FD771CFAEB2F7CFDF4293A3E7C08EEFE7D19E7D52B
+      70F7EE81AB5B576B3E078C1881A95F7FCDDB1220E823FD7DFA40574E2BE533F3
+      B52AF94BD0635CE465FC7C8AF12B55F29B70FCB54A7B7B7BD0BC21DB146A5FA2
+      44099693FDD939CF227EAAAF1C6AA3CA1F356A140F5D7204AE26BE18AA32C45C
+      6DFC55AB56F17111F3699EEAA9BD36BEC0A57552F1EAD6AD9B428E2A5FE0AAEA
+      160AC545902DC8212E41CC6DD9B2A5249FEA06650EE2D7930C41BFC025F9C8CC
+      945FBFD670A589ADC7E9D3BC1C9A270EC92199FC3A799D263EAF83F105901C41
+      96006D3944EBC47C1E6CDB2670C9768A8DE0A3361FB4F1099AF8AA3E087CD249
+      D0C655F243B083F10DE1AACA11FC35946B4859B48883B110F8946752F064BB30
+      4DEBFEAB7C2A527C71BD2EFD425B81AFCA55E56B2AC4D7543EA5FE4FEDFFE7DC
+      FFC6F0F3327E3E87B271E3464C9E3C590DB46EEC8DB118F5FD289CBD7556CD9F
+      EFBEFB8EDF76F9B5EC073FAF4874EF3816214113103E2811A5AD6DF9F6EE171A
+      A0F9ABE66877A31DDCC31AA0A6AB336AD6AC05A71AB5E05ABB293AF824A077E7
+      85880ADB826971FBB120E528D6ADF8010E76B2F3338F102F8CB81F83B66FDBC3
+      F74D1B841C8BC688E9CB3038642DCF230CE8B152C68FDF8FCCB9CAFC76FEDDB1
+      EDD0694C3ABD109D9E06A2E55B5FB4BF1A8C9E194908EE95A693DFDEBF070EEE
+      BE864D5F9DC1D4CD6BD0FB7C245ABE698D96CFDAA0FDA621E8193E0B030275F3
+      B7AE3F8FC5E9C73065F60E84AE9B06BF3BDDD0E24D4BF85EEE8A1EF3123162D4
+      5A9DFC25E9C7312BF92062477D8D816317A2ED817EF0FAB535BC5FB446B7A311
+      884D5F838CF9DFE8E68FDC81F0DEEB1114928ACEE963D0FA72005ABCF34697DB
+      7D306EEF7C2C5F7704F6763574F22976C13D32103C3605DD0E0E83F73B1FB479
+      D51E43AFC6A062537BBDF8849E1DE7A36FD05C04668C428B8BADD08CE54BEDDD
+      B579FE80FEE1888E9A86ECC54744FCAF797E8F7629F0700B41DBD6BDF83C0CE8
+      1180BE097D31ECCC3016E350A57CEDD625045ECDBAC0A34147B8B9F8C3B99A2F
+      9BEF802953A6E09B6FBE51B47DF8E8217E7AF4D37F6AECDEBA750B952B57D178
+      BD71C48851ECFCF888A4CD67CE9C41D7AE81F8E1D45DBC790E35BC7A06C48E9F
+      05E71A8D91C5CE3BA5EEE99AE52F8806EE9E6A080A0CC5D307C0EDABC099136F
+      D0BECD40CC9E3D5BEFD86566F2FA10357C360E7EFD04CB32CEC1B37190A41DDA
+      0A5DF7E9DB2B0969D3CF61D2D853B030A9A28807F91F10D00B1E8DBD24616151
+      082E2E2EFC352CDFA6A31035300755CBF7C2C0FE43417127EEA9E357800F9004
+      AD2319C2216AFFCE3BD1D56B23EF97DC068DE00B9341761079FEFC0528C83540
+      9B86D93A9F49259B791922BEAC58C3D77DA9DECF4BFF2FF2DDAB26C1CCB4A45E
+      7CEA3FEA63719D53554FBEEFF5E11397724C3C5EC4CBDA0AE5879E7ABE14A3CB
+      1CE4BDBD7A9DF4355ED576B49C8B83391C0FF17562A14EAA6DDEF57F2AFFBF94
+      CFBCE4F5DD077DEED91BCDD7F10E8DBEFA75BE47A3E7F3075FF8FF837CEE7FE3
+      3D20838AF09CA82EB09692A0E7B1F47BE6530AF2E70E990C418E66FDBA8B2047
+      0AFFE16DAB5EFCB52B276359D6780568D9107E5EF5172C68A1C42B5CD8D2207E
+      F3A6751036C01FB1E37AF1535A36843F6E742052670DC1A28C287E4ACBFF243F
+      28B0256FFBEC6961FC94968DF17FC1BCE1BC8CCCF923FE96FE4B4B4B83B3B333
+      CA952BC783DAD094EE6B74ECD851AB3E0F0FFE9E38EAD4A90392437572195C9B
+      366D50BC78717EFDF4E9D321C5A5E78BE9D9E3214386F0CFA7D2F516411ED5BB
+      BBBB63DCB871A856AD9A928C76EDDAF1EBBB77EF8ECCCC4C787B7BF3F7BD060C
+      18C0F3535353F979B281E6499E8F8F0FFF8C2DD959B66C59AC5BB70E313131FC
+      B662EAD4A9FCB39BCB972FE77DA7F73B9A356BC6CBECD2A50B962E5DCAB7A95D
+      BB360FD23767CE1CBE3DC9263FE8B9D17CF9F229E24CF7F09C9C9CF86DC9860D
+      1BD0A449133EA6C44F4A4AE2F5901D55AAC8AEC1509D387EC4A57A5A5FB46851
+      50BC681DF14B962CC9CB4A4949E1DB060707F353B90CAC59B30623468C50C48C
+      B8F2FB703C3F2A2A8AF75DCC5FB97225CA94E19FB1408B162D94F814EF35B2FB
+      F758BD7A352A54A8A0C617FA8BDA98989820282848894FB194FBCA91DF850A15
+      E2632AF0A9FFE9196DF2317FFEFC7CDC043EC59638D417427B8A2FD593CD3425
+      FFA82F84F8932EA1CECACA8AEF2B61BB4E7CB29F9E23178F0D8A8DEA78A1BCA1
+      7888F994A70B172E04F945793471E2445E0FD94D1CCA25EA3FE2C4C6C6F2BE51
+      DE097C1A57143BCA3392B578F1625E0FC9B1B6B6E665916D141FF28D728D726E
+      C68C193C9F729AAE2DD1B3D2B4BE52A54A7CFC85FEB3B5B585ABAB2B3F4F7D42
+      71E8237AA6E1333FC7D0FBF88B6226405816AF132B12B5535A16F38D38EE53D3
+      A78F5E8979C9F5BA96C57C6DFAF5E073DAE2A6279FCB0B5FA50FB4F699D4BCC0
+      55ED576D50E96F2E0FFDFF9F29B41D276CDAB409FBF7EF3718C271026D5368DB
+      E5EBEBCBEF63972D5BA6179FB679B44DA4ED11F1699B4BDBB0060D1AF0535A47
+      F669E2D3B632242484EF1FDA9F535BDA9FD1FE353A3A9ADFE71729528497BD6D
+      DB36357E42420276ECD8C1CFD33E2E2C2C8CB77FD7AE5D484F4FE7E5D2769AFC
+      A2E30E717B02D9171919C93F2B433CAAA3694444046F0F2DC7C5C5C1DFDF9F7F
+      AE8D6245C737AAB6D0FD08E2D0369C64527F903DB44CDB795AA6F56407C58ADE
+      4921FB54FDD9B2650BE6CF9FCFDB43B6D37EB772E5CAFCFD07D249FBB93163C6
+      F072E85D17F2570A1453CA0FF2998EDBCCCDCDD1B87163BEBFE839188A2FF595
+      AA7EF29D741397FA817C26DF2906B46F24B9B43F243ED9461CF28DEA09E423C5
+      82FA917CA7655A4F31200EC58EFCA1D8D0310AF948FAC8E73D7BF6F03E92FD14
+      438A85B04CFB43CA2902C9A2FE156CA679AA23BB48AEB04CBE527BF2C5C6C686
+      8FBBAABF249B6C247DB45FA665CA17CA3BE293AD64B7901BAA20BB48BE90EFE4
+      33CD53FFD0FE5EAA8FC5202EC92050BE53DCE8F852DFF12B7E8E53EA8A88AE2B
+      6E5ADB19225BAAAD721D74CA55AF576C737FF9E51743B7BD0A9E18FA5C8794E2
+      E92143274F92AFF2CD1EBDF92ACFF0E6D176BD65E87B2D380F5C49197A7125E2
+      21196F7D735DD3B56B7D725FDFF1F329C6EFDF73A8AEE99D783D8E8374BEDBAE
+      850F1DEFCA6BFB7E1874D964C43705C47A8D7EAF5C4B3C347335BF2396CBD9B1
+      A306347105E44586BEFE6A926148AC74CBD09DEF9A65E83F56D465183ECE7265
+      183F46F58FA9A6E2F52FF1059EEAD4501902FE2DFFF35A74DF2717EEEDAB42EA
+      9900E97679D3FFA57C29792D73E79E0141B5BE7F7FF5E796D6AE3D8EF1E32F29
+      EA972F3F853265DEF2A07931D7C2E2037C7C1E2AC9A858F1358A157B8FC4C40B
+      7C7DD5AA2F157C9AA73A5A47F3C4A7A96007C912F8542FE81B35EA2A08AAB60A
+      F2C42533F3343B1FFE59A9FE7F81EFE3B341ED1DAB3265EEA9D50505CD41EDDA
+      C715CB6BD7AE65CBF3D1DA7D36C6F5F4564259ABAB6A757D5B0F868BE3D7F2F5
+      45D0DCDD05CBA38761CFF4093895314209EB264E51ABFB26650CB626276270FB
+      C6488C8F63FD58D5282426267ED936B242D74C8C5DA677233E05DF187C0AFD79
+      5996E9FEF7FCFF14FAFFCD65B1FDFF46FFFF57E2F7A9CBA4CB93E80BBC987341
+      F3B15FBD87F5F8361BCF6C546A13733586AF177E52323C1F782AB511AFDB7C66
+      33922E27F1F534DDF5FD2E357ED6B92CF8DEF355B411F4125774B6ACC6EB7BAB
+      AFA22EE92AE3BD91B511FC55E2A8F0059B9D9EC8DE7711F3C5BE947C5E12AA7C
+      D598901D4A7C2A6F737DE18B2F87D2A54B2B81BB905BC755E0E4DF7652E7D3B3
+      00C2F5916D81A515E01EE42ED33ABA562DE68F3B330E75AA94C3B9495EC09B2C
+      6C1CE22CFB96CE987AC0FEA1BCED3831062558DDE6CD9B95E3CBF89C2B87BBD9
+      A1002E282129A01A7AD7B3E0ED772DCD29EEF18B8B85BB855EF7CD0C7D6723AF
+      E7E09F82BF6BD7F7484ABACA5FFBA1E9E6CD670C923367CE05E45E4B036262AE
+      1A6C872063D2A4CBEAEFDEB01506A15327C457AF2E03CD1BCA57C19C8A15713A
+      33D328103753CBFBE8BA4A66DDBA0AFEFAF5C33074A829C2C3398D888830C5D8
+      B185B16B573454F9AF5E2DC2850BD5919363A2F6FD90C3874DF1FDF74570EB56
+      45BC7C591FEFDE4D53E3FFFAEB463C7F1ECECB3876AC88D2F74A6EDFAECC7F7B
+      E4B7DF1A63EFDE3AD8B061AC1A7FD3A6C54C4F24933D128F1F07E0C60D17864A
+      78FBB6213E7C68CAD6B9B2E3ED0A285FDE02438684AAF197AF59837E038399CE
+      483C7C381E376FF6C177DF35C0810375D0AF5F595895B504676D0DAE6D5B0C92
+      BF7B22E69F7BFD1A9357AD428F5E812C46BDE0E7E70A53535370F40C0CEB27AE
+      776F70AB57837BFB16831E3D52E3EF603237DCBD8BA9AC4DD89831FCFD4D0B0B
+      B65DA06F4E128FBEE5F1D34FA8C8E6BF91E03FF9ED37242D5B861DCF9F83BE67
+      32E4DB6F5174F76E70CF9E817BFC18DCBC79C8BE781197488E44FF0B256EC102
+      AC64B68C64BA8A31D463DBBAE46DD2DFCA93E253B974F326A6AE5F8F21F4ED10
+      3DF3CFD8FC9D6469095E8E1120EEA7BAD8CFE5ED1908A56D1CA7FAED76E595FF
+      517EDEFC0F9BB542015ABEF9E0B1029F033FCFFDAF7C4CA8F4D57B59FC73ABFE
+      93FCCFF419A0D8F1A3913A7B0AA64D9A8894999379244D1C8B1953E211333612
+      B1D123306E7404468F08C3F0A1FD111E1A8C81433AA2F5DA10F4CF72C5F973F7
+      F1EBB3D7B87EE502AE5E3A8B33DF1DC5869599D8B06A215267C462FEEC78CC9D
+      1E8BE98951983431121387F4C09C6ECEF8AA7F5DF8EF0E8775E13DF06BFA3382
+      7B5D40DADCA7D8B3EB09AE5EF915D7AF3DC6A1FDDF60EFAEDDD8B57D0BB66EDC
+      80554BD230A49903360F6E8065BD5CD07BFD1874F0BB82E9F1807FF31768E7FD
+      1BEA557F00F3FCEB50B6C475142D9A081797F5F0F2CA86778B75880EF4C7A201
+      8D70749C0F8E8DF040BF4DD118167E1BE74F03DF1E000EEF05B6AE03E2467D44
+      7C1450DFF9061C6DCFC2B6D44D14B3DC88CE0D133033A013CE26FBE3C1CCF63C
+      DFB3C939CC99CA8EAD6281D54B814D6BD97431B07B0BB06611B079153BEE8BFA
+      88217DDFA29CF545942A7C0C315E61383BAD1B42368E858DF541D4ACF6332ADB
+      3E4163B7D7F06AF21B6A3A3E47DF1E1FE0D5F825C60CFF03A323FEC4B0011F30
+      7CC05F286E7119D58BAF4746402DDE7F37979D2855E2141C2A5E8455D17B3037
+      5B0EF37C2751C4F230CBB1D9285EE434ACADBE6531D9888A363FB2BA5928552C
+      0D93FDABA3D7EA5170A9BF10C1ED7F41C756BFB2F8BD450DFBAB7072BC877CDC
+      76142EB811A626F48C4904039D5F2C66E80937BBE1486A5B0D3D578D42C3D0F6
+      98D6B925423D7C30C4AB33C6748C47B746F170775802FF06FBD0DC75378BDF57
+      4CE709665B3A5CAB4C4558931A98D9D109416BA3D0657E288E8F6A8855C12E58
+      D7CF15DBC2EA6169AFDA88695505252C2D30A5436DD6E7EE30CBE780304F0F14
+      296001AFAAA5E059A524FA7E35067D378CC19319ADB13FBC21CE8E6B8A9F923D
+      7122AA3193C77FEB0B031A96C7B0D635F9F94D610DF9E9A170D994FA8FF032A5
+      2D0E0F6B8C9B099E7835DB07D7E33CB12B8C7FEE0705CD4C994E337EFEE17CD9
+      33FFE14D2AA1A963499EDB6BEB283C9ADE1A87221AE176620BFC9EE28B3B092D
+      B067B04C477F8F8A18DCB8023FFF6821FF4C15DE2FEFCD4F89EB7F6408D266B7
+      C1D67EB57176547DFC38D60317A2DCB16B900BBAD52E85ADFD6BE3CC48377EFE
+      ECD8C6FCB4AFBB0D7C0734E4B91313F22164B5073AEE0F3108C421AEFC3100C9
+      ED99F8FEADB88DEABCB808F78CC5EFDDE9789F4A499EC4B750B5EA975A972CF1
+      5F4DFADA2FE6EBF93E98A47ED57BDFFADA2F54A9CA3036FE9C0E47C4F7F905BF
+      55E7B5E91774698AB98A3D92F552CBE2F88A5D90E951FCC78F6A9F4BDA99EB8F
+      3A57D40E9A7349CC51E74AE5BABABE5C1952F9A3DC07EA7DA2EAAF86FC916AA7
+      C95FBE9C3F7F1E9A40CF3EBD0F0A52E0C5B97378F1E2053BA77CABB05F13F7D1
+      AC59603B5F9CDBB70F78F24486C183813A75800E1D70E5CA1549FE2F69694068
+      287D34094C114E9F3ECDCE5F3F28C04E7EF13A3C1C9839935F1673EF53FEB0F5
+      60E78737D9391815FA4EC2FBF7EF65DC4D9BF0342303376765E2FAB8C5EC7CFB
+      B9827BE5F0613C65763D62DC376FDE80BE3B24944B972E61C7922578DDBD3B2E
+      9D3881E3367D3135E28A926EB2F935D3497C2AA49F6450BCFE7CF810484CE475
+      9C6F35120DB873B8B975AB32DFDF9FE79D6331160AC9B8131F8F9F5BB6C4E5A3
+      4771E1871F70AC641F6CE6C294FDCECA02162E54F0E85BD39B56AC00DAB5C32F
+      ECBC576877D6770CBCB8DD78367162AE5EB4C5EB8808A04B177CE8D3072FBCBD
+      59555B7CE8DA5549C76FB1B128C3DDC33E8B10A5FAF7EF7BE1FDC860DC63FAC8
+      3FB251BCFE6E7636CE3488401F6E058672CB716F4D2AF32BD7F7A74F93F1FA5E
+      06C0F24BA8BB74FC381E8D9E80F55C2832EC37A0027713D15C1ADEECEE8E77EF
+      FAB0FE38AE1C3BB07CE9D8928FC3F19A11D86F3312BD2AFC0233EE0DB26C587F
+      770F02AED5657D331D0F1FCEE6F1E64D28EFBB8CCF72A56D73CC66C74B292CB5
+      5C6C81D37DD371BF2F6B73791E5BEFCEE0C57C0D56F0AF5FDFA5D0FFEAD52B59
+      7E912C3666F0276DC7E6E1D9B36D0C1371E1C269681B677C1FDEBFCFF71DE524
+      CDEB6AFFA9A0FB7933C3AF05B8D42D62F47F7D12B7738F3064CC4837F8794F31
+      F7EDE1DDFABCF3AF954B536D76142E5C18BAB89A64F0D7F265DF3FD3C9A5F5E2
+      982AB872FF0CE1D254C18D8BE3EB0DE11E3A7448B64C5C39DF10AED27BF4323E
+      27F64113776E83B90A5D24879EF797C79F13CB90E2AE8B5DC7F3E23899BDF4FE
+      A6863ED5CA2524154ED2F91D09F1FCF35ACF95B82A36EB2CD49E78C67025AE4F
+      1854E87D84BC5C5BC82B3F87D94C3234411FFD3922BFC51C615E9B7CA18D6087
+      982BE66BB35F6A5E1FBEA053AC5B3CAF6ABF945E314FD33A5539523157D52D65
+      87AA1E5DCB623B54FB49D57F295FC4FA35E9D1D47FAABE68B2431C035D3A34E5
+      AB26FF55F32947627C4AE586AA2FAAEDF5C9E7BFABDCB8750B694B9622686804
+      BA8D1C8EA0E404844C9F86C0B81884C6C761F5E68DF8E9C143491B0E9E3C893A
+      1DFCD16E4C14B27EBE83E07929A8DBAB1776B16D2FED9D68CF317EFF5E84B36D
+      F7C96BEAF740E7AE5C01BB664D50D4C11E16254BA2A0B535CAB1F38F1D8CB781
+      BE3BFBE73B2C7CF20893CF9EC1EECBB9F741BFF9E17B7805F78463330FD8D474
+      42D18A1551A8A4352CACAC605DAD3AB632EE7A8615EFD8B1E4F367C8B87F0F33
+      2F9D47C2FE7DB8FDF429B2B66C429D4E1DE1D0B821CA3855E7F9966CFF6CC6F8
+      5655AB62233E30DD6FB1E4F50B643C7D84D47B7778FEB89C83D877F122B2366D
+      40ED766D61D7C01DA5AB5543D14A9560696303CB326550DAD919AB186FF1F3A7
+      CCF68748BF770F2937AE63FAF9B388CDD98F1C760E75E0FBD3A8E3EF878A6E6E
+      CCDE6A286667C7645444097B7BD8793446E6C3FB98C774126FD6954B98CACE2F
+      124F1DC3E85DDB71E3F163D9B719FAF561FA19BF7A359460F1B3AAEAC8C7A226
+      B36BF695CB987AFE0C12BF3B86F82339AC0F76216AF326C4AF59AD88E16B769E
+      D6A947080A15AA8482056D61695901C58A3AA2A2AD273AB59B8BB6BED3D0CA6B
+      229A371989868D07625C728A640E5CBF740B838286A1B089032C390758710DE0
+      C4F5873DD711954DBD3161D81C3C7AF044670EDFBD7E1F75CAB44169CE038E5C
+      77F83A87E1C5B3B706E5FE4F371FA0BC89376A15E886B72FFF346ADC84754DC2
+      B4E8A5468FB9E5191B7070EFB746F35F3E7F8D3FDEFFF9B93CA7F809EE21AADD
+      C8D388BFE31E9621E5BFC8FF12FFCF3AFEFF4A51BD7E6C0894AE1FD3B5661D10
+      DA89E3C7CBD283AB0A31DF98F285FF85AFE17ED5FFC7EF00E6D55F9DFB0E3DF8
+      79D29F87EF3E2AF879B043F97E9DE171F85479F749E2908758A8E9F9878F21FE
+      9658FC5B7C63FCFFE38F0F58B9F23C060EDA8E7C16A90CD9A8512B1B31137270
+      FFFE0B7CFCF85152E75F7F7DC49D3BBFC1B55E362AF6BB8BB8EBCF10C8CE6F03
+      333311C76CF55DF604B6F66B90BEE0327EFFFD0F3519CB965D846D85D588BBFC
+      846F3FF0F66D700E0EA8959ACA2F0BB08D7C845A75B295643C78F0122D7DB315
+      DCB8F7EF111015855AF4DD1911572C83EC205FC8EE7E030EA14DF613C5FA8003
+      0798ADF688FBF96759DDAB5718CACEB549AE4206F385E2F1F6ED9FB028B64651
+      3F9471384747B8A4A7CBFCDEBB17353C3C50BA6A55D4E8D00181E7CFCBEA67DC
+      454CCC212C5B76167603BF55F03B2726C2A5756B599B3D7BC0B1F3F98E191998
+      F6FC399C274C80CB8001B2B62CBE359C56F0324896C0770E0A42C3993311F7E2
+      05ECBCBDD17CD326CC67F533D9B9BE5BB76E68FF6DAE2EEA5B557EFBA347C131
+      DF2BB8B8A0A2B33382990D04B780007E1DDD659CA4E0A7E2C68D5F6157638D52
+      7C6BD077008B17479576ED78D03CD5D13AB285F6B8BED9CF10D27F3BDEBFFF80
+      DA2EACEFAE3D93F15FBE448D860DE19D95A59047F35447EB84BA0A2177F93C95
+      E5CE59541C7892AF6FBE6103BCBB76E5FB4C61139BA76B2BB48E5F667942794A
+      B92EE4EE90880318BEFF2C385B5B047CF79D5ACEF82E5C0867B90DB6FD4EF2B9
+      2ECE5F3E075B2E43C73907902D9173716FDF222AE7026C1D5258EEFDC8E79DEA
+      1878F3E60F6467FF083FFFD5AC4FBEE5FB45866F99BF5B3078E80E5EAF14575C
+      28A6870FDF616D1278B469B38ACF535D3C03F7F79C273CF12FF073DF7FFBFCF8
+      9FABEE7F9D6B201F0670B5EE1389674C5FE9CB13DAA9FEFEA90377912E8375D2
+      FD4863F9C23D6C155F610897E3FFDDD660BED2FD6F03F952F7BF393D6568BCFF
+      AD075FE7FD6F2D32F4BEFF2D21C3E0FBDFAA320CBDFFAD9AFBC6DCFF96183F06
+      9F6F6B1887069FC37FAAF1FC6F6F27FEBE0B074AAF5A4842175F6A5EBCAC438E
+      645F4AB5877EDFE992CC0BB12D86EEC334F965CC3ED408BE920C23FCC83D9FD5
+      D25786FA01E3DEC7D53BAFF48DC33FCDCFA3FD7FDB3D0043AFBBA83C1FCF7F4C
+      41DF6B1E425BA971A7E73513357E5EF5FF2FF09393F5E937CD7C43A089AFCD06
+      41B7363ECDD3F3CFC23D269A17A0DA4E139FBF2720D82A7F9EFAEFE47F82F1F3
+      4FEDADF3F8FD05190CF94F1E4DFA8DE37379E61BFA9F429AF65FC6F0C51CFDF9
+      CAD789059E7E7CA577A20DB51DC2E57BD5F6CACB80B6E3A79C9C1C68B75BF4CE
+      B6447B4D75DA724A4AA7269FF5FBEFABFFB5F269B603FF8E7EE3AE757C42FEE7
+      6C7B1EF840DEB846E78C623B64402E19708F5E69FB63848FF89CB60F30D26E59
+      5C68BB5AF92719F4E3E7F204AEB0AC9DAFCE23B0F94B1B0BF0D0DAEF028FE6E5
+      3C25AEBA7E659E84BD4A5C41B6C095E2A9D8ABC455E6736ABEAADA2BA5437D3C
+      E6D66BB257D52FC9F841DA5E713C757C475D922BF8A5737C4133575FBE8678EA
+      BF3D90C7C260AE9C2F8B91A84F0CD8A6E4723FD5F6FE5F2FFCF1583CA780707C
+      A62F577E0C960B4364C8BEB3A7682FD8A2F7715DBCC43E21DE80FD849E7C351F
+      B55DAB8ED7707F4C1463497C2AFD9AAED9EBAB5FC371F8E7ACFF4B5119EF5C2E
+      F23CDE0D9291A33EDEB91C03CEE3A4B6D7866CC38DE7E73507195D29EED2F8A2
+      FFFFCB36E0CB7E57E59D4F8978E8DBE79AE2A1F77E477B3C74E79C867818AA5F
+      95AFAADFD0E31055FD861E87E449FF97E310C942FFC940FF274CFF5B48FF414C
+      FFBFB875EB56BDC73EFD6721FDF722CDD3FF3EBAB9B9A9DDEF137C1D999080FA
+      BEBEF0080AE2FF135A0CFA1FC35EBD7AC1D1D151F97BD5227EB50E1DF8E72BFB
+      DCBE0D5FA6AB1A437386EE9191E8DAB52BB45DC3207E59C69FC1F811F4159967
+      CF3085C989646871E408FCFCFCF8FFA71020C57766FC18C61D7CEF1E38FA4FE5
+      468DD4C1ECA7FFDA94E2BB33FEE0376F902F3010DCE8D1E0284E624447A369E7
+      CE42FCD59FF7A1FF75A6FF9166FDA4C61D368CE76AF25D516763038EDE0D5741
+      A38E1DC5FDFEE5F941ED6D3FD7E707F14FA07821E3782E8E45F1CDD6A1F8E947
+      F976CDBC209B9A8BDAD0B7190BA8F1AA3894C0F62521C06F738027A9F8E34E26
+      0A1765EBF273FC7FD90AEDCCE9FFE945BC32C5F3636D6A00F06631F0EB72BCB9
+      9C81373FCE04AECC405B3FD9FFD9E7CFAF6E6709E6DFC29420E0CE543CFF711A
+      9EFD308FE95C093C5D8B3FAE2F002E4F4174841F8A9B7328562C9F1AFFF1B50C
+      BCBDB90A3F9D5A8887DF4EC28BD3C9787B2993D9B00178C8E45C99838531BEA8
+      675F085656666AFCB5D382F1E6E646BCBDBF114F4FA5E0C5770978FB23F3FDF1
+      1AE0C53AE05A1AB6CD688B761EE550BC787E05AF8009F3874D572675C48B1B1B
+      F0C72F9B193F95F1E3F1EEC7D94CF76A19FF7A3A76A576423BBFEA285CD8444D
+      FFD97D53F1F2EA5A3CBE988D27C76630FB13F1F67C1AF39F719F311957E762F3
+      BC9EE8D0A131E39BAAF1230736C16F37D2F0FBE53978F0ED64FC7A6A16FEB8B5
+      82F7FFC31DD61797A76171CA20B64DF6868D4D21256E3EF9D484F9323EB431DE
+      DE98C2784B809FB2F1E6DA22BCBB381B1F58FC63270C60FC562854C8446BCE51
+      4E4C9BD81EF82585E54E0ADE5D9D85F757D2E0EE668FD2E54BEB9DBB45999EB4
+      783FE0791ADE3F4C95D517E164DF3517B533D521A77259738475AFA5974E0B21
+      1612F2F31B7C2CA0DF798F1EE7B37FFBFDA601030620AF7C6519397A3DD72CF0
+      C45089DBDFAAFF53F96F68FCB5E8D3C0CFCD03755F75F173E3A91EEB7F42FFA7
+      F0FFDF183FFA8DDF38F977DC74212EF77B6D6A3ED233E9BAC0E978363EAF7C6D
+      B61BCA0794A7FF847E1D7E6B7D6F5668A73A25142A5448E9D940FAA6AAEABD3F
+      4D7A052EA7F26CA18A0CADFA390DCF66AAF2A5F4C7C6C6F279376EDC38A5FFDF
+      AB52A58A5EFAC585781AE2A851BF26BE282E5AF42B7F1758B059859BE7FECFEB
+      F8D5876F6262027C938F07CD1B3A7E05BE04D768BE685EE7F853B55F58D667FC
+      8BB9AAD0A55F952BE816A0CD7F29AEBEE39FB75D85ABEFF897E21A3AFE05195F
+      C6FF7F7FFCAB16272727D476764344448451C71EC44F9DB509EDDA7647585898
+      9A8C61C386C1DBDB1BDAF8CB320F6271C63EB46AD90123478EE4DBD23549BA16
+      D8A8A117EAD7D5CECF4ADB8D39D3D6637A72369A366981E2C5AC30A0771CE6CF
+      3C80F4D93968D3AAB7249FEC2D5BB62CBA761A0477D7F63CCEFC70015E4D0311
+      17BD028BE61DE7A1CA277F486F4BAF4EB0AFEC8CCE6DC7202E6A278F3B379F61
+      78E8725EC6D4F88D6AFCD2A56D302C6C26664DFA1AF366EC879BAB174686AD54
+      E2D3343AE22B54AFD2408D4FF3825D044D7C42A50ACE7F3B9FFC70AFDB066323
+      3648F233E67C03EFE6DD34F205199E1EDD316CE012057F50F03C5897AC8080CE
+      43F8586BE313126356C3BB592FBEFFA81F3BF90F42696B5BF4E8D143A9EFC4FC
+      052987F91C499EB0160EF6CE2851BC141AB837C23496472B16E5A05AD5DA6A79
+      43FC09A3972072F06C7468DB97CF5157BA2E2B2F63C78E8597671B3E27A5F80E
+      76B5E0E3DD861F13C1C1C19279191E1E0EFF36DD98FD36469F0FD0B8A3DCD6B4
+      FEE8D18DD8B4C984C7ECD92658B24486C444132C5C68829933076AD5BD7DFB6A
+      6CD8C061FF7E0EA9A91CD6AC91213191437636DD9B69A7957FF8F06EECDC29CD
+      5FBF9EC3E4C9415AF9C78F1FC7E2C59AF9B3676B3F67BB7CF9323232E8FF2D39
+      E637FDDFA48C3F7D3A87152B74F3A9905EE2919C61C3381633997E7A77252B6B
+      B44EFEBA75E5785BB76D93F1296EB366916E0EAB564DD4C9DFBEBD1DAF936C0E
+      0BE3306F1E87A143398C1E4DB25274F2F7EE9D8C69D3643A131264760F1E2C9B
+      AE5FBF4227FFD4A9A358BA54A69FA669691C2F8FF4EFA6FFE3D3A3646515E1FB
+      8FB8C387CBE2403668F95EBD52D9BA75386F3FFD6723F1A3A23836E6F53F0F3F
+      77EE0776BCC161CC98DCFF7E0C0EB63268DC2D5F3E80E53B879010CA5B0E0307
+      1A760F80FE7362C2041BB64DE078A4A418FE1EC1F9F3E7D83EBC03EAD4B1128E
+      D7749684180E3B5A73B8B86608FFBF065B92FC30C999C3DC211C26C66A8E21AD
+      1BEA237B18FAAC9D1DEEDDBB871F7EF80107060DC2395647482BCFF26A98BA0C
+      E21E6C22E3523B96683C57CC3FC1F03DC30686192A3204BD3CB77265FEFF13F6
+      EEDDABC45F43EB5AB6C41CBAD61DD81C5F7DD51682BF0A2E61D1229C3C7912DF
+      7EFB2D4E9D3A85DDDDBBE338E90E0AC2F7DF7F8F2DD1D1FC7F97CC9DDB5FF6BF
+      953EB95C9ABE3D7B16172E5CC083070F70E4C8111C7073C3BE4A95F0F0E245DE
+      1E92B97AF56A4CB035C5ACA91CCE38E772CFB0FDC6DDBB777168E9529EBF97C5
+      6139C95EB890BF177AE2C4095E46628B1698CFF6135BB70EE0F9E744713B7CF8
+      3016B56F8F2BACED9C72E590CAEAC7311B061529825FCE9CE1F98B982FBFDCBA
+      8519339AF17D2BF09F3E7D8A75A9A97CACBE2A50809F123F9661619D3AFC7FA9
+      90FD141BE1BEA0A01F919138CB7CDFD9AF1FEFEF91E6CD7188E1EDF2E5B8B667
+      0F5E9E3BC773680C535C26366A8489E36479C5F3376F066DBF6FECDCC9C7EAC6
+      8D1B3C4866666626CEB3980CA9570F916CBF3FD2C50555CAD3B901DBA62EB4C5
+      B54DD379B942CE8841B6AE68D20493B84A18CCF4F830D4661819C6C9FF77F581
+      A22DF53BDDEB26904EBAFF9BC1F6E32DE531F094735B3592E9263E8D917DFBF6
+      B16DD530ACEEDC806F4788A17B1AF2799A7AC8B96D1977C284DCFC9D34A909DB
+      4E1491E5623487FE6CACA7C9790D44D3C1B66CFF1996AB57EB33002CA763596C
+      691BA6986AE0D137C1FBF7EFAF002DF7ECD953A9AEF0B9C24ACBE2B6343D76E0
+      188F9933672ACE35689EEAFADF92F36FE5B61320C8A1F903070E08DF27578096
+      892B401B9F6C963AE7D12643E0936E6DE74DC413FC91E213D4798DE4E77F8D78
+      BE600BE93296AF165B39571C77654061BFEA3A85EF5E9C46109FA6C4D7D446DC
+      FFEA7E48EBA738A8F69F00E51C8052DF89B99AF8E2D8A8EA177335F109AEAEBF
+      212EF62CCF17C7585BFEA942D89D902CA9F5BAF8827E9A6AE3AB8E5FE59C82C6
+      750277527A06BEDEB1C3E8738AA894541CBB710B676EDD46CE49B66FDBF09541
+      B2864E9E8AC5478E61FACE3D48DCBC0D29BBF7216BEF7E2CDEB8094B962ED329
+      2B222109CB8EB2F345C68B5EB71183162E45F739F3D07B5E06A296AFC28CEC95
+      58B444F337D8C74D998A54C69DB16B2FC6ACD98001998BD16D562ADA4E9A8E56
+      F193E09734053DD9F284B4742667899A9CE973533171F53A4CFB7A3746AD5C8B
+      90F42C749D9982B6C9D378BEF7C424B498108FE6E362D12E260ED3E7A729C958
+      C88E3706CF4B47D2D6AF11B97C357ACFCF449719B97CAFD844B4888947B3E858
+      788C1C8B86438661687C223B3FC9B52564EA0C44AFFD0A83B296A2E7DC34749A
+      365BC64F207E02D33D114DC7C6A04954341A0E1D0197E010741A32148B162FE6
+      65748A1C875ED3D3D169F21C749832136D92A7CA6D4F84E7F838197754341A8F
+      188D86112350B76F7F54F3EF802EA1B26B3B3E3D86C0D13B14153CFAA2449D6E
+      28E0D215451A764729CF9EB0F5ED0DFB4EFD50BDC740B8F41B8CFA83C25127A8
+      0FAAFAF9A3765BD9F960E0A05128ECDC19F8B624CCAAF9C3DCC1171676DEFC32
+      81ABE001AE62131EF9EC9AA0885353D8346806CFAE013C7F744C22F239FAC0DC
+      DE876F6F5EA131CC6DEBC1A2742D1428C5B6277228E45955815D6D0F2C60FB78
+      BE0F1666A158754F98576E064B9BBA30B7AE090B2B47BEAD45D1F22850C416E6
+      0C1CA17059D46BD212F3D3D295AFC1B13CA950CF0FA6655D6051C2010558BBA2
+      85AC7919852D4BA140C192285FA12AC68E1EAB3117A94F93A6CC408F01C3E1EA
+      DD0D852AB9C19CC9326736903D5E1D7B63795696DEE36BF1E225486079DCA3FF
+      30D4F6EC8CEEFD22B08CE59BDE377E65658E51378DD5FFC3D1602E97FB5D5CA3
+      B8A245FE138C8672390DDFD3D0972B052919867E33575EEAE4916FB40DAD5AB5
+      928C83B6F889EF5DB8BBBBEB1D4779B92DAED3C697CA1F79FF2BF8745D5B575E
+      A9F639E954B1E98C31F964484E0BFC499326F1A0F3217D758B64FCA6E24A3103
+      B8878C19BF9F621B20F035E5AB0E5E9C6A9FEB2343D7F782748D7FEA1F23C75E
+      645EC62FCDCBEFD518CD2F52A4489EB61D627EBE7CF90C8A9F2A5F5E0EE9DB7F
+      545FAA5429D5B6CDF5CD1FD5BEA3EF23EAB3CD17F18B691AE7068C757E9CEEDF
+      BF5F31DEE5E53703F2BE928AD9B7B97FA8E8F9B709CB748D75ADF7EFB5C8D067
+      FC689321F06BD6ACA9F5BB61820C4D7C535353142850400DBAB6FF868E7F43ED
+      A742EBFE6E7E5EEDA7F8E6CF9F5F12E2E710FE2EFBF3AA3FAFFEE7856FE0FF97
+      E49EBB74B6FA89E10CC369117E60F89A6138C356864A1A9F1FEC6C7581A13183
+      23435586EA0C55187C19CE311C6428AD85FF1D432D86A10CE5E575B60CFB18AE
+      30D4D1FAFC6267AB930C1D187E66D841ED1956313C61E8AC6BDB25F7B72C4377
+      86477239CFE3BB149F9BD0B5682F3DF965E4F33D4906E3CE1AE8D96248E7BA03
+      0F562E7678A25DF19C310C5E0C8524F867E4B12BC2F4158FED64EDEF566149A4
+      A3D5BE2B554BEDFC95714E329C6378C8F015431515FE4D865D0CDB98DE6D01F5
+      83BF616D5ED42CB3115DEBF54BB72B7EA8205BB66268C3F03DC341860A227E0D
+      06E7C4AE856B86346DE355A3F496EB76C5BFB96B5FE2E087EAD6DB0FD8173F54
+      4E68CB787518AE31CC908A05F3B535E3DE63EB5B322C60F37FB1E916065B918C
+      E90C77A4F8AC3E94E1128335437186C50C246313838DBC4D6F86771AF8410C37
+      182AC997C9EFA572191B194A310CA5F868E0D766F889A18FA88E642C93CBD8CC
+      708861BF067E7E0616F39C2B0C1E0C26F2FA120CAB19C0F098C15F533EB175E5
+      18B6CAED98CBD097215CDE6F4F198630E4D396936C7D69864486DB0C7F30BC66
+      C861684F364A50F259585854B1B1B1F11150A674699F6296057D0A9BE567534B
+      1FEB52257D0A585854A3B612FC42F5EAD51BBF6FDFBE5B070E1CB8BD73DBB6DB
+      B3A246DEEE6A57FEB65F71CBDB010E156F8F0F0CB8DDA07E7D3A0F2F24C12FEC
+      EDED3DFDFDFBF77FFDF9C77B2C8E188C01362510EE5405231BBA6358ADEA08B1
+      2E02E7C2053798725C794DFC77EFDEFDF5D3C50B08AD608DE12E3531B6470846
+      F58DC484A08198D0CA1BDEE626770A99709D35F15FBF7CF9D78ED4D9E86F5312
+      E33B7643C4B8540C4EC84264F46CA4C424A347F182EFCA997269F4F8A10ABF98
+      9F9FDFBCDF5FBDFAB865FA140C2C678D09DD7A2122711142193F62623A32A6CD
+      437099E27F5434E556B0F6A622AEA54D3E93A97D6A383EBD76EAE4C7D33BBFFE
+      1852BAD8C798965E1FA3078EFA18353CE9AF496393FF3A71E8F05F7D6C4AFE51
+      C994CB16F12D58677468929FBBDFCDC2E4CFD0965E0FC70E8B38DFD2AAC89DE0
+      5285FF1CEBDFF66D406BFF8B7D0283BE8B193FFE7C805591B7954DB9758C5744
+      E4835905536E59E3FCDC23365F36BF693EA7C2160507573033DBE6636EF2A45A
+      7E933D4C599D72F94C323A98736FBDCDB85FCC39AE3D6B6B2E38C0F88B1AE6E7
+      1E9AE737F374ADEEB2A5A567FBBB4DEA36B9E490DF34C7D78CFB8DD9E8694A8F
+      BA9872DB4A9970B18C52401C3CC6CF22FDF6151C57F48B487E3F286EC1C72131
+      A91F6B962D7F9AE97B58DC841B2BD767A6123BBED89A72737DCCB81795CBDB7F
+      D53D74FCFB41F10BD167F44C30FE9996E6DCE36226DC68B1BD6A9D6FC275F5CA
+      CFFD54D9C22CA77E75971FBBB50B7EEC59D7E396537ED3B32DCDB8A74C613D6D
+      E38DAD2FC77C58EC6BCEFD5AC73CDF851A9685BE77B130BBDCCA8CFB95C57BA5
+      AABF1A4A01E66774CD7CDCCE06F9B9D3B5F2717B2D398EB643250C3814B7649D
+      5A810DF0EACCA68ADA7C16158ACD53861B0C2DB4B46B216FF354CE11CAA35AB5
+      6AA152A54A745CB15CAA7FE475CB9B71CDD093E3EFD53D12ADBB4BCF4CD9D8F0
+      CF36654A8C2D4E5E97599773456BAE35B5BB2B5AD7916127C31A7AFC4FB3F963
+      DB719CCFCF6C66174307D5D8ABC48AB6712ADB492471DCEB643D62EA488FB130
+      6C60682AE7B26D16F632B8EAD11F69F41F07952B57263FBF916D2FD18F6189EC
+      352E4E472A72ABECEDED8567D0CE705CEF4A744B9FA1BD9E39E4C9709A1DEF5E
+      63D3BE1CF7916E816FA7D738F5E4535F59D3B0E4B8307AED8C6E690F33F2CCB2
+      06C33E067B5D6347A25F98EEE7E3E996A98ED7703ACA7362AD287F1AD2A3441C
+      E7F190E30607EBD0AD9ABF64CB56CAF5665C53AADB42DB692D7CF1F8A1735336
+      ECB9DDFE9C3F0834AF63FB11C5F084E1BABCEFA87461F8598ECEDC6752D8A989
+      597CD48948AF7A876F37AC71FC764BF7536722FA5F69D4B7EBB93A4D6B9F38D2
+      ACCE899C8181E76B4AF0F2FF74E37CC33D6B662E9B11E1F75B47F7F1A854F430
+      BAFBEEFCB07FD3AAF40B677EAED5DCF5E42A2FB753E173A6DCB610F1F23DB87B
+      D575FF86D40569D11D9E4477A98011AD0B21AC55133895DD83BA953622A6678B
+      8F0BE223AF75F73B71726ADCCD6A62BDD7CF1F9FB53829F8E138C61BEE5B9471
+      8B61845F318C6C6B0B4FA705B0B73A82E0E6DDD1DFBB2D42DA4CF97357F6E47D
+      CF9E3CACAF489CEBE7DAEDCC9E9A336B580B44F99792C9F02B8E516D8A22B0E9
+      40D895380A9F3AF3D0BDF9542447C4BCDFBF7EE6E65F9F3E526C43AE5F38D977
+      D382F127336303B03831085306D667BAAD30BC75610CF17545ED72DB51D5FA10
+      3A78AC44F6CCD1AF7F3CBA6DF2378772BCE765A4774EC9480FBCFCC3E1944509
+      3D7F21FBC777AB84F4711DC09691DCCF15D387344380F74A54297510DD3DC290
+      105C15EB964EF96B46F6F2273D63C63D0B9D31FDA52C7ED75C58FC32E78DF17F
+      36B6932D627B54C182095D316F741B8CEAE886A880EE1FE7270EFF735CEC0804
+      458F81DFD02170EBD801C3B29789AF41E6BF73EDC7262C166B66477ABF1CDDBE
+      0C6202EC3E2E4CE8F526337DF2AF41E161CFEDDCEAA1B48303AC6C6D615BA52A
+      0665CC973A0F2E70EDC76FFD989C4DDF6C593073D1DAD529DE3D03DF556DD410
+      159C9C509A6D534BD8D8A20C931392325BDB35410B3A4D1E392929B251E78E7F
+      5569E08EF24E3550DADE0E56E5CBA36C952AE8337386CE6B7B49F3530735EDD2
+      E90FC7FA6E2857A306CA383AC0DACE0E15D9780F9E3E4D277FDBBEBDBE9DFA87
+      DCAFE25E1FE598FEB255ABC0B65A35903D41D3A77EF9A698B66D89EC219A5B0C
+      17183A309431906FC9509D815EFCF061A896075B3C181C24CEFD3D189A12E23B
+      5B3511C143C0C42E568DBFB3B708DFE9621910C7E6E3BBF0D75A1AC576B26AD4
+      BD61E1A7B52A98BF91E3B5242A9ABF1A50DAEC777F1BD6A6A2C52B56F7CACDCE
+      E275A857B19BCD6B14FC539F6B4ECD19EC84F7C8F399A0A16381C723DB14EFD7
+      A361E17BD56CCCDF9729960F852D4CF97526127C7A76CEDE84BE03618A96CE96
+      37C7B62BD1E5DC948AA6495D4B561FD7BE44BBC12D8B8DEBE5516479BBBA850E
+      B7702A78B5816381872E952C5E905FCECC872165CC5EF5A952E04650D3224B99
+      FFF5A4C7AC97C9A6113685D2FA5ADB4C0B2C593DB1AB557D8A2B8B5F93F3152D
+      C22E542BE8E685ED2646F69F1703BD844F0F283940EDD85027BF3903BDC8F233
+      C361C88E8FBE944F3FE6EB325C63B8CCD085C1C6407E41F998AF26EFF39A79B0
+      A581AE6D06CB657796A70DE56820877B7CB792EEA7ED0B0C3CE06C1990D0AD64
+      7DCA6501490C095DACDC2676B272EBD1A8C823364E5EAAE0451D86FE65CC5E77
+      B6357F45F32ECA785EDFA1C08B50EF6237B48DFF26F41D1589FA7CA61CDC1D0A
+      3C63C729A1010D0B3FA852D6EC4FEBA2F9606961C2AF13DAB1131F38AA7E07C6
+      D2146C7CDF19E35FA2C7E1D872F9981FCEB42D60B6C405362AB2A6AD4BA1E3CC
+      A69B6E0E059ED036AB4D19B3774EE5CDDFBA32BB3D597D904711BAAEDB4032DE
+      079D4CD70C2D5B646E6FEB0A937A94AC75DACE227C53DD424163BA956C1EDBA3
+      64BDD9BDAD2B9E4C286F6640FF3563A82DCF051AF3F98CD8E64732DC673801FE
+      7CE8BF55FE0FFC7B60F1
+    }
+  end
+  object MainMenu1: TMainMenu
+    Images = MenuImages
+    Left = 112
+    Top = 72
+    object File1: TMenuItem
+      Caption = 'File'
+      object New3: TMenuItem
+        Action = NewModel
+      end
+      object Open: TMenuItem
+        Action = LoadFile
+      end
+      object Save2: TMenuItem
+        Action = FileSave
+        GlyphShowMode = gsmAlways
+      end
+      object Save1: TMenuItem
+        Action = FileSaveas
+      end
+      object Import1: TMenuItem
+        Caption = 'Import'
+        object Part2: TMenuItem
+          Action = ImportPart
+        end
+        object Carlssonhulfile1: TMenuItem
+          Action = ImportHullFile
+        end
+        object ImportOff1: TMenuItem
+          Action = ImportFEF
+        end
+        object Surface1: TMenuItem
+          Action = ImportSurface
+        end
+        object Chines1: TMenuItem
+          Action = ImportChines
+        end
+        object Carenefile1: TMenuItem
+          Action = ImportCarene
+        end
+        object VRML1: TMenuItem
+          Action = ImportVRML
+        end
+        object PolyCad1: TMenuItem
+          Action = ImportPolyCad
+        end
+        object MenuImportSTL: TMenuItem
+          Action = ImportSTL
+        end
+        object MenuItem3: TMenuItem
+          Action = ImportOBJ
+        end
+        object N6: TMenuItem
+          Caption = '-'
+        end
+        object ImportMichletWaves1: TMenuItem
+          Action = ImportMichletWaves
+        end
+      end
+      object Export1: TMenuItem
+        Caption = 'Export'
+        object Part1: TMenuItem
+          Action = ExportPart
+        end
+        object IGES1: TMenuItem
+          Action = ExportIGES
+        end
+        object DXF3Dfaces1: TMenuItem
+          Action = ExportDXFFaces
+        end
+        object DXF2DPolylines1: TMenuItem
+          Action = ExportDXF2DPolylines
+        end
+        object ExportDXFPolylines1: TMenuItem
+          Action = ExportDXF3DPolylines
+        end
+        object WavefrontfileObj1: TMenuItem
+          Action = ExportObj
+        end
+        object STL1: TMenuItem
+          Action = ExportSTL
+        end
+        object ExportFEFfile1: TMenuItem
+          Action = ExportFEF
+        end
+        object Offsets1: TMenuItem
+          Action = ExportOffsets
+        end
+        object Coordinates1: TMenuItem
+          Action = ExportCoordinates
+        end
+        object N3: TMenuItem
+          Caption = '-'
+        end
+        object MichletCFD1: TMenuItem
+          Action = ExportMichlet
+        end
+        object ArchimedesMB1: TMenuItem
+          Action = ExportArchimedes
+        end
+        object GHS1: TMenuItem
+          Action = ExportGHS
+        end
+        object PAM1: TMenuItem
+          Action = ExportPAM
+        end
+      end
+      object ExitProgram1: TMenuItem
+        Action = ExitProgram
+      end
+      object N2: TMenuItem
+        Caption = '-'
+      end
+      object Preferences1: TMenuItem
+        Action = Preferences
+      end
+      object N4: TMenuItem
+        Caption = '-'
+      end
+      object Recentfiles: TMenuItem
+        Caption = 'Recent files'
+      end
+    end
+    object Project1: TMenuItem
+      Caption = 'Project'
+      object Projectsettings1: TMenuItem
+        Action = EditProjectSettings
+      end
+      object Linesplan1: TMenuItem
+        Action = ShowLinesplan
+      end
+    end
+    object Edit1: TMenuItem
+      Caption = 'Edit'
+      object Undo1: TMenuItem
+        Action = Undo
+      end
+      object Archimedes1: TMenuItem
+        Action = Redo
+      end
+      object Delete1: TMenuItem
+        Action = Delete
+      end
+      object N7: TMenuItem
+        Caption = '-'
+      end
+      object Undohistory1: TMenuItem
+        Caption = 'Undo history'
+        object Clear1: TMenuItem
+          Action = ClearUndo
+        end
+        object Show1: TMenuItem
+          Action = ShowUndoHistory
+        end
+      end
+    end
+    object Point1: TMenuItem
+      Caption = 'Point'
+      object Add1: TMenuItem
+        Action = AddPoint
+      end
+      object Projectline1: TMenuItem
+        Action = PointAlign
+      end
+      object MenuItemPointAlignPermanently: TMenuItem
+        Action = PointAlighnPermanently
+        Caption = 'Align Permanently'
+      end
+      object MenuItemPointAnchor: TMenuItem
+        Action = PointAnchor
+      end
+      object MenuItem2: TMenuItem
+        Action = PointsCoincide
+      end
+      object PointCollapse1: TMenuItem
+        Action = PointCollapse
+      end
+      object miPointExtrude: TMenuItem
+        Action = PointExtrude
+      end
+      object AddControlPointToGroup: TMenuItem
+        Action = AddPointToGroup
+        AutoCheck = True
+      end
+      object InsertPlane1: TMenuItem
+        Action = InsertPlane
+      end
+      object Saveas1: TMenuItem
+        Action = LayerIntersection
+      end
+      object PointsLock1: TMenuItem
+        Action = PointsLock
+      end
+      object Unlockpoints1: TMenuItem
+        Action = PointsUnlock
+      end
+      object Unlockallpoints1: TMenuItem
+        Action = PointsUnlockAll
+      end
+    end
+    object Edge1: TMenuItem
+      Caption = 'Edge'
+      object Extrude1: TMenuItem
+        Action = EdgeExtrude
+      end
+      object Split1: TMenuItem
+        Action = EdgeSplit
+      end
+      object Collapse1: TMenuItem
+        Action = EdgeCollapse
+      end
+      object New2: TMenuItem
+        Action = NewEdge
+      end
+      object Crease1: TMenuItem
+        Action = EdgeCrease
+      end
+    end
+    object Curve1: TMenuItem
+      Caption = 'Curve'
+      object AddCurve1: TMenuItem
+        Action = NewCurve
+      end
+    end
+    object Face1: TMenuItem
+      Caption = 'Face'
+      object New4: TMenuItem
+        Action = NewFace
+      end
+      object Invert1: TMenuItem
+        Action = InvertFace
+      end
+    end
+    object Layer1: TMenuItem
+      Caption = 'Layer'
+      object Activelayercolor1: TMenuItem
+        Action = ActiveLayerColor
+      end
+      object Autogroup1: TMenuItem
+        Action = LayerAutoGroup
+      end
+      object New1: TMenuItem
+        Action = NewLayer
+      end
+      object Deleteempty1: TMenuItem
+        Action = DeleteEmptyLayers
+      end
+      object Deleteempty2: TMenuItem
+        Action = LayerDialog
+      end
+      object miShowLayerVisibilityDialog: TMenuItem
+        Action = LayerVisibilityDialog
+      end
+    end
+    object Visibility1: TMenuItem
+      Caption = 'Visibility'
+      object ShowControlNet1: TMenuItem
+        Action = ShowControlNet
+      end
+      object miShowFreeObjects: TMenuItem
+        Action = ShowFreeObjects
+      end
+      object Controlcurves1: TMenuItem
+        Action = ShowControlCurves
+      end
+      object ShowInteriorEdges1: TMenuItem
+        Action = ShowInteriorEdges
+      end
+      object Showbothsides1: TMenuItem
+        Action = BothSides
+      end
+      object Analyzesurface2: TMenuItem
+        Action = ShowGrid
+      end
+      object Stations1: TMenuItem
+        Action = ShowStations
+      end
+      object Buttocks1: TMenuItem
+        Action = ShowButtocks
+      end
+      object Waterlines1: TMenuItem
+        Action = ShowWaterlines
+      end
+      object Diagonals1: TMenuItem
+        Action = ShowDiagonals
+      end
+      object Hydrostaticdata1: TMenuItem
+        Action = ShowHydrostatics
+      end
+      object Flowlines1: TMenuItem
+        Action = ShowFlowlines
+      end
+      object Normals1: TMenuItem
+        Action = ShowNormals
+      end
+      object Curvature1: TMenuItem
+        Action = Showcurvature
+      end
+      object Markers1: TMenuItem
+        Action = ShowMarkers
+      end
+      object miSetSplitSection: TMenuItem
+        Action = SplitSectionDialog
+      end
+      object N5: TMenuItem
+        Caption = '-'
+      end
+      object Decrcurvaturescale1: TMenuItem
+        Action = DecreaseCurvatureScale
+      end
+      object Incrcurvaturescale1: TMenuItem
+        Action = IncreaseCurvatureScale
+      end
+    end
+    object Selection1: TMenuItem
+      Caption = 'Selection'
+      object Selectall1: TMenuItem
+        Action = SelectAll
+      end
+      object Clearselection1: TMenuItem
+        Action = DeselectAll
+      end
+      object SelectAllControlPoints1: TMenuItem
+        Action = SelectAllControlPoints
+      end
+      object miSelectionDialog: TMenuItem
+        Action = SelectionDialog
+      end
+      object SelectionSeparator1: TMenuItem
+        Caption = '-'
+      end
+      object SelectLeakPoints1: TMenuItem
+        Action = SelectLeakPoints
+      end
+    end
+    object ools1: TMenuItem
+      Caption = 'Tools'
+      object Analyzesurface1: TMenuItem
+        Action = CheckModel
+      end
+      object Removenegative1: TMenuItem
+        Action = RemoveNegative
+      end
+      object Removeunusedpoints1: TMenuItem
+        Action = RemoveUnusedPoints
+      end
+      object Developplates1: TMenuItem
+        Action = DevelopLayers
+      end
+      object Deleteempty3: TMenuItem
+        Action = KeelRudderWizard
+      end
+      object Markers2: TMenuItem
+        Caption = 'Markers'
+        object Import2: TMenuItem
+          Action = ImportMarkers
+        end
+        object Deletemarkers1: TMenuItem
+          Action = DeleteMarkers
+        end
+      end
+      object AddCylinder1: TMenuItem
+        Action = AddCylinder
+      end
+      object miAddGridPanel: TMenuItem
+        Action = AddGridPanel
+      end
+      object MenuItem1: TMenuItem
+        Caption = 'Add flow line'
+      end
+    end
+    object ransform1: TMenuItem
+      Caption = 'Transform'
+      object Scale3D1: TMenuItem
+        Action = ScaleModel
+      end
+      object Deselectall2: TMenuItem
+        Action = MoveModel
+      end
+      object Rotatemodel1: TMenuItem
+        Action = RotateModel
+      end
+      object Rotatemodel2: TMenuItem
+        Action = RotateModelM
+      end
+      object MirrorFace1: TMenuItem
+        Action = MirrorFace
+      end
+      object Lackenby1: TMenuItem
+        Action = TransformLackenby
+      end
+    end
+    object Calculations1: TMenuItem
+      Caption = 'Calculations'
+      object Intersections1: TMenuItem
+        Action = IntersectionDialog
+      end
+      object Hydrostatics1: TMenuItem
+        Action = DesignHydrostatics
+      end
+      object Hydrostatics2: TMenuItem
+        Action = HydrostaticsDialog
+      end
+      object Crosscurves1: TMenuItem
+        Action = CrossCurves
+      end
+      object Resistance1: TMenuItem
+        Caption = 'Resistance'
+        object Delftyachtseries1: TMenuItem
+          Action = ResistanceDelft
+        end
+        object Kaper1: TMenuItem
+          Action = ResistanceKaper
+        end
+        object Holtr1: TMenuItem
+          Action = ResistanceHoltr
+        end
+        object Hollen: TMenuItem
+          Action = ResistanceHollen
+        end
+        object Oortmer: TMenuItem
+          Action = ResistanceOortmer
+        end
+        object FungLeib: TMenuItem
+          Action = ResistanceFungLeib
+        end
+        object OST: TMenuItem
+          Action = ResistanceOST
+        end
+        object RBHS: TMenuItem
+          Action = ResistanceRBHS
+        end
+        object Planing1: TMenuItem
+          Action = ResistancePlaning
+        end
+        object MH: TMenuItem
+          Action = ResistanceMH
+        end
+      end
+      object PropellerTask1: TMenuItem
+        Caption = 'Design of propeller'
+        object PropTask5: TMenuItem
+          Action = PropTask5_
+        end
+        object PropTask4: TMenuItem
+          Action = PropTask4_
+        end
+        object PropTask1: TMenuItem
+          Action = PropTask1_
+        end
+        object PropTask2: TMenuItem
+          Action = PropTask2_
+        end
+        object PropTask3: TMenuItem
+          Action = PropTask3_
+        end
+      end
+      object HydrodynTask: TMenuItem
+        Caption = 'Hydrodynamics characteristics'
+        object AddMassCFD1: TMenuItem
+          Action = ExportAddMass
+        end
+        object HydrodynTask1: TMenuItem
+          Action = HydrodynTask1_
+        end
+        object HydrodynTask2: TMenuItem
+          Action = HydrodynTask2_
+        end
+        object HydrodynTask3: TMenuItem
+          Action = HydrodynTask3_
+        end
+      end
+      object PropellerRvrs: TMenuItem
+        Caption = 'Hydrodynamics ship tasks'
+        object PropTaskRvrs: TMenuItem
+          Action = PropTaskRvrs_
+        end
+        object HydrodynManeuv: TMenuItem
+          Action = HydrodynManeuv_
+        end
+      end
+    end
+    object Window1: TMenuItem
+      Caption = 'Window'
+      object NewWindow1: TMenuItem
+        Action = NewWindow
+      end
+      object Tile1: TMenuItem
+        Action = TileWindow
+      end
+      object Cascade1: TMenuItem
+        Action = CascadeWindow
+      end
+      object N1: TMenuItem
+        Caption = '-'
+      end
+    end
+    object Help1: TMenuItem
+      Caption = 'Help'
+      ShortCut = 112
+      object HelpContents: TMenuItem
+        Action = HelpAction
+        Caption = 'Contents'
+        ShortCut = 112
+      end
+      object CheckUpdates: TMenuItem
+        Action = ActionCheckUpdates
+      end
+      object HelpAbout: TMenuItem
+        Action = AboutAction
+        Caption = 'About'
+      end
+    end
+  end
+  object ColorDialog: TColorDialog
+    Color = clBlack
+    CustomColors.Strings = (
+      'ColorA=000000'
+      'ColorB=000080'
+      'ColorC=008000'
+      'ColorD=008080'
+      'ColorE=800000'
+      'ColorF=800080'
+      'ColorG=808000'
+      'ColorH=808080'
+      'ColorI=C0C0C0'
+      'ColorJ=0000FF'
+      'ColorK=00FF00'
+      'ColorL=00FFFF'
+      'ColorM=FF0000'
+      'ColorN=FF00FF'
+      'ColorO=FFFF00'
+      'ColorP=FFFFFF'
+      'ColorQ=C0DCC0'
+      'ColorR=F0CAA6'
+      'ColorS=F0FBFF'
+      'ColorT=A4A0A0'
+    )
+    Left = 240
+    Top = 72
+  end
+  object FontDialog1: TFontDialog
+    MinFontSize = 0
+    MaxFontSize = 0
+    Left = 240
+    Top = 136
+  end
+end

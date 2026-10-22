@@ -1,0 +1,44 @@
+name: Windows native engine and MCP
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build-test-package:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          architecture: x64
+      - name: Python environment
+        shell: pwsh
+        run: |
+          python -m venv .venv
+          .venv/Scripts/python -m pip install -r requirements-dev.lock
+          .venv/Scripts/python -m pip install --no-deps --no-build-isolation -e .
+      - name: Pinned compiler and nonvisual engine
+        shell: pwsh
+        run: |
+          scripts/bootstrap-toolchain.ps1
+          scripts/build-engine.ps1
+          .venv/Scripts/python scripts/create_examples.py --output-dir examples
+      - name: Native and stdio tests
+        run: .venv/Scripts/python -m pytest -q
+      - name: Build release packages
+        shell: pwsh
+        run: scripts/package-windows.ps1
+      - name: Standalone end-to-end test
+        run: .venv/Scripts/python -m pytest tests/test_mcp.py -q
+      - name: Public snapshot checks
+        run: .venv/Scripts/python scripts/audit_public.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: FreeShip-MCP-Windows-x64
+          path: |
+            dist/*.whl
+            dist/*.tar.gz
+            dist/*.zip

@@ -1,0 +1,6 @@
+FreeShip MCP: new integration code GPL-3.0-or-later.
+Contains modified FREE!ship / FreeShip Plus source.
+Upstream: https://github.com/markmal/freeship-plus-in-lazarus
+Commit: 1de17e99fb2b1cc559cdf27c5cafb595a627a641
+Original per-file copyright and license notices remain authoritative.
+See vendor/freeship/copyright, COPYING, and license texts.

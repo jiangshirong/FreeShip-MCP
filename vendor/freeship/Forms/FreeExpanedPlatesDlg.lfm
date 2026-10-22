@@ -1,0 +1,819 @@
+object FreeExpanedplatesDialog: TFreeExpanedplatesDialog
+  Left = 494
+  Height = 800
+  Top = 154
+  Width = 1200
+  ClientHeight = 800
+  ClientWidth = 1200
+  Position = poDefault
+  LCLVersion = '3.2.0.0'
+  object Panel2: TPanel
+    Left = 910
+    Height = 762
+    Top = 38
+    Width = 290
+    Align = alRight
+    AutoSize = True
+    BevelOuter = bvLowered
+    ClientHeight = 762
+    ClientWidth = 290
+    TabOrder = 0
+    object Panel3: TPanel
+      Left = 1
+      Height = 376
+      Top = 1
+      Width = 288
+      Align = alTop
+      AutoSize = True
+      BevelOuter = bvNone
+      ChildSizing.Layout = cclLeftToRightThenTopToBottom
+      ChildSizing.ControlsPerLine = 1
+      ClientHeight = 376
+      ClientWidth = 288
+      TabOrder = 0
+      object Panel1: TPanel
+        Left = 0
+        Height = 216
+        Top = 0
+        Width = 288
+        BevelOuter = bvNone
+        ChildSizing.LeftRightSpacing = 10
+        ChildSizing.TopBottomSpacing = 10
+        ChildSizing.HorizontalSpacing = 6
+        ChildSizing.VerticalSpacing = 8
+        ChildSizing.Layout = cclLeftToRightThenTopToBottom
+        ChildSizing.ControlsPerLine = 2
+        ClientHeight = 216
+        ClientWidth = 288
+        TabOrder = 0
+        object Label5: TLabel
+          Left = 10
+          Height = 26
+          Top = 10
+          Width = 187
+          Caption = 'Part name'
+          Layout = tlCenter
+          ParentColor = False
+        end
+        object _Label6: TLabel
+          Left = 203
+          Height = 26
+          Top = 10
+          Width = 70
+          Caption = '_Label6'
+          Font.Style = [fsBold]
+          Layout = tlCenter
+          ParentColor = False
+          ParentFont = False
+        end
+        object Label1: TLabel
+          Left = 10
+          Height = 26
+          Top = 44
+          Width = 187
+          Caption = 'Minimum edge error'
+          Layout = tlCenter
+          ParentColor = False
+        end
+        object _Label2: TLabel
+          Left = 203
+          Height = 26
+          Top = 44
+          Width = 70
+          Caption = '_Label2'
+          Layout = tlCenter
+          ParentColor = False
+        end
+        object Label3: TLabel
+          Left = 10
+          Height = 26
+          Top = 78
+          Width = 187
+          Caption = 'Maximum edge error'
+          Layout = tlCenter
+          ParentColor = False
+        end
+        object _Label4: TLabel
+          Left = 203
+          Height = 26
+          Top = 78
+          Width = 70
+          Caption = 'Label2'
+          Layout = tlCenter
+          ParentColor = False
+        end
+        object Label15: TLabel
+          Left = 10
+          Height = 26
+          Top = 112
+          Width = 187
+          Caption = 'Maximum area error'
+          Layout = tlCenter
+          ParentColor = False
+        end
+        object _Label16: TLabel
+          Left = 203
+          Height = 26
+          Top = 112
+          Width = 70
+          Caption = 'Label2'
+          Layout = tlCenter
+          ParentColor = False
+        end
+        object Label17: TLabel
+          Left = 10
+          Height = 26
+          Top = 146
+          Width = 187
+          Caption = 'Total area error'
+          Layout = tlCenter
+          ParentColor = False
+        end
+        object _Label18: TLabel
+          Left = 203
+          Height = 26
+          Top = 146
+          Width = 70
+          Caption = 'Label2'
+          Layout = tlCenter
+          ParentColor = False
+        end
+        object Label8: TLabel
+          Left = 10
+          Height = 26
+          Top = 180
+          Width = 187
+          Caption = 'No. iterations'
+          Layout = tlCenter
+          ParentColor = False
+        end
+        object _Label9: TLabel
+          Left = 203
+          Height = 26
+          Top = 180
+          Width = 70
+          Caption = 'Label2'
+          Layout = tlCenter
+          ParentColor = False
+        end
+      end
+      object Panel4: TPanel
+        Left = 0
+        Height = 132
+        Top = 216
+        Width = 288
+        BevelOuter = bvNone
+        ChildSizing.LeftRightSpacing = 10
+        ChildSizing.TopBottomSpacing = 10
+        ChildSizing.HorizontalSpacing = 6
+        ChildSizing.VerticalSpacing = 2
+        ChildSizing.Layout = cclLeftToRightThenTopToBottom
+        ChildSizing.ControlsPerLine = 3
+        ClientHeight = 132
+        ClientWidth = 288
+        TabOrder = 1
+        object Label7: TLabel
+          Left = 10
+          Height = 36
+          Top = 10
+          Width = 123
+          Caption = 'Rotation'
+          Layout = tlCenter
+          ParentColor = False
+        end
+        object FloatSpinEdit1: TFloatSpinEdit
+          Left = 139
+          Height = 36
+          Top = 10
+          Width = 80
+          Constraints.MinWidth = 80
+          DecimalPlaces = 3
+          MaxValue = 180
+          MinValue = -180
+          OnChange = FloatSpinEdit1Change
+          TabOrder = 0
+        end
+        object _Label12: TLabel
+          Left = 225
+          Height = 36
+          Top = 10
+          Width = 53
+          Caption = '[degr]'
+          Layout = tlCenter
+          ParentColor = False
+        end
+        object Label10: TLabel
+          Left = 10
+          Height = 36
+          Top = 48
+          Width = 123
+          Caption = 'X grid spacing'
+          Layout = tlCenter
+          ParentColor = False
+        end
+        object FloatSpinEdit2: TFloatSpinEdit
+          Left = 139
+          Height = 36
+          Top = 48
+          Width = 80
+          Increment = 0.1
+          OnChange = FloatSpinEdit2Change
+          TabOrder = 1
+        end
+        object _Label13: TLabel
+          Left = 225
+          Height = 36
+          Top = 48
+          Width = 53
+          Caption = '[m]'
+          Layout = tlCenter
+          ParentColor = False
+        end
+        object Label11: TLabel
+          Left = 10
+          Height = 36
+          Top = 86
+          Width = 123
+          Caption = 'Y grid spacing'
+          Layout = tlCenter
+          ParentColor = False
+        end
+        object FloatSpinEdit3: TFloatSpinEdit
+          Left = 139
+          Height = 36
+          Top = 86
+          Width = 80
+          Increment = 0.1
+          OnChange = FloatSpinEdit3Change
+          TabOrder = 2
+        end
+        object _Label14: TLabel
+          Left = 225
+          Height = 36
+          Top = 86
+          Width = 53
+          Caption = '[m]'
+          Layout = tlCenter
+          ParentColor = False
+        end
+      end
+      object CheckBoxMirror: TCheckBox
+        Left = 0
+        Height = 28
+        Top = 348
+        Width = 288
+        Caption = 'Mirror'
+        TabOrder = 2
+        OnClick = CheckBoxMirrorClick
+      end
+    end
+    object ListBox: TCheckListBox
+      Left = 1
+      Height = 384
+      Top = 377
+      Width = 288
+      Align = alClient
+      ItemHeight = 0
+      TabOrder = 1
+      TopIndex = -1
+      OnClickCheck = ListBoxClickCheck
+    end
+  end
+  object ToolBar1: TToolBar
+    Left = 0
+    Height = 38
+    Top = 0
+    Width = 1200
+    AutoSize = True
+    Caption = 'ToolBar1'
+    Color = clForm
+    Images = MenuImages
+    Indent = 5
+    ParentColor = False
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 1
+    object ToolButton20: TToolButton
+      Left = 5
+      Top = 2
+      Action = RotateCCW90
+      AutoSize = True
+    end
+    object ToolButton1: TToolButton
+      Left = 28
+      Top = 2
+      Action = RotateCCW5
+      AutoSize = True
+    end
+    object ToolButton11: TToolButton
+      Left = 51
+      Top = 2
+      Action = RotateCCW1
+      AutoSize = True
+    end
+    object ToolButton10: TToolButton
+      Left = 74
+      Height = 22
+      Top = 2
+      AutoSize = True
+      ImageIndex = 6
+      Style = tbsSeparator
+    end
+    object ToolButton12: TToolButton
+      Left = 82
+      Top = 2
+      Action = RotateCW1
+      AutoSize = True
+    end
+    object ToolButton2: TToolButton
+      Left = 105
+      Top = 2
+      Action = RotateCW5
+      AutoSize = True
+    end
+    object ToolButton3: TToolButton
+      Left = 128
+      Top = 2
+      Action = RotateCW90
+      AutoSize = True
+    end
+    object _ToolButton4: TToolButton
+      Left = 151
+      Height = 22
+      Top = 2
+      AutoSize = True
+      Caption = '_ToolButton4'
+      ImageIndex = 5
+      Style = tbsSeparator
+    end
+    object ToolButton5: TToolButton
+      Left = 159
+      Top = 2
+      Action = ZoomExtents
+      AutoSize = True
+    end
+    object ToolButton8: TToolButton
+      Left = 182
+      Top = 2
+      Action = ZoomIn
+      AutoSize = True
+    end
+    object ToolButton9: TToolButton
+      Left = 205
+      Top = 2
+      Action = ZoomOut
+      AutoSize = True
+    end
+    object _ToolButton6: TToolButton
+      Left = 268
+      Height = 22
+      Top = 2
+      AutoSize = True
+      Caption = '_ToolButton6'
+      ImageIndex = 1
+      Style = tbsSeparator
+    end
+    object ToolButton19: TToolButton
+      Left = 276
+      Top = 2
+      Action = ShowFillColor
+      AutoSize = True
+    end
+    object ToolButton4: TToolButton
+      Left = 299
+      Top = 2
+      Action = ShowSubmergedArea
+      AutoSize = True
+    end
+    object ToolButton18: TToolButton
+      Left = 322
+      Top = 2
+      Action = ShowInteriorEdges
+      AutoSize = True
+    end
+    object ToolButton23: TToolButton
+      Left = 345
+      Top = 2
+      Action = ShowErrorEdges
+      AutoSize = True
+    end
+    object ToolButton26: TToolButton
+      Left = 368
+      Hint = 'Show dimensions of the unfolded plates.'
+      Top = 2
+      Action = ShowDimensions
+      AutoSize = True
+    end
+    object ToolButton27: TToolButton
+      Left = 391
+      Top = 2
+      Action = ShowPartName
+      AutoSize = True
+    end
+    object ToolButton15: TToolButton
+      Left = 414
+      Top = 2
+      Action = ShowStations
+      AutoSize = True
+      Style = tbsCheck
+    end
+    object ToolButton16: TToolButton
+      Left = 437
+      Top = 2
+      Action = ShowButtocks
+      AutoSize = True
+    end
+    object ToolButton17: TToolButton
+      Left = 460
+      Top = 2
+      Action = ShowWaterlines
+      AutoSize = True
+    end
+    object ToolButton24: TToolButton
+      Left = 483
+      Top = 2
+      Action = ShowDiagonals
+      AutoSize = True
+    end
+    object _ToolButton14: TToolButton
+      Left = 506
+      Height = 22
+      Top = 2
+      AutoSize = True
+      Caption = '_ToolButton14'
+      ImageIndex = 12
+      Style = tbsSeparator
+    end
+    object ToolButton25: TToolButton
+      Left = 514
+      Top = 2
+      Action = Print
+      AutoSize = True
+    end
+    object ToolButton7: TToolButton
+      Left = 537
+      Top = 2
+      Action = SaveBitmap
+      AutoSize = True
+    end
+    object ToolButton13: TToolButton
+      Left = 560
+      Top = 2
+      Action = ExportDXF
+      AutoSize = True
+    end
+    object ToolButton6: TToolButton
+      Left = 583
+      Top = 2
+      Action = ExportTextFile
+      AutoSize = True
+    end
+    object _ToolButton21: TToolButton
+      Left = 606
+      Height = 22
+      Top = 2
+      AutoSize = True
+      Caption = '_ToolButton21'
+      ImageIndex = 12
+      Style = tbsSeparator
+    end
+    object ToolButton22: TToolButton
+      Left = 614
+      Top = 2
+      Action = CloseDialog
+      AutoSize = True
+    end
+    object SpinEditFontSize: TSpinEdit
+      Left = 228
+      Height = 36
+      Hint = 'Font Size'
+      Top = 2
+      Width = 40
+      MaxValue = 20
+      MinValue = 3
+      OnChange = SpinEditFontSizeChange
+      TabOrder = 0
+      Value = 6
+    end
+  end
+  object ActionList1: TActionList
+    Images = MenuImages
+    Left = 32
+    Top = 48
+    object ZoomExtents: TAction
+      Category = 'Zoom'
+      Caption = 'Extents'
+      Hint = 'Zoom all.'
+      ImageIndex = 0
+      OnExecute = ZoomExtentsExecute
+      ShortCut = 16449
+    end
+    object RotateCCW5: TAction
+      Category = 'Rotate'
+      Caption = '-5'
+      Hint = 'Rotate part 5 degr. counter clockwise.'
+      ImageIndex = 1
+      OnExecute = RotateCCW5Execute
+    end
+    object RotateCCW90: TAction
+      Category = 'Rotate'
+      Caption = '-90'
+      Hint = 'Rotate part 90 degr. counter clockwise.'
+      ImageIndex = 2
+      OnExecute = RotateCCW90Execute
+    end
+    object RotateCW5: TAction
+      Category = 'Rotate'
+      Caption = '+5'
+      Hint = 'Rotate part 5 degr. clockwise.'
+      ImageIndex = 3
+      OnExecute = RotateCW5Execute
+    end
+    object RotateCW90: TAction
+      Category = 'Rotate'
+      Caption = '+90'
+      Hint = 'Rotate part 90 degr. clockwise.'
+      ImageIndex = 4
+      OnExecute = RotateCW90Execute
+    end
+    object ZoomOut: TAction
+      Category = 'Zoom'
+      Caption = 'Zoom out'
+      Hint = 'Zoom out.'
+      ImageIndex = 6
+      OnExecute = ZoomOutExecute
+      ShortCut = 16463
+    end
+    object ZoomIn: TAction
+      Category = 'Zoom'
+      Caption = 'ZoomIn'
+      Hint = 'Zoom in'
+      ImageIndex = 7
+      OnExecute = ZoomInExecute
+      ShortCut = 16457
+    end
+    object RotateCCW1: TAction
+      Category = 'Rotate'
+      Caption = '-1'
+      Hint = 'Rotate part 1 degr. counter clockwise.'
+      ImageIndex = 8
+      OnExecute = RotateCCW1Execute
+    end
+    object RotateCW1: TAction
+      Category = 'Rotate'
+      Caption = '+1'
+      Hint = 'Rotate part 1 degr. clockwise.'
+      ImageIndex = 9
+      OnExecute = RotateCW1Execute
+    end
+    object SaveBitmap: TAction
+      Category = 'Export'
+      Caption = 'Save bitmap'
+      Hint = 'Save the current layout as a bitmap.'
+      ImageIndex = 10
+      OnExecute = SaveBitmapExecute
+    end
+    object ExportDXF: TAction
+      Category = 'Export'
+      Caption = 'DXF'
+      Hint = 'Export the visible plates to a DXF file.'
+      ImageIndex = 11
+      OnExecute = ExportDXFExecute
+    end
+    object ShowButtocks: TAction
+      Category = 'Visibility'
+      Caption = 'Buttocks'
+      Hint = 'Show buttocks on developed plates.'
+      ImageIndex = 12
+      OnExecute = ShowButtocksExecute
+    end
+    object ShowWaterlines: TAction
+      Category = 'Visibility'
+      Caption = 'Waterlines'
+      Hint = 'Show waterlines on developed plates.'
+      ImageIndex = 13
+      OnExecute = ShowWaterlinesExecute
+    end
+    object ShowStations: TAction
+      Category = 'Visibility'
+      Caption = 'Stations'
+      Hint = 'Show stations on developed plates.'
+      ImageIndex = 14
+      OnExecute = ShowStationsExecute
+    end
+    object ShowInteriorEdges: TAction
+      Category = 'Visibility'
+      Caption = 'Interior edges'
+      Hint = 'Show interior edges.'
+      ImageIndex = 15
+      OnExecute = ShowInteriorEdgesExecute
+    end
+    object ShowFillColor: TAction
+      Category = 'Visibility'
+      Caption = 'Solid'
+      Hint = 'Show plates with fillcolor.'
+      ImageIndex = 16
+      OnExecute = ShowFillColorExecute
+    end
+    object ShowErrorEdges: TAction
+      Category = 'Visibility'
+      Caption = 'ShowErrorEdges'
+      Checked = True
+      Hint = 'Highlight compressed or stretched edges.'
+      ImageIndex = 18
+      OnExecute = ShowErrorEdgesExecute
+    end
+    object ShowDiagonals: TAction
+      Category = 'Visibility'
+      Caption = 'Diagonals'
+      Hint = 'Show diagonals on developed plates.'
+      ImageIndex = 19
+      OnExecute = ShowDiagonalsExecute
+    end
+    object Print: TAction
+      Category = 'Export'
+      Caption = 'Print'
+      Hint = 'Send unfolded plates to printer or plotter.'
+      ImageIndex = 20
+      OnExecute = PrintExecute
+    end
+    object ShowDimensions: TAction
+      Category = 'Visibility'
+      Caption = 'ShowDimensions'
+      Checked = True
+      Hint = 'Show dimensions at grid intersections.'
+      ImageIndex = 21
+      OnExecute = ShowDimensionsExecute
+    end
+    object ShowPartName: TAction
+      Category = 'Visibility'
+      Caption = 'Part name'
+      Checked = True
+      Hint = 'Show the name of each developed part.'
+      ImageIndex = 22
+      OnExecute = ShowPartNameExecute
+    end
+    object ShowSubmergedArea: TAction
+      Category = 'Visibility'
+      Caption = 'ShowSubmergedArea'
+      Hint = 'Show the submerged surface areas in a different color.'
+      ImageIndex = 23
+      OnExecute = ShowSubmergedAreaExecute
+    end
+    object ExportTextFile: TAction
+      Category = 'Export'
+      Caption = 'Text file'
+      Hint = 'Export the visible plates to a TXT file.'
+      ImageIndex = 24
+      OnExecute = ExportTextFileExecute
+    end
+    object CloseDialog: TAction
+      Category = 'Dialog'
+      Caption = 'Close Dialog'
+      Hint = 'Close Dialog'
+      ImageIndex = 25
+      OnExecute = CloseDialogExecute
+    end
+  end
+  object MenuImages: TImageList
+    Scaled = True
+    Left = 120
+    Top = 48
+    Bitmap = {
+      4C7A1A0000001000000010000000281000000000000078DAED5C09701645161E
+      0A0A5D31048881200B842C31106E28A0B8446139944B0E1510A554407491A344
+      40B902A456113CA00051100153069645AE65B32CA281B8CA02552C844B11C5A5
+      80B254140B164AB1DECED77FF7A4A7A77B8EFF0F8756BAEA2533DDFDBDABDF9B
+      9EE99E7F2CCB22CBA63A75EAD091234770EC5BD0077D2D8E033568D08076EEDC
+      198815057D811172A360651E7E3AE7E6E652CB962D19E1D8648B5A77E1C2057A
+      E5955768FDFAF54E1B8E5187B620BDD0EF9D77DEF1F4431DDA82F0AD5AB532F6
+      812D571BDFBF7F7F3A79F2A4A71FEAD016847FFEF9E7A953A74EAE71C131EA75
+      7CD531434C008FFE23478E6484E3A0D804F6965B6E61710539A07DFBF631F293
+      2BF37DE8A18722C5A1C88544E237D1FCB112CF5F57B9E79E7B9CB62D5BB690AE
+      1ED4B9736717F6FCF9F354B3664D365EBB76ED7261455C09EC934F3EE9C1F6EA
+      D58B2A57AE4CC78F1FD7DA20EC85DCB7DF7EDBD5077281F5B31B7DEAD7AF4F22
+      0F447FD8059D55B957AE907D5EECD0C71F7F4C9F7DF619EBF3F5D75FD3E8D1A3
+      49F864CF9E3D1ED99B3793DDFE8351A7A3478F6AFD2CCA881197E8F5D7C988FF
+      E0830F7CF1A9A9A7EC3AC8384405055E3E41F8FCFC1826863D1419EF2EC5BE78
+      9DFF2CEBB8ED6F22937CE13FC4C3D34F3F4DDF7DF71DEB73FAF469DABB772FC7
+      1DD3DAFFCD37DFD0F8F1E39D1836C5865F2CA97DDE7CF34D271ED0AEC3412EDA
+      3A74E8E0B9264D9B36CDF1478F1E3D48F5D5FEFDFB99CE90AB62FD7253F6B39A
+      B3BA3278F060D6B75CB972B466CD1AD2D5E3FF7DF7DD47EA7860EEC158201E80
+      FDEAABAF9C3E8F3CF288A307EC50B143860CA1468D1AB13CD3E9C5756772DF78
+      E30D67BCC59C076CD0BCD8B16347D6A77BF7EE4E7FD8059D85DC75EBCE53850A
+      8718E158D4952F5FCC08C7070E1CA071E3C691F0C9B66DDB1CD90227F85CB12F
+      246A1DFA15151569FD2C7225265BE44DB1A77DE3C68D0CABE2C17FFCF8338E0D
+      51F1907BF3CD317DD3D33F8D8C974B18BCEABFB4B4A376AC5FA2A2A28B74EBAD
+      8749F6E9DAB5E73CFE433C3CF3CC3374E850AC7EFAF4FF50C58A0799EFF2F37F
+      D08EE9C18307E9D9679F7562D8141B7EB124F7397BF62C2D5EBCD88907D33D18
+      E4A2AD4F9F3E9E6BDE8C19339CFC78E081079CB63367CE107CB563C70EA633E4
+      AA58BFDC94FDACE6AC9A5B82F8F584157E6DF7D4AB85CFE98CD4FB44F0C03D01
+      E6595CFF30DFAB78CCE9420F3ED77B67047B8EC6F50FF70A320FD4897B5B5CC7
+      4DD75FB9BFE8039B3097634EC739E6785C0BD4F95FD503B688EB2E9F8B3CF37F
+      CF9EDF1BF5E063C8885FA323CDFFF2B8E8F041F37F103E68FE0FC207CDFF325E
+      E73FCCFF9F7F4EB475AB5EBEF01F6206F309E656B95D9DFF714F807B03B461EE
+      C0355FCC87723CF8C58C29C6301F634E479DAA877CCF207208F70ABAE72BC880
+      2D98EB559FF27B0246FC5EC10ACA6599875F8E97E57F49FEE7E61EE5F95E9237
+      253910ABF3CFFF581F77DEC4EAE45836E77FB124D33CFF9BF3EF90FD7C75D9D1
+      372A3E26F708D7FF441CF2E5120EEFF6DF71B2A753BB8EF8F54BEF5353FEAF5E
+      1DD31F72700D76FBB298F128CB7FFF5C2E854221C8880D2A61F03A9961B15759
+      B6C907A164F3E714E77F047FEBB0CE7918F2E31185647E7EF2B1A62748A783B0
+      DDA82F7CC6499519D5773A3FCA6317D57F71E64C50FC957AD9B0610365656531
+      B9C9C9C9EC19E2D2A54BA17478EFBDF7D8B56EF7EEDD74F9F2653A75EA94FDFC
+      B58E3D2BE1B9C60FBBD9BE78E399E88B2FBEF0F47BEBADB7E885175E603C75D8
+      55AB56D1881123E8DB6FBF35CA78F7DD7769D4A851DA76D83870E040D6B66913
+      918E70BF909292A2C5B76EDD9AEEBDF75EDE86B51A1D3963EE29FDFAF5A3A143
+      87FAFAE7DCB973F6736E45E3DE077F2634968F3EFA88EEBFFF7E6D9FC3870F13
+      6C18306080F65E6D93ED8059B36619E73AFE9CC968E2C4896CCC312618B7050B
+      16B07D9063C78E79B0880F3C7F0BECD4A953597F3CF7623C1E7DF451B6EE827E
+      3A7FF0E76E46D04F6EFFE9A79F7CFD21CFAF2B56AC089D63588768DFBEBD83DD
+      6ADFE445C9AFA54B973A58F83D9E1C7DE28927989F7EDBF95FB2E6195FFEBBD7
+      4CC3E6BF378763255CFE9FA4D2C97FAFFCE8F9EFB63F7AFE97E0CBF2FFB79BFF
+      65FB7F25E5ECD92B9496F65F561F75FF6FFBF6FF517AFA2952F32EECFE5FE3C6
+      A7EDBCB960C487DF7FBBF1F1FAFD3F7F7CD0FE9F1FBE6CFFAF6CFD3F68FD5FCD
+      FFA8EBFF41F91FB4FE1F94FFE1D7DF6F7CBC7EFDDF1F1FB4FEAFE2CBD6FFF539
+      5E58584889504E4E4E6C7D2B24A96B61021F2F010F3D50844EEAB138578F557C
+      8CA750D50AB30EC8F082A78A8FF1152B50E43AD6E9AFE22D97DE25FA58B95628
+      BC8C71E402ABE04DFA7B7416D8B0F8803830EB1F6DFCBDF22DC378E53AE322FA
+      FBE1653E729B8A17FA878965D55E59BE1CB76148D6255E120BCFBAB548F9BD59
+      B98F7A2C17B15EABFACF278F5CFCC43BA0EA5AA749BEAE4DE26145D55FC68729
+      26F9EA3BC761F517552A8F78FD1FB4B120AFB10BBBD5633FF94296C9E78A3EDA
+      7ADDB9EC5FD984981C419E31D7EA59628F172BF523732CC9182F5617EB5E7925
+      3C74F1E31E03EF98A8F61AE247D7CF64EFAFB1F8ED85045E7BBB76EDEA903897
+      DB6441523FD7B98C8F77FF48961746AEE658DB1E742EE3FDE487C05B7E7E0B89
+      B712C12B63E03B66BA638155C7D58F94F1B61218FF1BA6E4E7E713086BF5EFBF
+      FF7E64AA55AB16A38C8C0CB69E8CE794850B17D2CA952B43E1B1063F7DFA741A
+      3E7C38C3376DDA941A366C486DDBB665FFD106FD4C78AC29635D18E3F3F2CB2F
+      B3BE5873C6FB9C53A64C61EBF04949498C37F614543CD689B1668BE3091326B0
+      B500E85F5050404B962C617CB1160FBBB00F22F707413FAC493FFEF8E30C873A
+      FCC7F325F4C1F9CC9933A977EFDE6C5D04BE7AEAA9A73CBA2C5BB68C61FAF6ED
+      CB78623CA00FCEE7CD9BC7CED10E3DE02BACCF433FD51EBCEFB968D122A60F74
+      1F366C18A5A7A753F3E6CD994CACA94F9A3489F169D7AE1DB35747F029E20336
+      57A95285ED35609D1BE325DE97C558A9F2613B64038B7180CDB01D3E58BB762D
+      E37BD75D77313C740306B6A11E041BE10B8C236CC739DAE10360E03BD803DFE4
+      E5E5311B210F36E33D62D808FDE143F8429C633F043105022F8CAFD019C7A883
+      5EE02BCE612BFA8BE777F85DB517BCA123E4BDFAEAABEC1CF182B8031EBA426F
+      111B2A897D1A11EFB019C7189F175F7C513BC632010B1E20C43BFC86FD96B0F9
+      AB5E0FB037D7B8716327AF71BD12F96D7A7F5814AC81A07FB366CDD81E1FEA38
+      0F0BFE401CA1FDA5975E221D76ECD8B1CC0E8C31F69EF8FE14E387FA366DDAD0
+      73CF3DC7F250E681F7A9D1FEE0830FB2DF062026962F5FCEF6008187EF710C1D
+      700C7EDDBA7563F9093DD3D2D2586C2237F03C06BF2316B06705FD318E77DE79
+      27E3897D28AC55A20FE21F0479187BF4076FD881B12C5FBEBC73CDC73BEAD9D9
+      D92C36303E8809F814F83973E63039D023333393F5479DEC3F60518F76AC13C1
+      5F68031EFB90E0F5DA6BAFB1BE0F3FFC30FBCF79B098405C0B9F018BFE68031E
+      790ADB653C72AB468D1AACCFDD77DFEDC2C3DFE08936ECA3D6AE5DDB8317E365
+      F1F7D291EB321EBEE4B65AB0BB52A54ACCA7028FF1C7BE166CAC50A102F39BC0
+      C3B7C0883D5AF4877F510F9DF11FF6612C84FF214BD455AB568D8D95D863051E
+      FA8F1933C6354FC337EADC8DB8813F643CE2146B7AB00B71847D6BC881DEC020
+      96307EC0E03A01DB1077028FBC82EF1067E085390D72C027353595F1826EF00F
+      6C43AC21E6708D021E318D35715C3BD05EB76E5DE67F317EB7DF7E3BB568D182
+      1D634CE0075CCBE2B8FD8EF3DEC559138AC843C645D1C1598B8968875B9E8E07
+      EABCF53A3DDD3CBCB8F0FED0DB4214C6277A7D8379A838BDCD7A7E267925F5FE
+      FA46F74594F808173F89C77F3C716BE291C8F37AC2CFFA89E0A979CBA4789F79
+      E8F5794B68C0E0D1F1F0606B2B9776FD231E1E0C036C1C3C1C6C1C3C581BFA5C
+      6B1EA88FCA4396DF39E9268AA287AABB066FE4A1C3A22D0C0F9DCF8013146F0C
+      FB604B23876ED495384A089BC329016C4E54BFCA72A3E26F64AC692CC26273D8
+      5F8A4B67A98FC32382BDAC4DE59113CD5F1E1E71F85AC7236A7CC93C72E2CC79
+      E072AEE1F5824E774848167D68CFB56B30DFCE88CC07EF11D3611B7BC0A6AD36
+      81176D88C487A659311EA0BD36ADB7E94493503C7EF9E517A2AE125EE8B2D3A6
+      2DD06549201F86F9B74D793675B3A9C8A6629BF6739BF657F5E541A3A47DF15E
+      367DA2E8037EEB6C3A5AD7C307EF89D04D76DB7CA9FF367E9E6AD3520D9F4F33
+      C9A3FFBF6C821FFB733D526C7A8C8F87AC4B31E75300DFFC39B677559763926C
+      6A62D30ADE0FFDB7DBD489B7CB76C1379B2C9ADD8BCB2CE27507F818A2AE03C7
+      65C5FA329E68DBC1EDF80B745811C342666B9B2A710C741A66D3063E36B36D6A
+      C1DBDA29F60BDF43E644DEFF301FFF6EC21F29443FFF4CDAF859A8F83ED7A6DF
+      71DCECD9E1E267914D7D38E6B1C788BEFF9E42E74F32C7E5E595FA35036B09D7
+      135F68DB051E260A23BF50BA96CA1871ECC75FF4117AC85819EFA7BFEE380C5E
+      C89465CBC7AAFE3AB932CED4A6F2D1F95C95ADD3439513742EEBA18E936ABFCE
+      1659BE498E69FC545B4C7AC83E0892618A5793FD6A3C156AE67C5D6CA8B6A8FD
+      C3C47350C13E4A1099B04D9A34A141830639DF6EC3DE8C4A5DBA74617B422A16
+      7B35D85FFBF1C71FD9BAAFEE771E2858E7D47DEB0CEBF9AB57AFA69E3D7BB26F
+      F498DE77E6FB109E8277984F9C88FD661D6BB4F8EEDCDCB9731DC26F6640B86C
+      4F9E3CD9A51F7E6B84FD34995FF5EAD5D977044158EF453B08FB03F5EAD513FB
+      03ACE0375258A3BE78F12223ACB7CF9F3FDF39C737DBBEFCF24BE63BACEB6737
+      6DE33C934227EC19615F2488F06D99CCECE63472CC6486879F5087EFE7E0DDD5
+      2082DEC3474EA0CCACD87E04FF4E62342A575EFC8683E1B31AB5A2F98B577BA8
+      F8C8A784DFF58096E76D647556B98A6CEF00BE09C2CF99BB9066E4CE673477E1
+      0A07CF7F1BC4E2033117CF1E3EF60339D6422C8F9B3091962D5FE54B5DBBF774
+      DE9990DFED029FCC064D29AD56862F09D9FC5B41AE82F80993B77EB95B4AEFE4
+      445FA054DEA98D4A217F9B6F5A8B89A27F427696D27B20D7733DF7D78C0FEB7F
+      DF6F345811BE5F61997FE75F9AF950DAF9784D8BD8674A84E22D325E773D91EB
+      75E3A1E2D577414DFF4DF24DEF929ADAC2E8EFC7CF243F082FBFBB1E05EFE7BF
+      44C62F11B2CACAD5DB2188FF5D48B2A6842013CFF0582B545F13F67AE0559F25
+      82BD96F8F0F36DA458C1BB2F6149C72F0A5EC7EF7AE0AD04BF5F5476690A157F
+      61EF41237FDF2CE0BE2DE83CE8DE54A727258037C55B69D97535E5EB3061EDF7
+      3B2FCBA3522AF5AA149220BFF6F4E45D1484CF4CF9A7AB4F46950F79DB4ECABA
+      6DAB3F7FBBCF1DB7FD9D4674EE463903AB50BFE67FB2EB63F8F6190B687C8FA6
+      9433A02ACD1C50CD45E09195FA37BA23A580E9D8F2F72BA94FB3B1D4307533E7
+      5940A3BB74A459032B7BB0023F6B60320DEFD0971AA7FD95F10041673FBFC8F8
+      D98392986EDDB3A752DDE4220AF2A98A9FDAAF260D6E3B941A56DFE4921B567E
+      66CA36AA5F6D3BB357C59A7808BCECFF8CAA1F3A7D8378C878605BD7594E43DA
+      0E21536C98F0B5933EA1EC1A1B68CC1FDBD0AC41491E3D6B27EDA6DA953F213F
+      FB27F5FE837D5C5533BE559DFA1C6D7B0CAFAB0F4B89E6DFFF010788A150
+    }
+  end
+  object PrintDialog: TPrintDialog
+    Left = 216
+    Top = 48
+  end
+end

@@ -1,0 +1,902 @@
+object FreeAddMassOutputDialog: TFreeAddMassOutputDialog
+  Left = 551
+  Height = 539
+  Top = 153
+  Width = 694
+  Caption = 'Add_Mass file generator.'
+  ClientHeight = 539
+  ClientWidth = 694
+  OnResize = FormResize
+  Position = poMainFormCenter
+  LCLVersion = '3.2.0.0'
+  object Panel1: TPanel
+    Left = 0
+    Height = 34
+    Top = 0
+    Width = 694
+    Align = alTop
+    AutoSize = True
+    BevelOuter = bvNone
+    ClientHeight = 34
+    ClientWidth = 694
+    TabOrder = 0
+    object OKbutton: TSpeedButton
+      Left = 530
+      Height = 30
+      Top = 2
+      Width = 80
+      Align = alRight
+      BorderSpacing.Around = 2
+      Constraints.MinWidth = 80
+      Caption = 'OK'
+      Flat = True
+      Glyph.Data = {
+        36040000424D3604000000000000360000002800000010000000100000000100
+        2000000000000004000064000000640000000000000000000000000000000000
+        00000000000000000000000000000EA628FF0EA628FF00000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        00000000000000000000000000000EA628FF0EA628FF00000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        00000000000000000000000000000EA628FF0EA628FF0EA628FF000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        000000000000000000000EA628FF0EA628FF0EA628FF0EA628FF000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        000000000000000000000EA628FF0EA628FF0EA628FF0EA628FF000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000EA628FF0EA628FF0EA628FF0EA628FF0EA628FF0EA628FF0000
+        0000000000000000000000000000000000000000000000000000000000000000
+        00000EA628FF0EA628FF0EA628FF0EA628FF0EA628FF0EA628FF0EA628FF0000
+        0000000000000000000000000000000000000000000000000000000000000000
+        00000EA628FF0EA628FF0EA628FF0EA628FF0EA628FF0EA628FF0EA628FF0EA6
+        28FF000000000000000000000000000000000000000000000000000000000000
+        00000EA628FF0EA628FF0EA628FF00000000000000000EA628FF0EA628FF0EA6
+        28FF000000000000000000000000000000000000000000000000000000000000
+        000000000000000000000000000000000000000000000EA628FF0EA628FF0EA6
+        28FF0EA628FF0000000000000000000000000000000000000000000000000000
+        00000000000000000000000000000000000000000000000000000EA628FF0EA6
+        28FF0EA628FF0EA628FF00000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000EA6
+        28FF0EA628FF0EA628FF00000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000EA6
+        28FF0EA628FF0EA628FF0EA628FF000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        00000EA628FF0EA628FF0EA628FF0EA628FF0000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000EA628FF0EA628FF0EA628FF0000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000EA628FF0EA628FF0EA628FF0000000000000000
+      }
+      OnClick = OKbuttonClick
+    end
+    object CancelButton: TSpeedButton
+      Left = 612
+      Height = 30
+      Top = 2
+      Width = 80
+      Align = alRight
+      BorderSpacing.Around = 2
+      Constraints.MinWidth = 80
+      Caption = 'Cancel'
+      Flat = True
+      Glyph.Data = {
+        36040000424D3604000000000000360000002800000010000000100000000100
+        2000000000000004000064000000640000000000000000000000000000000000
+        000000000000000000002110C0FF2110C0FF2110C0FF2110C0FF2110C0FF2110
+        C0FF2110C0FF2110C0FF00000000000000000000000000000000000000000000
+        00002110C0FF2110C0FF2110C0FF2110C0FF2110C0FF2110C0FF2110C0FF2110
+        C0FF2110C0FF2110C0FF2110C0FF2110C0FF0000000000000000000000002110
+        C0FF2110C0FF2110C0FF2110C0FF2110C0FF2110C0FF2110C0FF2110C0FF2110
+        C0FF2110C0FF2110C0FF2110C0FF2110C0FF2110C0FF00000000000000002110
+        C0FF2110C0FF2110C0FF2110C0FF000000000000000000000000000000000000
+        00002110C0FF2110C0FF2110C0FF2110C0FF2110C0FF000000002110C0FF2110
+        C0FF2110C0FF2110C0FF00000000000000000000000000000000000000002110
+        C0FF2110C0FF2110C0FF2110C0FF2110C0FF2110C0FF2110C0FF2110C0FF2110
+        C0FF2110C0FF00000000000000000000000000000000000000002110C0FF2110
+        C0FF2110C0FF2110C0FF2110C0FF2110C0FF2110C0FF2110C0FF2110C0FF2110
+        C0FF2110C0FF000000000000000000000000000000002110C0FF2110C0FF2110
+        C0FF2110C0FF2110C0FF000000002110C0FF2110C0FF2110C0FF2110C0FF2110
+        C0FF2110C0FF0000000000000000000000002110C0FF2110C0FF2110C0FF2110
+        C0FF2110C0FF00000000000000002110C0FF2110C0FF2110C0FF2110C0FF2110
+        C0FF2110C0FF00000000000000002110C0FF2110C0FF2110C0FF2110C0FF2110
+        C0FF0000000000000000000000002110C0FF2110C0FF2110C0FF2110C0FF2110
+        C0FF2110C0FF000000002110C0FF2110C0FF2110C0FF2110C0FF2110C0FF0000
+        00000000000000000000000000002110C0FF2110C0FF2110C0FF2110C0FF2110
+        C0FF2110C0FF2110C0FF2110C0FF2110C0FF2110C0FF2110C0FF000000000000
+        00000000000000000000000000002110C0FF2110C0FF2110C0FF2110C0FF2110
+        C0FF2110C0FF2110C0FF2110C0FF2110C0FF2110C0FF00000000000000000000
+        000000000000000000002110C0FF2110C0FF2110C0FF2110C0FF000000002110
+        C0FF2110C0FF2110C0FF2110C0FF2110C0FF0000000000000000000000000000
+        0000000000002110C0FF2110C0FF2110C0FF2110C0FF00000000000000002110
+        C0FF2110C0FF2110C0FF2110C0FF2110C0FF2110C0FF2110C0FF2110C0FF2110
+        C0FF2110C0FF2110C0FF2110C0FF2110C0FF2110C0FF00000000000000000000
+        00002110C0FF2110C0FF2110C0FF2110C0FF2110C0FF2110C0FF2110C0FF2110
+        C0FF2110C0FF2110C0FF2110C0FF2110C0FF0000000000000000000000000000
+        000000000000000000002110C0FF2110C0FF2110C0FF2110C0FF2110C0FF2110
+        C0FF2110C0FF2110C0FF00000000000000000000000000000000
+      }
+      OnClick = CancelButtonClick
+    end
+  end
+  object Panel2: TPanel
+    Left = 0
+    Height = 492
+    Top = 34
+    Width = 694
+    Align = alClient
+    BevelOuter = bvLowered
+    ClientHeight = 492
+    ClientWidth = 694
+    TabOrder = 1
+    object PageControl1: TPageControl
+      Left = 1
+      Height = 490
+      Top = 1
+      Width = 692
+      ActivePage = TabSheet1
+      Align = alClient
+      TabIndex = 0
+      TabOrder = 0
+      object TabSheet1: TTabSheet
+        Caption = 'Hull geometry'
+        ClientHeight = 450
+        ClientWidth = 688
+        object Panel4: TPanel
+          Left = 0
+          Height = 208
+          Top = 0
+          Width = 688
+          Align = alTop
+          AutoSize = True
+          BevelOuter = bvNone
+          ChildSizing.HorizontalSpacing = 10
+          ChildSizing.Layout = cclLeftToRightThenTopToBottom
+          ChildSizing.ControlsPerLine = 2
+          ClientHeight = 208
+          ClientWidth = 688
+          TabOrder = 0
+          object Panel9: TPanel
+            Left = 0
+            Height = 208
+            Top = 0
+            Width = 412
+            AutoSize = True
+            BevelOuter = bvNone
+            ChildSizing.LeftRightSpacing = 10
+            ChildSizing.TopBottomSpacing = 10
+            ChildSizing.HorizontalSpacing = 6
+            ChildSizing.VerticalSpacing = 2
+            ChildSizing.Layout = cclTopToBottomThenLeftToRight
+            ChildSizing.ControlsPerLine = 5
+            ClientHeight = 208
+            ClientWidth = 412
+            TabOrder = 0
+            object Label1: TLabel
+              Left = 10
+              Height = 36
+              Top = 10
+              Width = 249
+              Caption = 'Number of stations (5-45)'
+              Layout = tlCenter
+              ParentColor = False
+            end
+            object Label2: TLabel
+              Left = 10
+              Height = 36
+              Top = 48
+              Width = 249
+              Caption = 'Number of waterlines (5-25)'
+              Layout = tlCenter
+              ParentColor = False
+            end
+            object Label3: TLabel
+              Left = 10
+              Height = 36
+              Top = 86
+              Width = 249
+              Caption = 'Draft'
+              Layout = tlCenter
+              ParentColor = False
+            end
+            object Label4: TLabel
+              Left = 10
+              Height = 36
+              Top = 124
+              Width = 249
+              Caption = 'Length'
+              Layout = tlCenter
+              ParentColor = False
+            end
+            object Label5: TLabel
+              Left = 10
+              Height = 36
+              Top = 162
+              Width = 249
+              Caption = 'Volume'
+              Layout = tlCenter
+              ParentColor = False
+            end
+            object Edit1: TSpinEdit
+              Left = 265
+              Height = 36
+              Top = 10
+              Width = 80
+              Alignment = taRightJustify
+              MaxValue = 45
+              MinValue = 5
+              OnExit = Edit1AfterSetValue
+              TabOrder = 0
+              Value = 5
+            end
+            object Edit2: TSpinEdit
+              Left = 265
+              Height = 36
+              Top = 48
+              Width = 80
+              Alignment = taRightJustify
+              MaxValue = 25
+              MinValue = 5
+              OnExit = Edit2AfterSetValue
+              TabOrder = 1
+              Value = 5
+            end
+            object Edit3: TFloatSpinEdit
+              Left = 265
+              Height = 36
+              Top = 86
+              Width = 80
+              Alignment = taRightJustify
+              Constraints.MinWidth = 80
+              DecimalPlaces = 3
+              MaxValue = 10000000000
+              OnExit = Edit3AfterSetValue
+              TabOrder = 2
+            end
+            object Edit4: TFloatSpinEdit
+              Left = 265
+              Height = 36
+              Top = 124
+              Width = 80
+              Alignment = taRightJustify
+              DecimalPlaces = 3
+              OnExit = Edit4AfterSetValue
+              ReadOnly = True
+              TabOrder = 3
+            end
+            object Edit5: TFloatSpinEdit
+              Left = 265
+              Height = 36
+              Top = 162
+              Width = 80
+              Alignment = taRightJustify
+              DecimalPlaces = 3
+              OnExit = Edit5AfterSetValue
+              ReadOnly = True
+              TabOrder = 4
+            end
+            object Label8: TLabel
+              Left = 351
+              Height = 36
+              Top = 10
+              Width = 51
+              ParentColor = False
+            end
+            object Label9: TLabel
+              Left = 351
+              Height = 36
+              Top = 48
+              Width = 51
+              ParentColor = False
+            end
+            object _Label18: TLabel
+              Left = 351
+              Height = 36
+              Top = 86
+              Width = 51
+              Caption = '[m]'
+              Layout = tlCenter
+              ParentColor = False
+            end
+            object _Label19: TLabel
+              Left = 351
+              Height = 36
+              Top = 124
+              Width = 51
+              Caption = '[m]'
+              Layout = tlCenter
+              ParentColor = False
+            end
+            object _Label20: TLabel
+              Left = 351
+              Height = 36
+              Top = 162
+              Width = 51
+              Caption = '[m^3]'
+              Layout = tlCenter
+              ParentColor = False
+            end
+          end
+          object GroupBox3: TGroupBox
+            Left = 422
+            Height = 208
+            Top = 0
+            Width = 443
+            AutoSize = True
+            Caption = 'Hullform configuration:  '
+            ChildSizing.EnlargeVertical = crsHomogenousChildResize
+            ChildSizing.Layout = cclLeftToRightThenTopToBottom
+            ChildSizing.ControlsPerLine = 1
+            ClientHeight = 180
+            ClientWidth = 439
+            TabOrder = 1
+            object Panel8: TPanel
+              Left = 0
+              Height = 126
+              Top = 0
+              Width = 439
+              AutoSize = True
+              BevelOuter = bvNone
+              ChildSizing.LeftRightSpacing = 10
+              ChildSizing.TopBottomSpacing = 10
+              ChildSizing.VerticalSpacing = 2
+              ChildSizing.Layout = cclLeftToRightThenTopToBottom
+              ChildSizing.ControlsPerLine = 1
+              ClientHeight = 126
+              ClientWidth = 439
+              TabOrder = 0
+              object RadioButton1: TRadioButton
+                Left = 10
+                Height = 28
+                Top = 10
+                Width = 283
+                Caption = 'Monohull'
+                Checked = True
+                TabOrder = 0
+                TabStop = True
+                OnClick = RadioButton1Click
+              end
+              object RadioButton2: TRadioButton
+                Left = 10
+                Height = 28
+                Top = 40
+                Width = 283
+                Caption = 'Monohull, send as catamaran'
+                TabOrder = 1
+                OnClick = RadioButton1Click
+              end
+              object RadioButton3: TRadioButton
+                Left = 10
+                Height = 28
+                Top = 70
+                Width = 283
+                Caption = 'Catamaran'
+                TabOrder = 2
+                OnClick = RadioButton1Click
+              end
+            end
+            object Panel5: TPanel
+              Left = 0
+              Height = 54
+              Top = 126
+              Width = 439
+              AutoSize = True
+              BevelOuter = bvNone
+              ChildSizing.LeftRightSpacing = 10
+              ChildSizing.HorizontalSpacing = 6
+              ChildSizing.Layout = cclLeftToRightThenTopToBottom
+              ChildSizing.ControlsPerLine = 3
+              ClientHeight = 54
+              ClientWidth = 439
+              TabOrder = 1
+              object Label14: TLabel
+                Left = 10
+                Height = 36
+                Top = 0
+                Width = 298
+                Caption = 'Distance between center of hulls:'
+                Layout = tlCenter
+                ParentColor = False
+              end
+              object Distance: TFloatSpinEdit
+                Left = 314
+                Height = 36
+                Top = 0
+                Width = 80
+                Alignment = taRightJustify
+                Constraints.MinWidth = 80
+                DecimalPlaces = 3
+                Enabled = False
+                OnExit = DistanceAfterSetValue
+                TabOrder = 0
+              end
+              object _Label15: TLabel
+                Left = 400
+                Height = 36
+                Top = 0
+                Width = 29
+                Caption = '[m]'
+                Layout = tlCenter
+                ParentColor = False
+              end
+            end
+          end
+        end
+        object Panel6: TPanel
+          Left = 0
+          Height = 242
+          Top = 208
+          Width = 688
+          Align = alClient
+          BevelOuter = bvLowered
+          ClientHeight = 242
+          ClientWidth = 688
+          TabOrder = 1
+          object ScrollBar1: TScrollBar
+            Left = 1
+            Height = 12
+            Top = 229
+            Width = 686
+            Align = alBottom
+            Max = 180
+            Min = -180
+            PageSize = 0
+            Position = 20
+            TabOrder = 0
+          end
+          object ScrollBar2: TScrollBar
+            Left = 675
+            Height = 228
+            Top = 1
+            Width = 12
+            Align = alRight
+            Kind = sbVertical
+            Max = 180
+            Min = -180
+            PageSize = 0
+            Position = 20
+            TabOrder = 1
+          end
+        end
+      end
+      object TabSheet3: TTabSheet
+        Caption = 'Environment'
+        ClientHeight = 450
+        ClientWidth = 688
+        ImageIndex = 2
+        object Panel7: TPanel
+          Left = 0
+          Height = 450
+          Top = 0
+          Width = 688
+          Align = alClient
+          BevelOuter = bvNone
+          ChildSizing.Layout = cclLeftToRightThenTopToBottom
+          ChildSizing.ControlsPerLine = 1
+          ClientHeight = 450
+          ClientWidth = 688
+          TabOrder = 0
+          object Panel10: TPanel
+            Left = 0
+            Height = 191
+            Top = 0
+            Width = 435
+            AutoSize = True
+            BevelOuter = bvNone
+            ChildSizing.LeftRightSpacing = 10
+            ChildSizing.TopBottomSpacing = 10
+            ChildSizing.HorizontalSpacing = 6
+            ChildSizing.VerticalSpacing = 2
+            ChildSizing.ControlsPerLine = 8
+            ClientHeight = 191
+            ClientWidth = 435
+            TabOrder = 0
+            object Label6: TLabel
+              Left = 10
+              Height = 26
+              Top = 10
+              Width = 123
+              Caption = 'Water density'
+              Layout = tlCenter
+              ParentColor = False
+            end
+            object Label7: TLabel
+              Left = 10
+              Height = 26
+              Top = 37
+              Width = 223
+              Caption = 'Water kinematic viscosity'
+              Layout = tlCenter
+              ParentColor = False
+            end
+            object Label10: TLabel
+              Left = 10
+              Height = 26
+              Top = 64
+              Width = 110
+              Caption = 'Water depth'
+              Layout = tlCenter
+              ParentColor = False
+            end
+            object Label12: TLabel
+              Left = 10
+              Height = 26
+              Top = 91
+              Width = 93
+              Caption = 'Trim angle'
+              Layout = tlCenter
+              ParentColor = False
+            end
+            object Label20: TLabel
+              Left = 10
+              Height = 26
+              Top = 118
+              Width = 147
+              Caption = 'Number of areas'
+              Layout = tlCenter
+              ParentColor = False
+            end
+            object Label21: TLabel
+              Left = 10
+              Height = 26
+              Top = 145
+              Width = 185
+              Caption = 'Percent of areas sum'
+              Layout = tlCenter
+              ParentColor = False
+            end
+            object Edit6: TFloatSpinEdit
+              Left = 185
+              Height = 36
+              Top = 10
+              Width = 80
+              Alignment = taRightJustify
+              Constraints.MinWidth = 80
+              DecimalPlaces = 3
+              MaxValue = 1.03
+              OnExit = Edit6AfterSetValue
+              TabOrder = 0
+              Value = 1
+            end
+            object Edit7: TFloatSpinEdit
+              Left = 185
+              Height = 36
+              Top = 37
+              Width = 80
+              Alignment = taRightJustify
+              DecimalPlaces = 4
+              MaxValue = 1.61
+              OnExit = Edit7AfterSetValue
+              TabOrder = 1
+              Value = 0.8
+            end
+            object Edit8: TFloatSpinEdit
+              Left = 185
+              Height = 36
+              Top = 64
+              Width = 80
+              Alignment = taRightJustify
+              MaxValue = 10000
+              OnExit = Edit8AfterSetValue
+              TabOrder = 2
+            end
+            object Edit9: TFloatSpinEdit
+              Left = 185
+              Height = 36
+              Top = 91
+              Width = 80
+              Alignment = taRightJustify
+              DecimalPlaces = 3
+              MaxValue = 90
+              MinValue = -90
+              OnExit = Edit9AfterSetValue
+              TabOrder = 3
+            end
+            object Edit20: TFloatSpinEdit
+              Left = 185
+              Height = 36
+              Top = 118
+              Width = 80
+              Alignment = taRightJustify
+              DecimalPlaces = 0
+              MaxValue = 4000
+              MinValue = 400
+              OnExit = Edit20AfterSetValue
+              TabOrder = 4
+              Value = 1000
+            end
+            object Edit21: TFloatSpinEdit
+              Left = 185
+              Height = 36
+              Top = 145
+              Width = 80
+              Alignment = taRightJustify
+              MinValue = 10
+              OnExit = Edit21AfterSetValue
+              TabOrder = 5
+              Value = 100
+            end
+            object _Label9: TLabel
+              Left = 271
+              Height = 26
+              Top = 10
+              Width = 54
+              Caption = '[t/m3]'
+              Layout = tlCenter
+              ParentColor = False
+            end
+            object _Label8: TLabel
+              Left = 271
+              Height = 26
+              Top = 37
+              Width = 115
+              Caption = '*10-6  [m2/s]'
+              Layout = tlCenter
+              ParentColor = False
+            end
+            object _Label11: TLabel
+              Left = 271
+              Height = 26
+              Top = 64
+              Width = 29
+              Caption = '[m]'
+              Layout = tlCenter
+              ParentColor = False
+            end
+            object _Label13: TLabel
+              Left = 271
+              Height = 26
+              Top = 91
+              Width = 53
+              Caption = '[degr]'
+              Layout = tlCenter
+              ParentColor = False
+            end
+            object Label11: TLabel
+              Left = 271
+              Height = 1
+              Top = 118
+              Width = 1
+              ParentColor = False
+            end
+            object _Label21: TLabel
+              Left = 271
+              Height = 26
+              Top = 145
+              Width = 28
+              Caption = '[%]'
+              Layout = tlCenter
+              ParentColor = False
+            end
+          end
+          object Panel11: TPanel
+            Left = 0
+            Height = 74
+            Top = 191
+            Width = 435
+            AutoSize = True
+            BevelOuter = bvNone
+            ChildSizing.LeftRightSpacing = 10
+            ChildSizing.HorizontalSpacing = 6
+            ChildSizing.VerticalSpacing = 2
+            ChildSizing.Layout = cclLeftToRightThenTopToBottom
+            ChildSizing.ControlsPerLine = 2
+            ClientHeight = 74
+            ClientWidth = 435
+            TabOrder = 1
+            object Label22: TLabel
+              Left = 10
+              Height = 36
+              Top = 0
+              Width = 329
+              Caption = 'Calculation accuracy'
+              Layout = tlCenter
+              ParentColor = False
+            end
+            object Edit22: TFloatSpinEdit
+              Left = 345
+              Height = 36
+              Top = 0
+              Width = 80
+              Alignment = taRightJustify
+              Constraints.MinWidth = 80
+              MaxValue = 1
+              OnExit = Edit22AfterSetValue
+              TabOrder = 0
+              Value = 0.2
+            end
+            object Label23: TLabel
+              Left = 10
+              Height = 36
+              Top = 38
+              Width = 329
+              Caption = 'Type of areas (1-triangle;2-trapezium)'
+              Layout = tlCenter
+              ParentColor = False
+              OnResize = Label23Resize
+            end
+            object Edit23: TFloatSpinEdit
+              Left = 345
+              Height = 36
+              Top = 38
+              Width = 80
+              Alignment = taRightJustify
+              MaxValue = 2
+              MinValue = 1
+              OnExit = Edit23AfterSetValue
+              TabOrder = 1
+              Value = 1
+            end
+          end
+          object Panel12: TPanel
+            Left = 0
+            Height = 36
+            Top = 265
+            Width = 435
+            BevelOuter = bvNone
+            ChildSizing.LeftRightSpacing = 10
+            ChildSizing.HorizontalSpacing = 6
+            ChildSizing.ControlsPerLine = 2
+            ClientHeight = 36
+            ClientWidth = 435
+            TabOrder = 2
+            object Label27: TLabel
+              Left = 10
+              Height = 36
+              Top = 0
+              Width = 194
+              Align = alLeft
+              BorderSpacing.Right = 6
+              Caption = 'Type of object or ship:'
+              Layout = tlCenter
+              ParentColor = False
+            end
+            object ComboBox: TComboBox
+              Left = 210
+              Height = 36
+              Top = 0
+              Width = 215
+              Align = alClient
+              Constraints.MinWidth = 200
+              ItemHeight = 0
+              ItemIndex = 0
+              Items.Strings = (
+                'Any Objects or Ships'
+                'Underwater Vechicle'
+                'Displacement Sea Ships'
+                'Displacement River Ships'
+              )
+              TabOrder = 0
+              Text = 'Any Objects or Ships'
+              OnClick = ComboBoxClick
+            end
+          end
+          object Panel13: TPanel
+            Left = 0
+            Height = 113
+            Top = 301
+            Width = 435
+            AutoSize = True
+            ChildSizing.LeftRightSpacing = 10
+            ChildSizing.HorizontalSpacing = 6
+            ChildSizing.VerticalSpacing = 2
+            ChildSizing.Layout = cclLeftToRightThenTopToBottom
+            ChildSizing.ControlsPerLine = 2
+            ClientHeight = 113
+            ClientWidth = 435
+            TabOrder = 3
+            object Label24: TLabel
+              Left = 10
+              Height = 36
+              Top = 0
+              Width = 270
+              Caption = 'Drift angle BetaD, degr'
+              Layout = tlCenter
+              ParentColor = False
+            end
+            object Edit24: TFloatSpinEdit
+              Left = 286
+              Height = 36
+              Top = 0
+              Width = 80
+              Alignment = taRightJustify
+              Constraints.MinWidth = 80
+              MaxValue = 90
+              OnExit = Edit24AfterSetValue
+              TabOrder = 0
+            end
+            object Label25: TLabel
+              Left = 10
+              Height = 36
+              Top = 38
+              Width = 270
+              Caption = 'Estimated velocity Vs, knots'
+              Layout = tlCenter
+              ParentColor = False
+            end
+            object Edit25: TFloatSpinEdit
+              Left = 286
+              Height = 36
+              Top = 38
+              Width = 80
+              Alignment = taRightJustify
+              MaxValue = 30
+              OnExit = Edit25AfterSetValue
+              TabOrder = 1
+              Value = 10
+            end
+            object Label26: TLabel
+              Left = 10
+              Height = 36
+              Top = 76
+              Width = 270
+              Caption = 'Rotative velocity Omega, 1/sec'
+              Layout = tlCenter
+              ParentColor = False
+            end
+            object Edit26: TFloatSpinEdit
+              Left = 286
+              Height = 36
+              Top = 76
+              Width = 80
+              Alignment = taRightJustify
+              DecimalPlaces = 3
+              MaxValue = 30
+              OnExit = Edit26AfterSetValue
+              TabOrder = 2
+            end
+          end
+        end
+      end
+      object TabSheet2: TTabSheet
+        Caption = 'Results'
+        ClientHeight = 450
+        ClientWidth = 688
+        ImageIndex = 1
+        object Resultsmemo: TMemo
+          Left = 0
+          Height = 450
+          Top = 0
+          Width = 688
+          Align = alClient
+          Font.Name = 'Courier New'
+          ParentFont = False
+          ScrollBars = ssBoth
+          TabOrder = 0
+          Visible = False
+        end
+      end
+      object TabSheet4: TTabSheet
+        Caption = 'Help'
+        ClientHeight = 450
+        ClientWidth = 688
+        ImageIndex = 1
+        object Resultsmemo2: TMemo
+          Left = 0
+          Height = 450
+          Top = 0
+          Width = 688
+          Align = alClient
+          Font.Name = 'Courier New'
+          ParentFont = False
+          ScrollBars = ssBoth
+          TabOrder = 0
+          Visible = False
+        end
+      end
+    end
+  end
+  object Panel3: TPanel
+    Left = 0
+    Height = 13
+    Top = 526
+    Width = 694
+    Align = alBottom
+    BevelOuter = bvNone
+    TabOrder = 2
+  end
+  object ActionList1: TActionList
+    Left = 448
+    object SaveFile: TAction
+      Caption = 'Save'
+    end
+  end
+end

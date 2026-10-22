@@ -1,0 +1,16 @@
+include LICENSE NOTICE UPSTREAM.json README.md README.zh-CN.md requirements*.lock
+include .gitattributes .gitignore PUBLIC-FILES.txt vendor-manifest.json
+recursive-include .github *.yml
+recursive-include engine *.pas *.lpr *.lpi
+recursive-include scripts *.py *.ps1
+recursive-include scripts *.spec
+recursive-include docs *.md *.json
+recursive-include tests *.py
+recursive-include examples *.fbm *.ftm *.json *.md
+recursive-include vendor/freeship *
+recursive-exclude vendor/freeship *.o *.ppu *.a *.compiled *.bak *.log *.obj *.lps *.lrj *.rsj
+prune .toolchain
+prune .build
+prune .venv
+prune dist
+prune build

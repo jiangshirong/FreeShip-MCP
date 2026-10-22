@@ -1,0 +1,705 @@
+object FreePropeller_Task3: TFreePropeller_Task3
+  Left = 554
+  Height = 600
+  Top = 265
+  Width = 900
+  BorderStyle = bsDialog
+  Caption = 'Passport diagram'
+  ClientHeight = 600
+  ClientWidth = 900
+  Position = poOwnerFormCenter
+  LCLVersion = '3.2.0.0'
+  object ToolBar1: TToolBar
+    Left = 0
+    Height = 24
+    Top = 0
+    Width = 900
+    AutoSize = True
+    ButtonHeight = 22
+    ButtonWidth = 50
+    Caption = 'ToolBar1'
+    Color = clForm
+    Images = MenuImages
+    Indent = 5
+    ParentColor = False
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 0
+    object _ToolButton10: TToolButton
+      Left = 5
+      Height = 22
+      Top = 2
+      Caption = '_ToolButton10'
+      ImageIndex = 6
+      Style = tbsSeparator
+    end
+    object PrintButton: TToolButton
+      Left = 13
+      Hint = 'Print the results of the calculation.'
+      Top = 2
+      Caption = 'PrintButton'
+      ImageIndex = 2
+      OnClick = PrintButtonClick
+    end
+    object _ToolButton14: TToolButton
+      Left = 63
+      Height = 22
+      Top = 2
+      Caption = '_ToolButton14'
+      ImageIndex = 12
+      Style = tbsSeparator
+    end
+    object ToolButton25: TToolButton
+      Left = 71
+      Hint = 'Close the window and save changes.'
+      Top = 2
+      ImageIndex = 1
+      OnClick = ToolButton25Click
+    end
+    object ToolButton7: TToolButton
+      Left = 121
+      Hint = 'Close window without saving changes.'
+      Top = 2
+      ImageIndex = 0
+      OnClick = ToolButton7Click
+    end
+  end
+  object PageControl1: TPageControl
+    Left = 0
+    Height = 576
+    Top = 24
+    Width = 900
+    ActivePage = TabSheet1
+    Align = alClient
+    TabIndex = 0
+    TabOrder = 1
+    object TabSheet1: TTabSheet
+      Caption = 'General'
+      ClientHeight = 536
+      ClientWidth = 896
+      object Panel1: TPanel
+        Left = 0
+        Height = 536
+        Top = 0
+        Width = 896
+        Align = alClient
+        BevelOuter = bvNone
+        BorderWidth = 10
+        ClientHeight = 536
+        ClientWidth = 896
+        TabOrder = 0
+        object Panel: TPanel
+          Left = 10
+          Height = 516
+          Top = 10
+          Width = 345
+          Align = alLeft
+          AutoSize = True
+          BevelOuter = bvNone
+          ChildSizing.Layout = cclLeftToRightThenTopToBottom
+          ChildSizing.ControlsPerLine = 1
+          ClientHeight = 516
+          ClientWidth = 345
+          TabOrder = 0
+          object CheckBox2: TCheckBox
+            Left = 0
+            Height = 28
+            Top = 0
+            Width = 345
+            Caption = 'Extract data from current hull'
+            TabOrder = 0
+            OnClick = CheckBox2Click
+          end
+          object Panel2: TPanel
+            Left = 0
+            Height = 606
+            Top = 28
+            Width = 345
+            BevelOuter = bvNone
+            ChildSizing.HorizontalSpacing = 6
+            ChildSizing.VerticalSpacing = 2
+            ChildSizing.Layout = cclLeftToRightThenTopToBottom
+            ChildSizing.ControlsPerLine = 2
+            ClientHeight = 606
+            ClientWidth = 345
+            TabOrder = 1
+            object Label2: TLabel
+              Left = 0
+              Height = 36
+              Top = 0
+              Width = 259
+              Caption = 'Propeller diameter, m'
+              Layout = tlCenter
+              ParentColor = False
+            end
+            object Edit2: TFloatSpinEdit
+              Left = 265
+              Height = 36
+              Top = 0
+              Width = 80
+              Alignment = taRightJustify
+              Constraints.MinWidth = 80
+              DecimalPlaces = 3
+              MaxValue = 25
+              OnExit = Edit1AfterSetValue
+              TabOrder = 0
+            end
+            object Label3: TLabel
+              Left = 0
+              Height = 36
+              Top = 38
+              Width = 259
+              Caption = 'Disk area ratio'
+              Layout = tlCenter
+              ParentColor = False
+            end
+            object Edit3: TFloatSpinEdit
+              Left = 265
+              Height = 36
+              Top = 38
+              Width = 80
+              Alignment = taRightJustify
+              DecimalPlaces = 3
+              MaxValue = 1.8
+              OnExit = Edit1AfterSetValue
+              TabOrder = 1
+            end
+            object Label4: TLabel
+              Left = 0
+              Height = 36
+              Top = 76
+              Width = 259
+              Caption = 'Pitch ratio'
+              Layout = tlCenter
+              ParentColor = False
+            end
+            object Edit4: TFloatSpinEdit
+              Left = 265
+              Height = 36
+              Top = 76
+              Width = 80
+              Alignment = taRightJustify
+              DecimalPlaces = 3
+              MaxValue = 6
+              OnExit = Edit1AfterSetValue
+              TabOrder = 2
+            end
+            object Label5: TLabel
+              Left = 0
+              Height = 36
+              Top = 114
+              Width = 259
+              Caption = 'Rational jump'
+              Layout = tlCenter
+              ParentColor = False
+            end
+            object Edit5: TFloatSpinEdit
+              Left = 265
+              Height = 36
+              Top = 114
+              Width = 80
+              Alignment = taRightJustify
+              DecimalPlaces = 3
+              MaxValue = 10
+              OnExit = Edit1AfterSetValue
+              TabOrder = 3
+            end
+            object Label6: TLabel
+              Left = 0
+              Height = 36
+              Top = 152
+              Width = 259
+              Caption = 'Number of blade'
+              Layout = tlCenter
+              ParentColor = False
+            end
+            object Edit6: TFloatSpinEdit
+              Left = 265
+              Height = 36
+              Top = 152
+              Width = 80
+              Alignment = taRightJustify
+              DecimalPlaces = 0
+              MaxValue = 8
+              OnExit = Edit1AfterSetValue
+              TabOrder = 4
+            end
+            object Label7: TLabel
+              Left = 0
+              Height = 36
+              Top = 190
+              Width = 259
+              Caption = 'Number of diagram'
+              Layout = tlCenter
+              ParentColor = False
+            end
+            object Edit7: TFloatSpinEdit
+              Left = 265
+              Height = 36
+              Top = 190
+              Width = 80
+              Alignment = taRightJustify
+              DecimalPlaces = 0
+              MaxValue = 20
+              OnExit = Edit1AfterSetValue
+              TabOrder = 5
+            end
+            object Label8: TLabel
+              Left = 0
+              Height = 36
+              Top = 228
+              Width = 259
+              Caption = 'Number of propellers'
+              Layout = tlCenter
+              ParentColor = False
+            end
+            object Edit8: TFloatSpinEdit
+              Left = 265
+              Height = 36
+              Top = 228
+              Width = 80
+              Alignment = taRightJustify
+              DecimalPlaces = 0
+              MaxValue = 3
+              OnExit = Edit1AfterSetValue
+              TabOrder = 6
+            end
+            object Label9: TLabel
+              Left = 0
+              Height = 36
+              Top = 266
+              Width = 259
+              Caption = 'Frequency of propeller, 1/min'
+              Layout = tlCenter
+              ParentColor = False
+            end
+            object Edit9: TFloatSpinEdit
+              Left = 265
+              Height = 36
+              Top = 266
+              Width = 80
+              Alignment = taRightJustify
+              MaxValue = 10000
+              OnExit = Edit1AfterSetValue
+              TabOrder = 7
+            end
+            object Label10: TLabel
+              Left = 0
+              Height = 36
+              Top = 304
+              Width = 259
+              Caption = 'Wake fraction'
+              Layout = tlCenter
+              ParentColor = False
+            end
+            object Edit10: TFloatSpinEdit
+              Left = 265
+              Height = 36
+              Top = 304
+              Width = 80
+              Alignment = taRightJustify
+              DecimalPlaces = 4
+              OnExit = Edit1AfterSetValue
+              TabOrder = 8
+            end
+            object Label11: TLabel
+              Left = 0
+              Height = 36
+              Top = 342
+              Width = 259
+              Caption = 'Thrust fraction'
+              Layout = tlCenter
+              ParentColor = False
+            end
+            object Edit11: TFloatSpinEdit
+              Left = 265
+              Height = 36
+              Top = 342
+              Width = 80
+              Alignment = taRightJustify
+              DecimalPlaces = 4
+              OnExit = Edit1AfterSetValue
+              TabOrder = 9
+            end
+            object Label12: TLabel
+              Left = 0
+              Height = 36
+              Top = 380
+              Width = 259
+              Caption = 'Koef. infl. on thrust'
+              Layout = tlCenter
+              ParentColor = False
+            end
+            object Edit12: TFloatSpinEdit
+              Left = 265
+              Height = 36
+              Top = 380
+              Width = 80
+              Alignment = taRightJustify
+              DecimalPlaces = 3
+              MaxValue = 1.1
+              OnExit = Edit1AfterSetValue
+              TabOrder = 10
+            end
+            object Label13: TLabel
+              Left = 0
+              Height = 36
+              Top = 418
+              Width = 259
+              Caption = 'Koef. infl. on torque'
+              Layout = tlCenter
+              ParentColor = False
+            end
+            object Edit13: TFloatSpinEdit
+              Left = 265
+              Height = 36
+              Top = 418
+              Width = 80
+              Alignment = taRightJustify
+              DecimalPlaces = 3
+              MaxValue = 1.1
+              OnExit = Edit1AfterSetValue
+              TabOrder = 11
+            end
+            object Label14: TLabel
+              Left = 0
+              Height = 36
+              Top = 456
+              Width = 259
+              Caption = 'Efficiency of shaft'
+              Layout = tlCenter
+              ParentColor = False
+            end
+            object Edit14: TFloatSpinEdit
+              Left = 265
+              Height = 36
+              Top = 456
+              Width = 80
+              Alignment = taRightJustify
+              DecimalPlaces = 3
+              MaxValue = 1
+              OnExit = Edit1AfterSetValue
+              TabOrder = 12
+            end
+            object Label15: TLabel
+              Left = 0
+              Height = 36
+              Top = 494
+              Width = 259
+              Caption = 'Efficiency of reductor'
+              Layout = tlCenter
+              ParentColor = False
+            end
+            object Edit15: TFloatSpinEdit
+              Left = 265
+              Height = 36
+              Top = 494
+              Width = 80
+              Alignment = taRightJustify
+              DecimalPlaces = 3
+              MaxValue = 1
+              OnExit = Edit1AfterSetValue
+              TabOrder = 13
+            end
+            object Label16: TLabel
+              Left = 0
+              Height = 36
+              Top = 532
+              Width = 259
+              Caption = 'Water density, kg/m**3'
+              Layout = tlCenter
+              ParentColor = False
+            end
+            object Edit16: TFloatSpinEdit
+              Left = 265
+              Height = 36
+              Top = 532
+              Width = 80
+              Alignment = taRightJustify
+              MaxValue = 2000
+              OnExit = Edit1AfterSetValue
+              TabOrder = 14
+            end
+            object Label17: TLabel
+              Left = 0
+              Height = 36
+              Top = 570
+              Width = 259
+              Caption = 'Engine power, kW'
+              Layout = tlCenter
+              ParentColor = False
+            end
+            object Edit17: TFloatSpinEdit
+              Left = 265
+              Height = 36
+              Top = 570
+              Width = 80
+              Alignment = taRightJustify
+              MaxValue = 100000
+              OnExit = Edit1AfterSetValue
+              TabOrder = 15
+            end
+          end
+        end
+        object Chart: TChart
+          Left = 355
+          Height = 516
+          Top = 10
+          Width = 531
+          AxisList = <          
+            item
+              Marks.LabelBrush.Style = bsClear
+              Minors = <>
+              Title.LabelFont.Orientation = 900
+              Title.Visible = True
+              Title.Caption = 'Thrust [kN]'
+              Title.LabelBrush.Style = bsClear
+            end          
+            item
+              Alignment = calBottom
+              Marks.LabelBrush.Style = bsClear
+              Minors = <>
+              Title.Visible = True
+              Title.Caption = 'Ship speed [knots]'
+              Title.LabelBrush.Style = bsClear
+            end          
+            item
+              Alignment = calRight
+              Marks.LabelBrush.Style = bsClear
+              Minors = <>
+              Title.LabelFont.Orientation = 900
+              Title.Visible = True
+              Title.Caption = 'Power [kW]'
+              Title.LabelBrush.Style = bsClear
+            end>
+          Foot.Brush.Color = clBtnFace
+          Foot.Font.Color = clBlue
+          Legend.Alignment = laCenterRight
+          Legend.Visible = True
+          Title.Brush.Color = clBtnFace
+          Title.Font.Color = clBlue
+          Title.Text.Strings = (
+            'Passport diagram'
+          )
+          Title.Visible = True
+          Align = alClient
+          ParentColor = True
+          object Series1: TLineSeries
+            Title = 'n='
+            LinePen.Color = clRed
+            Marks.Visible = False
+            Pointer.HorizSize = 2
+            Pointer.VertSize = 2
+          end
+          object Series2: TLineSeries
+            Title = 'n='
+            LinePen.Color = clRed
+            Marks.Visible = False
+          end
+          object Series3: TLineSeries
+            Title = 'n='
+            LinePen.Color = clRed
+            Marks.Visible = False
+          end
+          object Series4: TLineSeries
+            Title = 'n='
+            LinePen.Color = clRed
+            Marks.Visible = False
+          end
+          object Series5: TLineSeries
+            Title = 'n='
+            LinePen.Color = clRed
+            Marks.Visible = False
+            Pointer.HorizSize = 2
+            Pointer.VertSize = 2
+          end
+          object Series6: TLineSeries
+            Title = 'n='
+            LinePen.Color = clRed
+            Marks.Visible = False
+          end
+          object Series7: TLineSeries
+            Title = 'n='
+            LinePen.Color = clRed
+            Marks.Visible = False
+          end
+          object Series8: TLineSeries
+            Title = 'n='
+            LinePen.Color = clRed
+            Marks.Visible = False
+          end
+          object Series9: TLineSeries
+            Title = 'n='
+            LinePen.Color = clRed
+            Marks.Visible = False
+          end
+          object Series10: TLineSeries
+            Title = 'n='
+            LinePen.Color = clRed
+            Marks.Visible = False
+          end
+          object Series_1: TLineSeries
+            Title = 'Jb='
+            LinePen.Color = clBlue
+            Marks.Visible = False
+            Pointer.HorizSize = 2
+            Pointer.VertSize = 2
+          end
+          object Series_2: TLineSeries
+            Title = 'Jb='
+            LinePen.Color = clBlue
+            Marks.Visible = False
+          end
+          object Series_3: TLineSeries
+            Title = 'Jb='
+            LinePen.Color = clBlue
+            Marks.Visible = False
+          end
+          object Series_4: TLineSeries
+            Title = 'Jb='
+            LinePen.Color = clBlue
+            Marks.Visible = False
+          end
+          object Series_5: TLineSeries
+            Title = 'Jb='
+            LinePen.Color = clBlue
+            Marks.Visible = False
+            Pointer.HorizSize = 2
+            Pointer.VertSize = 2
+          end
+          object Series_6: TLineSeries
+            Title = 'Jb='
+            LinePen.Color = clBlue
+            Marks.Visible = False
+          end
+          object Series_7: TLineSeries
+            Title = 'Jb='
+            LinePen.Color = clBlue
+            Marks.Visible = False
+          end
+          object Series_8: TLineSeries
+            Title = 'Jb='
+            LinePen.Color = clBlue
+            Marks.Visible = False
+          end
+          object Series_9: TLineSeries
+            Title = 'Jb='
+            LinePen.Color = clBlue
+            Marks.Visible = False
+          end
+          object Series_10: TLineSeries
+            Title = 'Jb='
+            LinePen.Color = clBlue
+            Marks.Visible = False
+          end
+          object Series11: TLineSeries
+            Title = 'R'
+            LinePen.Color = clNavy
+            LinePen.Width = 2
+            Marks.Visible = False
+          end
+          object Series12: TLineSeries
+            Title = 'R_e'
+            LinePen.Color = clNavy
+            LinePen.Width = 2
+            Marks.Visible = False
+          end
+          object Series_11: TLineSeries
+            Title = 'P'
+            LinePen.Color = clGreen
+            LinePen.Width = 2
+            Marks.Visible = False
+          end
+          object Series_12: TLineSeries
+            Title = 'P_e'
+            LinePen.Color = clGreen
+            LinePen.Width = 2
+            Marks.Visible = False
+          end
+          object Series13: TLineSeries
+            Title = 'P_e'
+            LinePen.Color = clFuchsia
+            LinePen.Width = 2
+            Marks.Visible = False
+          end
+          object Series14: TLineSeries
+            Title = 'P_e'
+            LinePen.Color = clFuchsia
+            LinePen.Width = 2
+            Marks.Visible = False
+          end
+        end
+      end
+    end
+    object TabSheet2: TTabSheet
+      Caption = 'Results'
+      ClientHeight = 536
+      ClientWidth = 896
+      ImageIndex = 1
+      object Resultsmemo: TMemo
+        Left = 0
+        Height = 536
+        Top = 0
+        Width = 896
+        Align = alClient
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Courier New'
+        ParentFont = False
+        ScrollBars = ssBoth
+        TabOrder = 0
+        Visible = False
+      end
+    end
+    object TabSheet3: TTabSheet
+      Caption = 'Help'
+      ClientHeight = 536
+      ClientWidth = 896
+      object Panel15: TPanel
+        Left = 0
+        Height = 536
+        Top = 0
+        Width = 896
+        Align = alClient
+        BevelOuter = bvLowered
+        ClientHeight = 536
+        ClientWidth = 896
+        ParentFont = False
+        TabOrder = 0
+        object Resultsmemo2: TMemo
+          Left = 1
+          Height = 534
+          Top = 1
+          Width = 894
+          Align = alClient
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Courier New'
+          ParentFont = False
+          ScrollBars = ssBoth
+          TabOrder = 0
+          Visible = False
+        end
+      end
+    end
+  end
+  object MenuImages: TImageList
+    Left = 292
+    Bitmap = {
+      4C7A0400000010000000100000000B0100000000000078DAED55D10E83200CE4
+      BFCD5E08D95FB947F7595D74CA00DBD203353E8CA4234BB9BBF628D1B92B1791
+      7381BEBB96D7724138F3CB075FE673EC3EAF9DB160350E2B56EA13C1CA1C18BE
+      479FAFDFC62163EB1C52CF160ECD2F82F15ABE367B5A7F9A7F730EBBE3DEA7EC
+      A80BEBD7E8C00607E2535D147F67AC741756AC5F7EA9A9E6E44CE400FA5D7225
+      87C7FCDA713478CD71A0F39572C0B39970B4626FB4C810F247A0B22C784ED38A
+      3D595BF2C0A43DBDA76C07FCE6B0F1BF25340E24523E4D3F3C430CAE86AD77B1
+      DED9B3354A4DD43BCEC7F4EE50FF1ADF4C6DFE9AD7F0184CDAEB3976F6C7D758
+      0DA5FE43F05AED289E28DFAFD03FA2FFDAFED7BF529F629CA9DFFA7E3FCFE74A
+      53
+    }
+  end
+  object PrintDialog: TPrintDialog
+    Left = 193
+    Top = 3
+  end
+end

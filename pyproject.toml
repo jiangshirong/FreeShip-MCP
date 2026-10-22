@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools==80.9.0", "wheel==0.45.1"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "freeship-mcp"
+version = "0.1.0"
+description = "Windows local MCP for the native FreeShip hull geometry and hydrostatics engine"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "GPL-3.0-or-later"
+classifiers = ["Operating System :: Microsoft :: Windows", "Programming Language :: Python :: 3"]
+dependencies = ["mcp==2.3.0", "openpyxl==3.1.5", "ezdxf==1.4.3"]
+
+[project.optional-dependencies]
+dev = ["pytest==8.4.2", "build==1.3.0"]
+
+[project.scripts]
+freeship-mcp = "freeship_mcp.server:main"
+
+[project.urls]
+Homepage = "https://github.com/jiangshirong/FreeShip-MCP"
+Issues = "https://github.com/jiangshirong/FreeShip-MCP/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+freeship_mcp = ["bin/*.exe", "bin/*.json", "licenses/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

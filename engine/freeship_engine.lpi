@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectOptions>
+    <Version Value="12"/>
+    <General><MainUnit Value="0"/><Title Value="freeship-engine"/><UseAppBundle Value="False"/><ResourceType Value="res"/></General>
+    <RequiredPackages Count="4">
+      <Item1><PackageName Value="LazControls"/></Item1>
+      <Item2><PackageName Value="TAChartLazarusPkg"/></Item2>
+      <Item3><PackageName Value="Printer4Lazarus"/></Item3>
+      <Item4><PackageName Value="LCL"/></Item4>
+    </RequiredPackages>
+    <Units Count="1"><Unit0><Filename Value="freeship_engine.lpr"/><IsPartOfProject Value="True"/></Unit0></Units>
+  </ProjectOptions>
+  <CompilerOptions>
+    <Version Value="11"/>
+    <Target><Filename Value="../src/freeship_mcp/bin/freeship-engine.exe"/></Target>
+    <SearchPaths>
+      <IncludeFiles Value="../vendor/freeship;../vendor/freeship/Units;../vendor/freeship/Forms"/>
+      <OtherUnitFiles Value="../vendor/freeship/Units;../vendor/freeship/Forms"/>
+      <UnitOutputDirectory Value="../.build/units"/>
+    </SearchPaths>
+    <Parsing><SyntaxOptions><SyntaxMode Value="objfpc"/></SyntaxOptions></Parsing>
+    <CodeGeneration><Optimizations><OptimizationLevel Value="2"/></Optimizations></CodeGeneration>
+    <Linking><Debugging><GenerateDebugInfo Value="False"/><StripSymbols Value="True"/></Debugging></Linking>
+    <Other><CustomOptions Value="-dLCL -dVER3 -dFREESHIP_HEADLESS -Xs"/></Other>
+  </CompilerOptions>
+</CONFIG>

@@ -1,0 +1,9 @@
+* text=auto eol=lf
+vendor/** -text -whitespace
+src/freeship_mcp/licenses/** -text -whitespace
+LICENSE -text -whitespace
+*.fbm -text
+*.res -text
+*.png -text
+*.ico -text
+*.cur -text

@@ -1,0 +1,527 @@
+object FreeResistance_Kaper: TFreeResistance_Kaper
+  Left = 382
+  Height = 750
+  Top = 224
+  Width = 1000
+  Caption = 'Kaper resistance calculation.'
+  ClientHeight = 750
+  ClientWidth = 1000
+  DesignTimePPI = 120
+  Position = poOwnerFormCenter
+  LCLVersion = '3.2.0.0'
+  object ToolBar1: TToolBar
+    Left = 0
+    Height = 30
+    Top = 0
+    Width = 1000
+    AutoSize = True
+    ButtonHeight = 28
+    ButtonWidth = 62
+    Caption = 'ToolBar1'
+    Color = clForm
+    Images = MenuImages
+    Indent = 5
+    ParentColor = False
+    ParentFont = False
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 0
+    object _ToolButton10: TToolButton
+      Left = 5
+      Height = 28
+      Top = 2
+      Caption = '_ToolButton10'
+      ImageIndex = 6
+      Style = tbsSeparator
+    end
+    object PrintButton: TToolButton
+      Left = 15
+      Hint = 'Print the results of the calculation.'
+      Top = 2
+      Caption = 'PrintButton'
+      ImageIndex = 2
+      OnClick = PrintButtonClick
+    end
+    object _ToolButton14: TToolButton
+      Left = 77
+      Height = 28
+      Top = 2
+      Caption = '_ToolButton14'
+      ImageIndex = 12
+      Style = tbsSeparator
+    end
+    object ToolButton25: TToolButton
+      Left = 87
+      Hint = 'Close the window and save changes.'
+      Top = 2
+      ImageIndex = 1
+      OnClick = ToolButton25Click
+    end
+    object ToolButton7: TToolButton
+      Left = 149
+      Hint = 'Close window without saving changes.'
+      Top = 2
+      ImageIndex = 0
+      OnClick = ToolButton7Click
+    end
+  end
+  object PageControl1: TPageControl
+    Left = 0
+    Height = 720
+    Top = 30
+    Width = 1000
+    ActivePage = TabSheet1
+    Align = alClient
+    ParentFont = False
+    TabIndex = 0
+    TabOrder = 1
+    object TabSheet1: TTabSheet
+      Caption = 'General'
+      ClientHeight = 687
+      ClientWidth = 992
+      ParentFont = False
+      object Panel1: TPanel
+        Left = 0
+        Height = 687
+        Top = 0
+        Width = 992
+        Align = alClient
+        AutoSize = True
+        BevelOuter = bvLowered
+        BorderWidth = 10
+        ClientHeight = 687
+        ClientWidth = 992
+        ParentFont = False
+        TabOrder = 0
+        object Chart: TChart
+          Left = 293
+          Height = 665
+          Top = 11
+          Width = 688
+          AxisList = <          
+            item
+              Marks.LabelBrush.Style = bsClear
+              Minors = <>
+              Title.LabelFont.Orientation = 900
+              Title.Visible = True
+              Title.Caption = 'Resistance [Lbs]'
+              Title.LabelBrush.Style = bsClear
+            end          
+            item
+              Alignment = calBottom
+              Marks.LabelBrush.Style = bsClear
+              Minors = <>
+              Title.Visible = True
+              Title.Caption = 'Speed [knots]'
+              Title.LabelBrush.Style = bsClear
+            end>
+          BackColor = clDefault
+          Foot.Brush.Color = clBtnFace
+          Foot.Font.Color = clBlue
+          Title.Brush.Color = clBtnFace
+          Title.Font.Color = clBlue
+          Title.Text.Strings = (
+            'KAPER resistance for canoes and kayaks'
+          )
+          Align = alClient
+          object Series1: TLineSeries
+            Title = 'Rf      '
+            LinePen.Color = 11162880
+            Marks.Visible = False
+            Pointer.HorizSize = 2
+            Pointer.VertSize = 2
+          end
+          object Series2: TLineSeries
+            Title = 'Rr      '
+            LinePen.Color = clGreen
+            Marks.Visible = False
+          end
+          object Series3: TLineSeries
+            Title = 'Rt      '
+            LinePen.Color = clRed
+            LinePen.Width = 2
+            Marks.Visible = False
+          end
+          object Series4: TLineSeries
+            Title = 'Spilman'
+            Marks.Visible = False
+          end
+        end
+        object Panel2: TPanel
+          Left = 11
+          Height = 665
+          Top = 11
+          Width = 282
+          Align = alLeft
+          AutoSize = True
+          BevelOuter = bvNone
+          ChildSizing.LeftRightSpacing = 10
+          ChildSizing.TopBottomSpacing = 2
+          ChildSizing.HorizontalSpacing = 6
+          ChildSizing.VerticalSpacing = 10
+          ChildSizing.Layout = cclLeftToRightThenTopToBottom
+          ChildSizing.ControlsPerLine = 1
+          ClientHeight = 665
+          ClientWidth = 282
+          ParentColor = False
+          ParentFont = False
+          TabOrder = 1
+          object CheckBox2: TCheckBox
+            Left = 10
+            Height = 24
+            Top = 2
+            Width = 262
+            Caption = 'Extract data from current hull'
+            ParentFont = False
+            TabOrder = 0
+            OnClick = CheckBox2Click
+          end
+          object Panel3: TPanel
+            Left = 10
+            Height = 288
+            Top = 36
+            Width = 262
+            BevelOuter = bvNone
+            ChildSizing.TopBottomSpacing = 10
+            ChildSizing.HorizontalSpacing = 6
+            ChildSizing.VerticalSpacing = 2
+            ChildSizing.Layout = cclLeftToRightThenTopToBottom
+            ChildSizing.ControlsPerLine = 3
+            ClientHeight = 288
+            ClientWidth = 262
+            ParentFont = False
+            TabOrder = 1
+            object Label2: TLabel
+              Left = 0
+              Height = 28
+              Top = 10
+              Width = 134
+              Caption = 'Length waterline'
+              Layout = tlCenter
+              ParentColor = False
+              ParentFont = False
+            end
+            object Edit2: TFloatSpinEdit
+              Left = 140
+              Height = 28
+              Top = 10
+              Width = 100
+              Alignment = taRightJustify
+              Constraints.MinWidth = 100
+              DecimalPlaces = 3
+              Increment = 0.01
+              OnExit = Edit1AfterSetValue
+              ParentFont = False
+              TabOrder = 0
+            end
+            object Label9: TLabel
+              Left = 246
+              Height = 28
+              Top = 10
+              Width = 16
+              Caption = '[-]'
+              Layout = tlCenter
+              ParentColor = False
+              ParentFont = False
+            end
+            object Label3: TLabel
+              Left = 0
+              Height = 28
+              Top = 40
+              Width = 134
+              Caption = 'Beam waterline'
+              Layout = tlCenter
+              ParentColor = False
+              ParentFont = False
+            end
+            object Edit3: TFloatSpinEdit
+              Left = 140
+              Height = 28
+              Top = 40
+              Width = 100
+              Alignment = taRightJustify
+              Constraints.MinWidth = 100
+              DecimalPlaces = 3
+              Increment = 0.01
+              OnExit = Edit1AfterSetValue
+              ParentFont = False
+              TabOrder = 1
+            end
+            object Label10: TLabel
+              Left = 246
+              Height = 28
+              Top = 40
+              Width = 16
+              Caption = '[-]'
+              Layout = tlCenter
+              ParentColor = False
+              ParentFont = False
+            end
+            object Label4: TLabel
+              Left = 0
+              Height = 28
+              Top = 70
+              Width = 134
+              Caption = 'Draft'
+              Layout = tlCenter
+              ParentColor = False
+              ParentFont = False
+            end
+            object Edit4: TFloatSpinEdit
+              Left = 140
+              Height = 28
+              Top = 70
+              Width = 100
+              Alignment = taRightJustify
+              Constraints.MinWidth = 100
+              DecimalPlaces = 3
+              Increment = 0.01
+              OnExit = Edit1AfterSetValue
+              ParentFont = False
+              TabOrder = 2
+            end
+            object Label11: TLabel
+              Left = 246
+              Height = 28
+              Top = 70
+              Width = 16
+              Caption = '[-]'
+              Layout = tlCenter
+              ParentColor = False
+              ParentFont = False
+            end
+            object Label6: TLabel
+              Left = 0
+              Height = 28
+              Top = 100
+              Width = 134
+              Caption = 'Wetted surface area'
+              Layout = tlCenter
+              ParentColor = False
+              ParentFont = False
+            end
+            object Edit5: TFloatSpinEdit
+              Left = 140
+              Height = 28
+              Top = 100
+              Width = 100
+              Alignment = taRightJustify
+              Constraints.MinWidth = 100
+              Increment = 0.01
+              OnExit = Edit1AfterSetValue
+              ParentFont = False
+              TabOrder = 3
+            end
+            object Label7: TLabel
+              Left = 246
+              Height = 28
+              Top = 100
+              Width = 16
+              Caption = '[-]'
+              Layout = tlCenter
+              ParentColor = False
+              ParentFont = False
+            end
+            object Label8: TLabel
+              Left = 0
+              Height = 28
+              Top = 130
+              Width = 134
+              Caption = 'Cp'
+              Layout = tlCenter
+              ParentColor = False
+              ParentFont = False
+            end
+            object Edit6: TFloatSpinEdit
+              Left = 140
+              Height = 28
+              Hint = '0.48 .. 0.64'
+              Top = 130
+              Width = 100
+              Alignment = taRightJustify
+              Constraints.MinWidth = 100
+              DecimalPlaces = 4
+              Increment = 0.001
+              MaxValue = 1
+              OnExit = Edit1AfterSetValue
+              ParentFont = False
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 4
+            end
+            object Label12: TLabel
+              Left = 246
+              Height = 28
+              Top = 130
+              Width = 16
+              Layout = tlCenter
+              ParentColor = False
+              ParentFont = False
+            end
+            object Label13: TLabel
+              Left = 0
+              Height = 28
+              Top = 160
+              Width = 134
+              Caption = 'Displacement'
+              Layout = tlCenter
+              ParentColor = False
+              ParentFont = False
+            end
+            object Edit7: TFloatSpinEdit
+              Left = 140
+              Height = 28
+              Top = 160
+              Width = 100
+              Alignment = taRightJustify
+              Constraints.MinWidth = 100
+              DecimalPlaces = 4
+              Increment = 0.01
+              OnExit = Edit1AfterSetValue
+              ParentFont = False
+              TabOrder = 5
+            end
+            object Label14: TLabel
+              Left = 246
+              Height = 28
+              Top = 160
+              Width = 16
+              Caption = '[-]'
+              Layout = tlCenter
+              ParentColor = False
+              ParentFont = False
+            end
+            object Label15: TLabel
+              Left = 0
+              Height = 28
+              Top = 190
+              Width = 134
+              Caption = 'Half entrance angle'
+              Layout = tlCenter
+              ParentColor = False
+              ParentFont = False
+            end
+            object Edit8: TFloatSpinEdit
+              Left = 140
+              Height = 28
+              Top = 190
+              Width = 100
+              Alignment = taRightJustify
+              Constraints.MinWidth = 100
+              DecimalPlaces = 3
+              Increment = 0.1
+              OnExit = Edit1AfterSetValue
+              ParentFont = False
+              TabOrder = 6
+            end
+            object Label16: TLabel
+              Left = 246
+              Height = 28
+              Top = 190
+              Width = 16
+              Caption = '[-]'
+              Layout = tlCenter
+              ParentColor = False
+              ParentFont = False
+            end
+            object Label17: TLabel
+              Left = 0
+              Height = 28
+              Top = 220
+              Width = 134
+              Caption = 'LCB'
+              Layout = tlCenter
+              ParentColor = False
+              ParentFont = False
+            end
+            object Edit9: TFloatSpinEdit
+              Left = 140
+              Height = 28
+              Top = 220
+              Width = 100
+              Alignment = taRightJustify
+              Constraints.MinWidth = 100
+              DecimalPlaces = 3
+              Increment = 0.001
+              OnExit = Edit1AfterSetValue
+              ParentFont = False
+              TabOrder = 7
+            end
+            object Label18: TLabel
+              Left = 246
+              Height = 28
+              Top = 220
+              Width = 16
+              Layout = tlCenter
+              ParentColor = False
+              ParentFont = False
+            end
+            object Label19: TLabel
+              Left = 0
+              Height = 28
+              Top = 250
+              Width = 134
+              Caption = 'Subm. transom ratio'
+              Layout = tlCenter
+              ParentColor = False
+              ParentFont = False
+            end
+            object Edit10: TFloatSpinEdit
+              Left = 140
+              Height = 28
+              Hint = '0.00 .. 0.04'
+              Top = 250
+              Width = 100
+              Alignment = taRightJustify
+              Constraints.MinWidth = 100
+              DecimalPlaces = 3
+              Increment = 0.001
+              OnExit = Edit1AfterSetValue
+              ParentFont = False
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 8
+            end
+          end
+        end
+      end
+    end
+    object TabSheet2: TTabSheet
+      Caption = 'Results'
+      ClientHeight = 687
+      ClientWidth = 992
+      ImageIndex = 1
+      ParentFont = False
+      object Resultsmemo: TMemo
+        Left = 0
+        Height = 687
+        Top = 0
+        Width = 992
+        Align = alClient
+        Font.Color = clBlack
+        Font.Height = -16
+        Font.Name = 'Courier New'
+        ParentFont = False
+        ScrollBars = ssBoth
+        TabOrder = 0
+      end
+    end
+  end
+  object MenuImages: TImageList
+    Left = 420
+    Bitmap = {
+      4C7A040000001000000010000000070100000000000078DAED55410E84200CE4
+      E7F4C0BFB8F9AD6E745D16B52D1D50E341922ED9949969871243B873318740FC
+      DDADBC9523E5CC3F4FB4CF6FB1C7BC75C683B538BC58AD4F04AB7360F8117DB9
+      7E1F878E6D73683D7B382CBF18C65BF9D6EC59FD59FECD39EC8E479F72E0212C
+      AD3180A500E26B5D14FF64AC76175E2C2DBFDC557375A67000FD2EB93D07617E
+      1D383ABC9638D0F9AA39E0D9AC387AB10F5AEC08FD23D0581EBCA4E9C55EACAD
+      79E0D29EA669B3037E4BD8F2DF13160712359FA59F522A21D5F0EB5DAD77F66C
+      8DBD26EA9DE4637D77A87F9D6FA6357FDD2BC6E8D25ECF89B39F736E8651FF29
+      78AB7614CFBCDDEFD03FA3FFD6FEEADFA9CF25AED4EF7DBF1FCA84495D
+    }
+  end
+  object PrintDialog: TPrintDialog
+    Left = 300
+  end
+end

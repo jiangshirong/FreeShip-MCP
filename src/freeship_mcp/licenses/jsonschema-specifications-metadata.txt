@@ -1,0 +1,2 @@
+jsonschema-specifications 2025.9.1
+License: MIT

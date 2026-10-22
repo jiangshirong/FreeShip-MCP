@@ -1,0 +1,212 @@
+object FreeHydrostaticsForm: TFreeHydrostaticsForm
+  Left = 616
+  Height = 200
+  Top = 359
+  Width = 300
+  AutoSize = True
+  BorderStyle = bsDialog
+  Caption = 'Hydrostatics'
+  ClientHeight = 200
+  ClientWidth = 300
+  Position = poOwnerFormCenter
+  LCLVersion = '2.0.8.0'
+  object Panel2: TPanel
+    Left = 0
+    Height = 30
+    Top = 0
+    Width = 300
+    Align = alTop
+    AutoSize = True
+    BevelOuter = bvNone
+    ClientHeight = 30
+    ClientWidth = 300
+    TabOrder = 0
+    object Button1: TSpeedButton
+      Left = 228
+      Height = 30
+      Top = 0
+      Width = 72
+      Align = alRight
+      AutoSize = True
+      Caption = 'Close'
+      Flat = True
+      Glyph.Data = {
+        F6000000424DF600000000000000760000002800000010000000100000000100
+        04000000000080000000204E0000204E00001000000000000000000000000000
+        80000080000000808000800000008000800080800000C0C0C000808080000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+        3333333344333333333333342243333333333342222433333333342222224333
+        33334222A22224333333222A3A2224333333A2A333A2224333333A33333A2224
+        333333333333A2224333333333333A2224333333333333A2224333333333333A
+        2224333333333333A2243333333333333A2233333333333333A3
+      }
+      OnClick = Button1Click
+    end
+    object Button2: TSpeedButton
+      Left = 0
+      Height = 30
+      Hint = 'Start the calculation.'
+      Top = 0
+      Width = 105
+      Align = alLeft
+      AutoSize = True
+      Caption = 'Calculate'
+      Flat = True
+      Glyph.Data = {
+        F6000000424DF600000000000000760000002800000010000000100000000100
+        04000000000080000000130B0000130B00001000000000000000000000000000
+        800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00337000000000
+        7333330888888888033333080808999803333308888888880333330808080808
+        0333330888888888033333080808080803333308888888880333330808080808
+        0333330888888888033333080000000803333308000E0E080333330800000008
+        0333330888888888033333088888888803333370000000007333
+      }
+      OnClick = Button2Click
+    end
+  end
+  object Panel1: TPanel
+    Left = 0
+    Height = 170
+    Top = 30
+    Width = 300
+    Align = alClient
+    AutoSize = True
+    BevelOuter = bvLowered
+    BorderWidth = 10
+    ChildSizing.LeftRightSpacing = 16
+    ChildSizing.TopBottomSpacing = 16
+    ChildSizing.HorizontalSpacing = 6
+    ChildSizing.VerticalSpacing = 2
+    ChildSizing.EnlargeHorizontal = crsHomogenousSpaceResize
+    ChildSizing.Layout = cclLeftToRightThenTopToBottom
+    ChildSizing.ControlsPerLine = 3
+    ClientHeight = 170
+    ClientWidth = 300
+    TabOrder = 1
+    object Label1: TLabel
+      Left = 8
+      Height = 36
+      Top = 16
+      Width = 94
+      Caption = 'Start draft '
+      Layout = tlCenter
+      ParentColor = False
+    end
+    object FloatSpinEdit1: TFloatSpinEdit
+      Left = 110
+      Height = 36
+      Top = 16
+      Width = 80
+      Alignment = taRightJustify
+      Constraints.MinWidth = 80
+      DecimalPlaces = 3
+      Increment = 0.1
+      MinValue = 0
+      TabOrder = 0
+      Value = 0.5
+    end
+    object _Label5: TLabel
+      Left = 197
+      Height = 36
+      Top = 16
+      Width = 77
+      Caption = 'Label9'
+      Layout = tlCenter
+      ParentColor = False
+    end
+    object Label2: TLabel
+      Left = 8
+      Height = 36
+      Top = 54
+      Width = 94
+      Caption = 'End draft'
+      Layout = tlCenter
+      ParentColor = False
+    end
+    object FloatSpinEdit2: TFloatSpinEdit
+      Left = 110
+      Height = 36
+      Top = 54
+      Width = 80
+      Alignment = taRightJustify
+      Constraints.MinWidth = 80
+      DecimalPlaces = 3
+      Increment = 0.1
+      MinValue = 0
+      TabOrder = 1
+      Value = 1
+    end
+    object _Label11: TLabel
+      Left = 197
+      Height = 36
+      Top = 54
+      Width = 77
+      Caption = '_Label11'
+      Layout = tlCenter
+      ParentColor = False
+    end
+    object Label3: TLabel
+      Left = 8
+      Height = 36
+      Top = 92
+      Width = 94
+      Caption = 'Draft step'
+      Layout = tlCenter
+      ParentColor = False
+    end
+    object FloatSpinEdit3: TFloatSpinEdit
+      Left = 110
+      Height = 36
+      Top = 92
+      Width = 80
+      Alignment = taRightJustify
+      Constraints.MinWidth = 80
+      DecimalPlaces = 3
+      Increment = 0.1
+      MinValue = 0
+      TabOrder = 2
+      Value = 1
+    end
+    object _Label10: TLabel
+      Left = 197
+      Height = 36
+      Top = 92
+      Width = 77
+      Caption = '_Label10'
+      Layout = tlCenter
+      ParentColor = False
+    end
+    object Label4: TLabel
+      Left = 8
+      Height = 36
+      Top = 130
+      Width = 94
+      Caption = 'Trim'
+      Layout = tlCenter
+      ParentColor = False
+    end
+    object FloatSpinEdit4: TFloatSpinEdit
+      Left = 110
+      Height = 36
+      Top = 130
+      Width = 80
+      Alignment = taRightJustify
+      Constraints.MinWidth = 80
+      DecimalPlaces = 3
+      Increment = 0.1
+      MinValue = 0
+      TabOrder = 3
+      Value = 0
+    end
+    object Label9: TLabel
+      Left = 197
+      Height = 36
+      Top = 130
+      Width = 77
+      Caption = 'Label9'
+      Layout = tlCenter
+      ParentColor = False
+    end
+  end
+end

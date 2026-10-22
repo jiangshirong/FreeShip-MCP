@@ -1,0 +1,2 @@
+httpx2 2.16.0
+License: BSD-3-Clause

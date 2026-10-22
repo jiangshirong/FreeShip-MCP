@@ -1,0 +1,2 @@
+annotated-types 0.8.0
+License: MIT

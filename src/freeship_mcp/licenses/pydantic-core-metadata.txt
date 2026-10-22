@@ -1,0 +1,2 @@
+pydantic-core 2.50.1
+License: MIT

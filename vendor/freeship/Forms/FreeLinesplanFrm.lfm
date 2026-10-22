@@ -1,0 +1,33 @@
+object FreeLinesplanForm: TFreeLinesplanForm
+  Left = 650
+  Height = 621
+  Top = 255
+  Width = 828
+  Caption = 'Linesplan.'
+  ClientHeight = 621
+  ClientWidth = 828
+  FormStyle = fsMDIChild
+  OnClose = FormClose
+  Position = poDefault
+  LCLVersion = '3.2.0.0'
+  Visible = True
+  inline LinesplanFrame: TFreeLinesplanFrame
+    Height = 621
+    Width = 828
+    Align = alClient
+    ClientHeight = 621
+    ClientWidth = 828
+    OnClick = LinesplanFrameClick
+    DesignLeft = 688
+    DesignTop = 221
+    inherited ToolBar1: TToolBar
+      Width = 828
+      inherited ToolButton19: TToolButton
+        AllowAllUp = True
+      end
+      inherited SpinEdit1: TSpinEdit
+        OnChange = SpinEdit1Change
+      end
+    end
+  end
+end

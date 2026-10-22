@@ -1,0 +1,2 @@
+sse-starlette 3.5.0
+License: BSD-3-Clause

@@ -1,0 +1,388 @@
+object FreeIntersectionDialog: TFreeIntersectionDialog
+  Left = 652
+  Height = 400
+  Top = 180
+  Width = 313
+  Caption = 'Intersections'
+  ClientHeight = 400
+  ClientWidth = 313
+  OnClose = FormClose
+  ParentFont = True
+  Position = poScreenCenter
+  LCLVersion = '3.2.0.0'
+  object Panel1: TPanel
+    Left = 0
+    Height = 376
+    Top = 24
+    Width = 313
+    Align = alClient
+    BevelOuter = bvNone
+    BorderWidth = 10
+    ClientHeight = 376
+    ClientWidth = 313
+    TabOrder = 0
+    object PageControl1: TPageControl
+      Left = 10
+      Height = 356
+      Top = 10
+      Width = 293
+      ActivePage = tsStations
+      Align = alClient
+      Images = MenuImages
+      TabIndex = 0
+      TabOrder = 0
+      OnChange = PageControl1Change
+      object tsStations: TTabSheet
+        Hint = 'Stations'
+        ClientHeight = 316
+        ClientWidth = 289
+        ImageIndex = 2
+        ParentShowHint = False
+        ShowHint = True
+        object sgStations: TStringGrid
+          Left = 0
+          Height = 316
+          Top = 0
+          Width = 289
+          Align = alClient
+          ColCount = 3
+          Columns = <          
+            item
+              Alignment = taRightJustify
+              ReadOnly = True
+              Title.Caption = 'No'
+              Width = 48
+            end          
+            item
+              Alignment = taRightJustify
+              ButtonStyle = cbsEllipsis
+              MinSize = 60
+              Title.Caption = 'Distance'
+              Width = 120
+            end          
+            item
+              ButtonStyle = cbsCheckboxColumn
+              Title.Caption = 'Curvature'
+              Width = 96
+            end>
+          FixedCols = 0
+          Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goDrawFocusSelected, goEditing, goSmoothScroll]
+          TabOrder = 0
+          OnEditingDone = OnGridEditingDone
+          OnGetEditMask = OnGridGetEditMask
+          OnSelection = OnGridSelection
+          OnValidateEntry = OnGridValidateEntry
+        end
+      end
+      object tsButtocks: TTabSheet
+        Hint = 'Buttocks'
+        ClientHeight = 316
+        ClientWidth = 289
+        ImageIndex = 0
+        ParentShowHint = False
+        ShowHint = True
+        object sgButtocks: TStringGrid
+          Left = 0
+          Height = 316
+          Top = 0
+          Width = 289
+          Align = alClient
+          ColCount = 3
+          Columns = <          
+            item
+              Alignment = taRightJustify
+              ReadOnly = True
+              Title.Caption = 'No'
+              Width = 48
+            end          
+            item
+              Alignment = taRightJustify
+              ButtonStyle = cbsEllipsis
+              MinSize = 60
+              Title.Caption = 'Distance'
+              Width = 120
+            end          
+            item
+              ButtonStyle = cbsCheckboxColumn
+              Title.Caption = 'Curvature'
+              Width = 96
+            end>
+          FixedCols = 0
+          Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goDrawFocusSelected, goEditing, goSmoothScroll]
+          TabOrder = 0
+          OnCheckboxToggled = sgButtocksCheckboxToggled
+          OnEditingDone = OnGridEditingDone
+          OnGetEditMask = OnGridGetEditMask
+          OnSelection = OnGridSelection
+          OnValidateEntry = OnGridValidateEntry
+        end
+      end
+      object tsWaterlines: TTabSheet
+        Hint = 'Waterlines'
+        ClientHeight = 316
+        ClientWidth = 289
+        ImageIndex = 1
+        ParentShowHint = False
+        ShowHint = True
+        object sgWaterlines: TStringGrid
+          Left = 0
+          Height = 316
+          Top = 0
+          Width = 289
+          Align = alClient
+          ColCount = 3
+          Columns = <          
+            item
+              Alignment = taRightJustify
+              ReadOnly = True
+              Title.Caption = 'No'
+              Width = 48
+            end          
+            item
+              Alignment = taRightJustify
+              ButtonStyle = cbsEllipsis
+              MinSize = 60
+              Title.Caption = 'Distance'
+              Width = 120
+            end          
+            item
+              ButtonStyle = cbsCheckboxColumn
+              Title.Caption = 'Curvature'
+              Width = 96
+            end>
+          FixedCols = 0
+          Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goDrawFocusSelected, goEditing, goSmoothScroll]
+          TabOrder = 0
+          OnEditingDone = OnGridEditingDone
+          OnGetEditMask = OnGridGetEditMask
+          OnSelection = OnGridSelection
+          OnValidateEntry = OnGridValidateEntry
+        end
+      end
+      object tsDiagonals: TTabSheet
+        Hint = 'Diagonals'
+        ClientHeight = 316
+        ClientWidth = 289
+        ImageIndex = 3
+        ParentShowHint = False
+        ShowHint = True
+        object sgDiagonals: TStringGrid
+          Left = 0
+          Height = 316
+          Top = 0
+          Width = 289
+          Align = alClient
+          ColCount = 3
+          Columns = <          
+            item
+              Alignment = taRightJustify
+              ReadOnly = True
+              Title.Caption = 'No'
+              Width = 48
+            end          
+            item
+              Alignment = taRightJustify
+              ButtonStyle = cbsEllipsis
+              MinSize = 60
+              Title.Caption = 'Distance'
+              Width = 120
+            end          
+            item
+              ButtonStyle = cbsCheckboxColumn
+              Title.Caption = 'Curvature'
+              Width = 96
+            end>
+          FixedCols = 0
+          Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goDrawFocusSelected, goEditing, goSmoothScroll]
+          TabOrder = 0
+          OnEditingDone = OnGridEditingDone
+          OnGetEditMask = OnGridGetEditMask
+          OnSelection = OnGridSelection
+          OnValidateEntry = OnGridValidateEntry
+        end
+      end
+    end
+  end
+  object ToolBar1: TToolBar
+    Left = 0
+    Height = 24
+    Top = 0
+    Width = 313
+    AutoSize = True
+    Caption = 'ToolBar1'
+    Color = clForm
+    Images = MenuImages
+    Indent = 5
+    ParentColor = False
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 1
+    OnClick = ToolBar1Click
+    object tbStations: TToolButton
+      Left = 5
+      Top = 2
+      Action = ShowStations
+      Visible = False
+    end
+    object tbButtocks: TToolButton
+      Left = 28
+      Top = 2
+      Action = ShowButtocks
+      Visible = False
+    end
+    object tbWaterlines: TToolButton
+      Left = 51
+      Top = 2
+      Action = ShowWaterlines
+      Visible = False
+    end
+    object tbDiagonals: TToolButton
+      Left = 74
+      Top = 2
+      Action = ShowDiagonals
+      Visible = False
+    end
+    object ToolButton14: TToolButton
+      Left = 97
+      Height = 22
+      Top = 2
+      Caption = 'ToolButton14'
+      ImageIndex = 12
+      Style = tbsSeparator
+    end
+    object tbAddOne: TToolButton
+      Left = 105
+      Top = 2
+      Action = AddOne
+    end
+    object tbAddRange: TToolButton
+      Left = 128
+      Top = 2
+      Action = AddRange
+    end
+    object tbDeleteSelected: TToolButton
+      Left = 151
+      Top = 2
+      Action = DeleteSelected
+    end
+    object tbCloseDialog: TToolButton
+      Left = 174
+      Top = 2
+      Action = CloseDialog
+    end
+    object ToolButton8: TToolButton
+      Left = 197
+      Top = 2
+      Caption = 'ToolButton8'
+    end
+  end
+  object MenuImages: TImageList
+    Left = 232
+    Bitmap = {
+      4C7A080000001000000010000000820500000000000078DAED996B2BA55D18C7
+      B7C89B891C924113298934431A1A26999072CA218D269344467248249AB0276F
+      4422A19C423924A54949CA0B1F60BEC47C92F5F85D595A96FBBEF7DE36F23C3D
+      BBAED96BAD6BFDFFD771AD7DDFC6E7FB577D948378E9EE494545C59DE8B9A933
+      0D19FBEECD4D7CB076DD7CD1BC81EC3A8C1DF581E626DECB7E10789F57DE82C4
+      FBC2C15B35F0AC99D35863EDBA7A89556F5F18F57F359FA3A323859C9E9EAAAB
+      ABAB90252D2D4D24333353B5B6B6AAEAEA6AB5BCBCAC76777783C2F7F4F4A8C9
+      C949D5D1D121F8F7EFDFAB9C9C1C555C5C2CDFE8F0CF0DBFBDBDAD3A3B3BA53E
+      0B0B0BB2777474547DFEFC598D8F8FAB9A9A1A15131323DC6767670FF0BF7EFD
+      52E7E7E7321E1E1E56BDBDBDE2FFC5C5855A5B5B13DE6FDFBE495CD9D9D9F7F6
+      23F8373434A4BABABA04C71ADF030303E20FF3E9E969555757A79A9A9A24577D
+      7D7D0F7CD9DCDC144C43438370520FFC613E3F3F2F73F4F841AE3E7EFC28FED9
+      F1FCFEFD5BADACAC883FF8DEDEDEAE323232547E7EBED8FCF9F3A71A1B1B139E
+      4F9F3E49BC4E424EE90F628E8B8B53D1D1D1AAA4A444EA55585828F9A556B67D
+      62C73658EA40CCC44E0E8E8F8F85B7BCBC5CF0F80686D8584788915C50476267
+      8E9E1C802177C4436EF6F7F72546EC11F3E5E5A5C488FFE4905CE8795B5B9BF4
+      140217F5D53E33660DBFE0D57362653FB1A4A4A448DEED78E1C647EC2D2E2ECA
+      9C7EA1EFC0E32B7EEBDEB005BFE0D7FD4ECC8CA9CFECECAC638D4D010B0742BF
+      93B7939393A0CFAF7D1FACAEAEAABCBCBCBB73CD7DA5CF776363A3E7DD555A5A
+      2AFB3F7CF8A0E061ED96C3473EE823F4737373CA093B3838287150E3E6E66639
+      B39A8FF5A2A22235313121E7D0E4A8AFAF17FDD7AF5FD5FAFABAF4C4D6D696EA
+      EEEE163CB9678C0F8CE1ABAAAA92F3899F6FDFBE95DEE46CF8FD7EC93BBDB0B7
+      B727B153C7B2B232E16C6969513B3B3BB287FE47B047EDD90F377150CBC8C8C8
+      BB3B7F646444E5E6E64A6F501F7A829C829F9999113BF891959525FB5933F307
+      9675F4B1B1B18A7CA1039F9898285C4B4B4BB2F7FBF7EFF27DCB213D415FEB9C
+      81653F3AF09C536237F19CADE4E464D9F3E5CB977B78F20D27BAC3C343F5EEDD
+      BB07785D2FF6444444C85937F1E4F236561F71BF79F34672AAF1D4FFC78F1F12
+      63545494E44DE3C92D186AA1F7935FD6F1996FE2A3163AFFD8D26B090909522B
+      38351EFFFBFBFBEFFD4E931BFBB79BBE211F269E3EDDD8D850C4451F4D4D4D89
+      1DFC06432F513F30DC13C446DF693CE78ADCD16770F19B861D78929292840BDF
+      C80FB1D16BF41C7714787ABAB6B656EE0EF4E9E9E9927F5DBFD4D45455505020
+      636A421EB8CB023D1BC015CEB345B8F8EB1B7FE1709360EC5F1BCF5B26468FBD
+      F8F51EED878935F15EFE3B8D83C16B9BA66D736CFBEF64D7C4B9E96C1EA79CDB
+      B69DFCB0ED049A9B7ED875B2E3778AC5B4EF66C7AD7E762C6E7E98390864C3AD
+      5FDDE2B7FBE9DAE1BDC0A937EC58ECFDC1F4F313BD89ABB0B0FE5B0903EB0FF5
+      5DCAB41B2AFE3563DD6A112CD62FFFAA47F96CECB9E308215ED1D91CFED0F2F5
+      80E311B976E208B5BF4C0EFF23DFF3C1F95FC1DF08A2227CF29EC7B302E350B1
+      F1F1F1F25EC6731EDFC1F2B0C7C6F36C8704E2D15837BC29368789F5C21F1C1C
+      485E4C3C63D6D9EF85D758744EF9E2D94FF3D8788DB56DEB0F79D1DC9A072C62
+      622B2B2B1DF1ACF5ACF7881E0E6D5F63E1BF79B992B1EB5575A3577FFE080F63
+      30F0C029BADB3537BCD8B8C16B81477369F1EA2174265EE4EFDF3B2CBE931B1D
+      A3570C5E78C40D6FC7A0F1D844BCB0F7E2D07EDCE043C1DA3C3ADE50B1AFECEF
+      FDC1AE3F175E05C2DFBCE229E419F14E7F73BEC3D9E260E729F0EA91FE078A27
+      6C7C08F57F49FCFF9F97B90F7C619CE5C7FCBFE3838F4BFFFAACB3F7587CC07B
+      C3E5FC3E3B3E5CFF9F0AFF02FDE3FB2F9EFB7F0015F1E138
+    }
+  end
+  object ActionList1: TActionList
+    Images = MenuImages
+    Left = 272
+    object ShowStations: TAction
+      Caption = 'Stations'
+      Checked = True
+      Hint = 'Switch to view or add stations.'
+      ImageIndex = 2
+      OnExecute = ShowStationsExecute
+    end
+    object ShowButtocks: TAction
+      Caption = 'Buttocks'
+      Hint = 'Switch to view or add buttocks.'
+      ImageIndex = 0
+      OnExecute = ShowButtocksExecute
+    end
+    object ShowWaterlines: TAction
+      Caption = 'Waterlines'
+      Hint = 'Switch to view or add waterlines.'
+      ImageIndex = 1
+      OnExecute = ShowWaterlinesExecute
+    end
+    object ShowDiagonals: TAction
+      Caption = 'Diagonals'
+      Hint = 'Switch to view or add diagonals.'
+      ImageIndex = 3
+      OnExecute = ShowDiagonalsExecute
+    end
+    object CloseDialog: TAction
+      Caption = 'CloseDialog'
+      Hint = 'Close this dialog.'
+      ImageIndex = 4
+      OnExecute = CloseDialogExecute
+    end
+    object AddOne: TAction
+      Caption = 'Add...'
+      Hint = 'Add one station.'
+      ImageIndex = 7
+      OnExecute = AddOneExecute
+    end
+    object AddRange: TAction
+      Caption = 'Range'
+      Hint = 'Add a whole range of intersection curves.'
+      ImageIndex = 6
+      OnExecute = AddRangeExecute
+    end
+    object DeleteAll: TAction
+      Caption = 'Delete all'
+      Hint = 'Delete all stations.'
+      ImageIndex = 5
+      OnExecute = DeleteAllExecute
+    end
+    object DeleteSelected: TAction
+      Caption = 'DeleteSelected'
+      Hint = 'Delete selected'
+      ImageIndex = 5
+      OnExecute = DeleteSelectedExecute
+    end
+  end
+end

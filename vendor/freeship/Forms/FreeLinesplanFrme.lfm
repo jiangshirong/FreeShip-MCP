@@ -1,0 +1,274 @@
+object FreeLinesplanFrame: TFreeLinesplanFrame
+  Left = 0
+  Height = 494
+  Top = 0
+  Width = 761
+  ClientHeight = 494
+  ClientWidth = 761
+  TabOrder = 0
+  DesignLeft = 1046
+  DesignTop = 306
+  object ToolBar1: TToolBar
+    Left = 0
+    Height = 30
+    Top = 0
+    Width = 761
+    AutoSize = True
+    Caption = 'ToolBar1'
+    Color = clForm
+    Images = MenuImages
+    Indent = 5
+    ParentColor = False
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 0
+    object ToolButton5: TToolButton
+      Left = 5
+      Top = 2
+      Action = ZoomExtents
+      AutoSize = True
+    end
+    object ToolButton8: TToolButton
+      Left = 28
+      Top = 2
+      Action = ZoomIn
+      AutoSize = True
+    end
+    object ToolButton9: TToolButton
+      Left = 51
+      Top = 2
+      Action = ZoomOut
+      AutoSize = True
+    end
+    object ToolButton6: TToolButton
+      Left = 119
+      Height = 22
+      Top = 2
+      Caption = 'ToolButton6'
+      ImageIndex = 1
+      Style = tbsSeparator
+    end
+    object ToolButton19: TToolButton
+      Left = 127
+      Top = 2
+      Action = ShowFillColor
+      AutoSize = True
+    end
+    object ToolButton2: TToolButton
+      Left = 150
+      Top = 2
+      Action = UseLights
+      AutoSize = True
+    end
+    object ToolButton3: TToolButton
+      Left = 173
+      Top = 2
+      Action = ShowMonochrome
+      AutoSize = True
+    end
+    object ToolButton4: TToolButton
+      Left = 196
+      Top = 2
+      Action = MirrorPlanView
+      AutoSize = True
+    end
+    object ToolButton14: TToolButton
+      Left = 219
+      Height = 22
+      Top = 2
+      AutoSize = True
+      Caption = 'ToolButton14'
+      ImageIndex = 12
+      Style = tbsSeparator
+    end
+    object ToolButton7: TToolButton
+      Left = 227
+      Top = 2
+      Action = SaveBitmap
+      AutoSize = True
+    end
+    object ToolButton13: TToolButton
+      Left = 250
+      Top = 2
+      Action = ExportDXF
+      AutoSize = True
+    end
+    object ToolButton1: TToolButton
+      Left = 273
+      Top = 2
+      Action = Print
+      AutoSize = True
+    end
+    object ToolButton15: TToolButton
+      Left = 296
+      Height = 22
+      Top = 2
+      Caption = 'ToolButton15'
+      ImageIndex = 12
+      Style = tbsSeparator
+    end
+    object SpinEdit1: TSpinEdit
+      Left = 74
+      Height = 28
+      Hint = 'Font Size'
+      Top = 2
+      Width = 45
+      Font.Height = -13
+      MaxValue = 20
+      MinValue = 3
+      OnChange = SpinEdit1Change
+      ParentFont = False
+      TabOrder = 0
+      Value = 8
+    end
+  end
+  object ActionList1: TActionList
+    Images = MenuImages
+    Left = 88
+    Top = 40
+    object ZoomExtents: TAction
+      Category = 'Zoom'
+      Caption = 'Extents'
+      Hint = 'Zoom all.'
+      ImageIndex = 0
+      OnExecute = ZoomExtentsExecute
+      ShortCut = 16449
+    end
+    object SaveBitmap: TAction
+      Category = 'Export'
+      Caption = 'Save bitmap'
+      Hint = 'Save the linesplan as a bitmap.'
+      ImageIndex = 4
+      OnExecute = SaveBitmapExecute
+    end
+    object ZoomIn: TAction
+      Category = 'Zoom'
+      Caption = 'ZoomIn'
+      Hint = 'Zoom in'
+      ImageIndex = 3
+      OnExecute = ZoomInExecute
+      ShortCut = 16457
+    end
+    object ZoomOut: TAction
+      Category = 'Zoom'
+      Caption = 'Zoom out'
+      Hint = 'Zoom out.'
+      ImageIndex = 2
+      OnExecute = ZoomOutExecute
+      ShortCut = 16463
+    end
+    object ExportDXF: TAction
+      Category = 'Export'
+      Caption = 'DXF'
+      Hint = 'Export the formatted linesplan to a DXF file.'
+      ImageIndex = 5
+      OnExecute = ExportDXFExecute
+    end
+    object ShowFillColor: TAction
+      Category = 'Visibility'
+      Caption = 'Solid'
+      Checked = True
+      Hint = 'Show plates with fillcolor.'
+      ImageIndex = 6
+      OnExecute = ShowFillColorExecute
+    end
+    object Print: TAction
+      Category = 'Export'
+      Caption = 'Print'
+      Hint = 'Send the linesplan to the printer.'
+      ImageIndex = 1
+      OnExecute = PrintExecute
+    end
+    object UseLights: TAction
+      Category = 'Visibility'
+      Caption = 'Use lights'
+      Checked = True
+      Hint = 'Use lights in solid color drawing mode.'
+      ImageIndex = 7
+      OnExecute = UseLightsExecute
+    end
+    object ShowMonochrome: TAction
+      Category = 'Visibility'
+      Caption = 'Monochrome'
+      Hint = 'Draw the linesplan in black and white only.'
+      ImageIndex = 8
+      OnExecute = ShowMonochromeExecute
+    end
+    object MirrorPlanView: TAction
+      Category = 'Visibility'
+      Caption = 'MirrorPlanView'
+      Hint = 'Show both sides of the ship in plan view.'
+      ImageIndex = 9
+      OnExecute = MirrorPlanViewExecute
+    end
+  end
+  object MenuImages: TImageList
+    Left = 192
+    Top = 40
+    Bitmap = {
+      4C7A0A00000010000000100000002E0700000000000078DAED9A7F48155914C7
+      27047729AC76DBB55C774D5FBC9E5A9A3CD7CC528C64CD42ACAC442A56222D8D
+      2D112CC3486B15C25563937425CDFCB1D81F5269D0B6817FD4266D7FF44F6C49
+      BB5009B1B15114B585D13F67FD1EDF8CF366EECC9B196B7F5F3878E7DEFB39E7
+      DC7BCF9937DE194992481A938888081A1E1E46DDB4600CC64A3E0E121D1D4D97
+      2F5F0EC8CA0563C1C876EDB06A1D663ED7D6D692D7EB6541DD682EDAB6172F5E
+      D0912347E8F4E9D34A1FEA68435F20BF30AEA7A747370E6DE80BC42726261A8E
+      C15CDE36BF6EDD3A1A1919D18D431BFA02F1959595949696E6B72FA8A35DA457
+      BB678809F0185F5454C4827AA0D8043B75EA548E2BD8815CBF7E9DC5CCAE5AEF
+      E6CD9B6DC5A19C0B9389DFC9E68F34F9FCD5958B172F522031D21F1717471B36
+      6C50F66EDBB66D3A59B16205656767EB749C3B778E0E1D3A44CF9F3FA7F0F070
+      BA7FFFBED04E4E4E8E70AE8D8D8DD4DDDD4D59595974E3C60D4A4F4F17F23367
+      CE14B6979494D09D3B77B82F373797E3AEAEAE4E91A1A12116AC5B4545859F7F
+      8F1F3FA69494143FBDA1A1A17C1F81343737733F64F7EEDD14151545414141CA
+      F86BD7AE91DBEDA6972F5FB294959551434383728D3DBB77EF1EAF5D4D4D0DC5
+      C62F56F60F3E25272793C7E30928797979E48E4DA0A22F2A98C73AA1EDE6CD9B
+      F4E8D1A38002BF0B8ACAC8ED8965DE779FB4275382E8E4C9930AEF5990480DCD
+      DD3AF969F8677AF2E4094BFBB7FDDC264D09A6F6F6765E9B407C4D5D1355D536
+      B0D43575283C620C2CE2033167DBFF31090B0B935909B15C5A564E6DED5DA692
+      9199C56C464686DF6F12F4B8A3E3694EB8CB5464DB555555BAF845FC58C95BB3
+      DC1595B367CF72DCC0EE8C193368EDDAB5343A3A6A49C7993367E8F8F1E304DF
+      5EBD7AC5F9D2D7D7C7B9F0E0C103531D5813CCF3EEDDBBBA71274E9CA0C3870F
+      B34E11DBD5D545858585849C34D2DFDBDB4BDBB76F17F6638EEBD7AFE7BE8101
+      22913C7CF89066CD9A25E493929268F5EAD5BE3EFCF688848B905FB3660D6DDA
+      B4C9747D9013C1C1C186CF3EF9F9F9A63CEE191B376E148EB975EB16610EB807
+      3E7BF64C3766606C019043B81F18AD9F1CABE5E5E5BCE7D813ECDBD1A347F939
+      E8F6EDDB3A16F1919999A9B0FBF7EFE7F17BF6ECE1FDD8BA752B9596960A7F17
+      B01EBE671F165F8E2BE5F5EBD7A6EBB172E54A85EDE8E8B09C2357AE5CA1A54B
+      972AECF9F3E76DE5576B6BABC262DD250765C78E1DBC4ED25B287F9FFC9F7886
+      7396FFFECF8056F35F9FC3E3C55AFE8FD09BC97FBD7DFBF9EF3F7FFBF93FC1FF
+      9FFFFF9EFCBF74E9124D460E1E3CC8BE9345E1B144CA9C65DEA980871F28B24F
+      DABA7CADAD6BF9719DB2AB129915B57D59A7961FD72BF984FCEA22FFB5BCE4E7
+      F7843F52AD648957338A5DB01ADEC87F9DCF326B950F1007C6FEDBDB7FBD7DC9
+      60BF6A957D91C79BF16A3DEA3E2D2FFB6F2596B5F355DB57C7AD1551FBE25424
+      DF2435B705D6ADFE1F453D465B57173010EDFA99E4919F3EF90C487B3E61645F
+      D4A7D221D9F55FCD5B2946F6B5678E56FD979BB43A9CAEBF146022F278953D5D
+      DDCCBE6CCB68CD35FE08DB45D7EAF5554F61DC8E2CBA3D17FA39311F3DAB1A47
+      C6B1A466F4AC28D6F5F6267488E2C77F0FF47BA29DAF41FC88C619CDD76A99CC
+      FF1594E00D21873AE89BFA16CACD2F76A283D776F487EF9DE86006AC031D0AEB
+      4007F761CC9FAD03ED7675A8EDA787BC4376FCD0FA2EE00D758858F459D1215A
+      3370B2388D6113F64DE4D03FAFA89E1A253BF71ADF78DD3380553DAADF01653C
+      4D3C4B3B64ADE99079312B59E627617F52F3379B83555EA4C30EABCD17C1BDC2
+      2AAF8921DBFCD5AB5785CF3436E7F05FC97BDBFFB76B9E8F6DB34F9F3E75C4CB
+      AC135ECDDAE5B5AC1D5EC45AE58D582BBC191B880FC49AF1565823DE2A2BE2ED
+      B05ADE2EABE69DB01AFB7F59C17B7A88CBE5E2F3649CA3363535516767A725FF
+      70067FE0C0012A2828603E3E3E9E626262F87D36FEA2CF8CC79932CE85F14E15
+      EFFF4F9D3AC567CEA9A9A9B46FDF3E3E870F0909313CEBC63931CE6C070707F9
+      9D7B717131FB7FE1C2056A696961BD388BC7BCF01E447BAE0CFF70268DEF1AC0
+      410FFEEEDAB58BFDC1757575357FEF80EF67B0563B77EE5474A01FD2D6D6C60C
+      BE6D804EBC3B813FB8AEAFAFE76BF4C30FAC15CEE7E19FCCCBD2DFDF4FC78E1D
+      637FE0FB962D5B28323292121212F87D35CED4F7EEDDCB7AF02D02E62B12AC29
+      CEDC31677C2F81770D38E7C67EE19C1DEB8BBDCA49233F495DF42BC544B6D1BC
+      F02F2961FE77E4FAA89A22C32A2829E647CA4C268A8E6CA5F00F0B29EC83CF69
+      7EC4D7CC642D196F87C4CDEBA3E5DEDFE9B3C534C655F235FA53E27E6166A1AB
+      97A64FF3D222F700AFE1C7A1256C2F2DE137CA4E255A9542B4C0D5439F460F71
+      5DBE767FF215CD7E3F8F05BA946F49C6EC672F1BD70FBFA057BE8E8DEAE4F198
+      CBB4773DE499DBAC8B21E8868FB0B72C7EC467AB91E6CE29671EBEC26FAC8B28
+      FEE017F4C3CE7BD397F39C518F985D4A4B16067E1F00163A205ECFA0ED7BC21F
+      0F74CEBE
+    }
+  end
+  object PrintDialog: TPrintDialog
+    Left = 328
+    Top = 56
+  end
+end
