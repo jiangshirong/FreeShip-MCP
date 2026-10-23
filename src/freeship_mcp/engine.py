@@ -12,7 +12,7 @@ import tempfile
 from typing import Any, Awaitable, Callable
 
 UPSTREAM_COMMIT = "1de17e99fb2b1cc559cdf27c5cafb595a627a641"
-PROTOCOL_VERSION = 2
+PROTOCOL_VERSION = 3
 
 
 def file_identity(path: Path) -> dict:
@@ -122,6 +122,9 @@ class Engine:
             raise ValueError("encoding must be cp1251, cp1252, or utf8")
         model = self.path(model_path)
         identity = file_identity(model)
+        expected = params.get("expected_model_sha256")
+        if expected is not None and expected != identity["sha256"]:
+            raise EngineError("Model snapshot hash mismatch; inspect current indices before editing")
         executable_identity = file_identity(self.executable)
         provenance = {"schema_version": 1, "model": identity,
                       "engine": executable_identity, "protocol_version": PROTOCOL_VERSION,
@@ -149,7 +152,12 @@ class Engine:
         try:
             request["output_path"] = str(temp)
             result = await self.raw(request, progress)
-            saved = await self.raw(dict(operation="inspect_model", model_path=str(temp), encoding=encoding))
+            saved = await self.raw(dict(operation="inspect_model", model_path=str(temp), encoding=encoding,
+                                        include_control_net=operation == "edit_control_net"))
+            if operation == "edit_control_net":
+                for key in ("control_net_points", "control_net_edges", "control_net_faces"):
+                    if result[key] != saved[key]:
+                        raise EngineError("Edited control net changed during native save/reload; output rejected")
             result["output_format_version"] = saved["format_version"]
             passthrough = operation == "save_model" and model.suffix.lower() == target.suffix.lower() and not params.get("output_version")
             identical = operation == "save_model" and model.read_bytes() == temp.read_bytes()

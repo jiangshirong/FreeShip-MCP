@@ -5,6 +5,7 @@ import asyncio
 import json
 import logging
 import os
+import re
 from pathlib import Path
 import sys
 import tempfile
@@ -15,11 +16,14 @@ from mcp.server.mcpserver.exceptions import ToolError
 from .engine import Engine, EngineError, finite, positions
 from .exporters import hydrostatics_report, linesplan_dxf
 from .verification import Target, verify_targets
+from .editing import LocalEdit
+from .quality import AlignmentRule, analyze_geometry
+from .linesplan import LinesplanOptions
 from .engine import file_identity
 
 
 def create_server(engine: Engine) -> MCPServer:
-    mcp = MCPServer("FreeShip MCP", version="0.2.0", instructions=(
+    mcp = MCPServer("FreeShip MCP", version="0.3.0", instructions=(
         "Native FreeShip geometry and hydrostatics on Windows. All public physical inputs use metres, "
         "metric tonnes and degrees. All paths are confined to the configured workspace. "
         "Do not infer empirical values or LCB targets. Outputs never overwrite existing files."))
@@ -45,13 +49,62 @@ def create_server(engine: Engine) -> MCPServer:
 
     @safe_tool()
     async def inspect_model(model_path: str, encoding: str = "cp1252", include_control_net: bool = False) -> dict:
-        """Read FBM/FTM. Separate project dimensions, geometry bounds and layer flags. encoding affects legacy FBM text."""
+        """Read FBM/FTM. Separate project dimensions, geometry bounds and layer flags. include_control_net returns point/edge/face indices. encoding affects legacy FBM text."""
         return await engine.call("inspect_model", model_path, encoding=encoding, include_control_net=include_control_net)
 
     @safe_tool()
     async def validate_model(model_path: str, encoding: str = "cp1252") -> dict:
         """Check topology, adjacent normals and native open-boundary leak candidates. Open deck above water is not automatically a defect."""
         return await engine.call("validate_model", model_path, encoding=encoding)
+
+    @safe_tool()
+    async def edit_control_net(model_path: str, output_path: str, expected_model_sha256: str,
+                               edit: LocalEdit, allow_locked: bool = False, encoding: str = "cp1252") -> dict:
+        """Apply one explicit local native edit to a new model, then validate and reload it.
+        Inspect include_control_net first; use its provenance.model.sha256 and current point/edge/face indices.
+        Supports point movement/alignment/relaxation, edge split/crease and face split/add/delete.
+        Relaxation is a selected-neighbour averaging operation, not automatic hull fairing.
+        Stored project dimensions are not inferred from edits. Recalculate hydrostatics and sections explicitly.
+        """
+        if not re.fullmatch(r"[0-9a-f]{64}",expected_model_sha256):
+            raise ValueError("expected_model_sha256 must be the lowercase SHA-256 from inspect_model")
+        return await engine.call("edit_control_net", model_path, output_path=output_path,
+            expected_model_sha256=expected_model_sha256, edit=edit.model_dump(exclude_none=True),
+            allow_locked=allow_locked, encoding=encoding)
+
+    @safe_tool()
+    async def analyze_hull_quality(model_path: str, stations_m: list[float] | None = None,
+                                   waterlines_m: list[float] | None = None, buttocks_m: list[float] | None = None,
+                                   alignment_rules: list[AlignmentRule] | None = None,
+                                   max_turn_degrees: float | None = None, max_curvature_per_m: float | None = None,
+                                   max_curvature_step_per_m: float | None = None,
+                                   sample_count: int = 201, encoding: str = "cp1252") -> dict:
+        """Read-only native section diagnostics: sampled turning, curvature, changes and explicit point constraints.
+        No default acceptance limits. Returns suspicious coordinates, native knuckles and topology diagnostics.
+        No self-intersection proof or automatic design approval. Up to 20 finding details per curve; total count retained.
+        Optional section positions are calculated in memory and never saved to the source.
+        """
+        if not 21 <= sample_count <= 1001:raise ValueError("sample_count must be 21..1001")
+        for name,value in (("max_turn_degrees",max_turn_degrees),("max_curvature_per_m",max_curvature_per_m),
+                           ("max_curvature_step_per_m",max_curvature_step_per_m)):
+            if value is not None:
+                finite(value,name)
+                if value<0:raise ValueError(f"{name} must be nonnegative")
+        if max_turn_degrees is not None and max_turn_degrees>180:raise ValueError("Turning limit must be <=180 degrees")
+        if alignment_rules is not None and len(alignment_rules)>1000:raise ValueError("At most 1000 alignment rules")
+        section_args={key:positions(value,None,key) for key,value in
+                      (("stations_m",stations_m),("waterlines_m",waterlines_m),("buttocks_m",buttocks_m)) if value is not None}
+        model=await engine.call("inspect_model",model_path,include_control_net=True,encoding=encoding)
+        topology=await engine.call("validate_model",model_path,encoding=encoding)
+        geometry=await engine.call("linesplan_geometry",model_path,sample_count=sample_count,encoding=encoding,**section_args)
+        identities=[r['provenance']['model']['sha256'] for r in (model,topology,geometry)]
+        if len(set(identities))!=1:raise EngineError("Model changed between diagnostic measurements")
+        result=analyze_geometry(geometry,model,topology,alignment_rules or [],max_turn_degrees,
+                                max_curvature_per_m,max_curvature_step_per_m)
+        result['provenance']=geometry['provenance']
+        result['alignment_rules']=[r.model_dump() for r in alignment_rules or []]
+        result['sample_count']=sample_count
+        return result
 
     @safe_tool()
     async def verify_model_targets(model_path: str, draft_m: float, targets: list[Target],
@@ -219,11 +272,18 @@ def create_server(engine: Engine) -> MCPServer:
                                  progress=lambda f, m: progress(ctx, f, m))
 
     @safe_tool()
-    async def export_linesplan_dxf(model_path: str, output_path: str, encoding: str = "cp1252") -> dict:
-        """Export metre-based 2D profile/plan/body views of native intersection splines, sampled exactly as the upstream DXF exporter."""
+    async def export_linesplan_dxf(model_path: str, output_path: str, encoding: str = "cp1252",
+                                   options: LinesplanOptions | None = None) -> dict:
+        """Export three views with native curves, true surface boundaries, mesh silhouettes, grids and labels.
+        Optional grid positions also generate temporary native sections. They do not change the source model.
+        Surface outlines are mesh segments; disconnected splines remain separate. No hidden-line removal.
+        """
         target = engine.path(output_path, output=True, suffixes=(".dxf",))
-        geometry = await engine.call("linesplan_geometry", model_path, encoding=encoding)
-        return await write_export(target, lambda p: linesplan_dxf(p, geometry), geometry["provenance"])
+        options=options or LinesplanOptions()
+        section_args={key:getattr(options,key) for key in ('stations_m','waterlines_m','buttocks_m') if getattr(options,key) is not None}
+        geometry = await engine.call("linesplan_geometry", model_path, encoding=encoding, **section_args)
+        provenance={**geometry['provenance'],'export':{'format':'.dxf','options':options.model_dump()}}
+        return await write_export(target, lambda p: linesplan_dxf(p, geometry, options), provenance)
 
     @safe_tool()
     async def export_hydrostatics(model_path: str, output_path: str, ctx: Context,

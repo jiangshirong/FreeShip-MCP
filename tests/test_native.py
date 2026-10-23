@@ -33,6 +33,16 @@ def test_analytic_box(engine):
     assert h["bm_longitudinal_m"] == pytest.approx(20**2 / (12 * 4), rel=1e-4)
 
 
+def test_native_boundary_export_includes_deck_without_sections(engine):
+    original=(engine.workspace / '箱体-Корпус.fbm').read_bytes()
+    geometry=run(engine.call('linesplan_geometry','箱体-Корпус.fbm'))
+    segments=geometry['boundary_segments_m']
+    top=[(a,b) for a,b in segments if abs(a[2]-8)<1e-6 and abs(b[2]-8)<1e-6]
+    import math
+    assert sum(math.dist(a,b) for a,b in top)==pytest.approx(26,rel=1e-5)
+    assert (engine.workspace / '箱体-Корпус.fbm').read_bytes()==original
+
+
 def test_native_roundtrip_and_binary_identity(engine):
     original = engine.workspace / "箱体-Корпус.fbm"
     result = run(engine.call("save_model", original.name, output_path="identity.fbm"))

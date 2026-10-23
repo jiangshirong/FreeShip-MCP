@@ -11,6 +11,8 @@ README.zh-CN.md
 UPSTREAM.json
 docs/development.md
 docs/development.zh-CN.md
+docs/local-editing.md
+docs/local-editing.zh-CN.md
 docs/numerics.md
 docs/numerics.zh-CN.md
 docs/target-verification.md
@@ -18,6 +20,7 @@ docs/test-results.json
 docs/upstream-changes.md
 docs/verification.md
 docs/verification.zh-CN.md
+engine/HeadlessEditing.pas
 engine/HeadlessLackenby.pas
 engine/HeadlessModel.pas
 engine/freeship_engine.lpi
@@ -43,6 +46,7 @@ scripts/package-windows.ps1
 scripts/verify_upstream.py
 setup.py
 src/freeship_mcp/__init__.py
+src/freeship_mcp/editing.py
 src/freeship_mcp/engine.py
 src/freeship_mcp/exporters.py
 src/freeship_mcp/licenses/FPC-RTL-COPYING.FPC
@@ -173,9 +177,12 @@ src/freeship_mcp/licenses/typing-inspection-metadata.txt
 src/freeship_mcp/licenses/uvicorn-6-LICENSE.md
 src/freeship_mcp/licenses/uvicorn-metadata.txt
 src/freeship_mcp/licenses/wheel-2-LICENSE.txt
+src/freeship_mcp/linesplan.py
+src/freeship_mcp/quality.py
 src/freeship_mcp/server.py
 src/freeship_mcp/verification.py
 tests/test_invariants.py
+tests/test_local_editing.py
 tests/test_mcp.py
 tests/test_native.py
 tests/test_verification.py

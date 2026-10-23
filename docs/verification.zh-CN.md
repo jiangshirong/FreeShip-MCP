@@ -13,7 +13,7 @@
 - 合成船型的 Lackenby 变换、上游收敛阈值及独立三维静水力残差。
 - 无浸水、破损模型、不可达目标、超时与取消，不留下假成功输出。
 - 中文及俄文路径、显式区间展开与中间进度通知。
-- 真实 MCP 客户端初始化、发现 13 个工具并完成整个调用链。
+- 真实 MCP 客户端初始化、发现 15 个工具并完成整个调用链。
 - 独立 Windows 程序运行时，PATH 仅保留系统目录，不能依赖开发用 Python、Pascal 或 FreeShip。
 - 独立 DXF 解析、视图和站位坐标；Excel 数值和图表引用范围。
 - 从公开文件清单的干净副本重新构建并运行原生解析测试。
@@ -26,3 +26,17 @@
 
 船型变换的验收需要调用者明确提供目标排水量和浮心位置。
 程序不会推测经验目标，也不会把母型值默认为设计要求。
+
+## Local editing and DXF additions / 局部编辑与型线图补充
+
+- Explicit point movement/alignment/translation and selected neighbour relaxation;
+  native edge split/crease, face split/add/delete, native reload and topology rejection.
+- Stale snapshot rejection, feature-protected relaxation, locked-point opt-in with lock
+  preservation, and local editing in imperial model storage.
+- Analytic circle curvature and straight/kink diagnostics with caller-selected limits;
+  explicit point-coordinate residuals, absent curve measurements not passed.
+- Real boundaries including upper edges, closed-box silhouettes, crease edges, body-view
+  horizontal/vertical grids, labels and empty-section reporting; independent DXF audit.
+- Python and standalone MCP discovery and calls for all 15 tools, without desktop control.
+
+See [local-editing.md](local-editing.md) and [中文说明](local-editing.zh-CN.md).

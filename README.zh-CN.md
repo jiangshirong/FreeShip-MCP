@@ -2,23 +2,33 @@
 
 [English](README.md)
 
-Windows x64 本地 MCP，提供 FreeShip 模型读写、Lackenby 船型变换、求交、静水力计算、
-DXF 型线图和 CSV/Excel 导出。计算使用原生 FreeShip 算法，全程不控制桌面。
+面向 Windows 的 FreeShip MCP 服务，提供模型读取、控制网格编辑、船型变换、几何诊断和工程文件导出，使用原生 FreeShip Plus 计算引擎。
 
-简单说，它让 AI 能够调用船舶计算工具。把自己的船体模型和设计参数交给 AI，
-就能让它读取模型、调整船型、计算静水力，并导出型线图和数据表。
-它需要配合支持本地 MCP 的 AI 客户端使用，下载包本身不包含 AI 模型或聊天软件。
+## 功能
 
-## 安装与连接
+- 读写 FBM/FTM 模型，支持 fv335、fv462 格式。
+- 编辑控制点、边和面，缩放几何，执行 Lackenby 船型变换。
+- 按指定位置生成横剖线、水线和纵剖线。
+- 检查拓扑、采样曲线质量和坐标约束。
+- 按指定吃水或吃水范围计算静水力。
+- 导出三视图 DXF 型线图及 CSV/XLSX 报告，并记录成果来源。
 
-从 [v0.2.0 下载页](https://github.com/jiangshirong/FreeShip-MCP/releases/tag/v0.2.0)
-下载 `FreeShip-MCP-Windows-x64.zip`，适用于 Windows 10/11 x64。
-不需要安装 FreeShip、Python 或 Pascal 编译器。解压后，把 MCP 配置中的
-`command` 指向其中的 `freeship-mcp.exe`，参数同样是 `--workspace` 和工作目录。
-独立包同时包含 Python 运行环境和原生计算引擎。
+## 安装
 
-例如，将程序包解压到 `C:\MCP\freeship-mcp`，新建 `C:\HullWork` 作为模型工作目录。
-在 AI 客户端中添加以下 MCP 配置，然后把自己的模型放进工作目录：
+**平台：** Windows 10/11 x64。**通信方式：** stdio。
+
+从 [Releases](https://github.com/jiangshirong/FreeShip-MCP/releases) 下载并解压 `FreeShip-MCP-Windows-x64.zip`。独立包包含运行环境和计算引擎。
+
+也可使用 Python 3.11 及以上版本安装 Windows wheel：
+
+```powershell
+py -3.11 -m venv .venv
+.venv\Scripts\python -m pip install .\freeship_mcp-0.3.0-py3-none-win_amd64.whl
+```
+
+## 配置
+
+创建工作目录，在 MCP 客户端配置中添加：
 
 ```json
 {
@@ -31,80 +41,64 @@ DXF 型线图和 CSV/Excel 导出。计算使用原生 FreeShip 算法，全程�
 }
 ```
 
-连接后，可以先对 AI 说：
+使用 wheel 安装时，将 command 改为 `.venv\Scripts\freeship-mcp.exe` 的绝对路径。
 
-> 检查 FreeShip MCP 是否可用，读取工作目录中的 box.fbm，计算吃水 4 米、无纵倾、无横倾时的静水力，导出 Excel。先不要修改原模型。
+| 参数 | 说明 |
+|---|---|
+| `--workspace` | 必填，已存在的模型及输出工作目录 |
+| `--timeout` | 原生操作超时秒数，默认 `120` |
+| `--engine` | 可选，兼容计算引擎的路径 |
+| `--check` | 检查引擎兼容性后退出 |
 
-试用模型可从仓库的 [examples](examples) 下载。使用自己的模型时，更换文件名、吃水等参数。
+文件访问限定在工作目录内，输出使用新文件名。日志写入标准错误流。
 
-如果已经安装 Python 3.11 以上，也可安装下载页中的 Windows wheel：
+## 工具
+
+| 工具 | 说明 |
+|---|---|
+| `engine_info` | 获取引擎版本、上游源码版本和功能 |
+| `inspect_model` | 读取项目设置、几何范围、图层、单位和控制网格索引 |
+| `validate_model` | 检查拓扑、相邻面法向和开口边界 |
+| `edit_control_net` | 移动、对齐、局部平滑控制点，拆边拆面、增删面及设置硬边 |
+| `analyze_hull_quality` | 检查采样曲线质量和指定坐标约束 |
+| `verify_model_targets` | 按指定目标与容差核对模型测量值 |
+| `check_export_source` | 核对导出文件及源模型哈希 |
+| `save_model` | 保存或转换 FBM/FTM 模型 |
+| `scale_model` | 缩放几何与项目尺度 |
+| `rebuild_hull` | 对选定图层执行 Lackenby 变换 |
+| `generate_sections` | 生成横剖线、水线和纵剖线 |
+| `calculate_hydrostatics` | 按指定吃水、纵倾和横倾计算静水力 |
+| `calculate_hydrostatics_series` | 按吃水列表或范围批量计算 |
+| `export_linesplan_dxf` | 导出纵剖、水线、横剖视图及轮廓、网格和标注 |
+| `export_hydrostatics` | 导出 CSV 或带数据与图表的 XLSX |
+
+接口物理量使用米、吨和度，面积与体积使用平方米和立方米。旧 FBM 文本编码支持 `cp1252`、`cp1251`、`utf8`。
+
+局部编辑须携带模型检查返回的 SHA-256。目标值和容差由调用参数指定。0.3.0 使用原生协议 3，服务与引擎须配套更新。
+
+## 文档
+
+- [局部编辑、线型诊断与 DXF 参数](docs/local-editing.zh-CN.md)
+- [单位与数值含义](docs/numerics.zh-CN.md)
+- [目标核验与导出清单](docs/target-verification.md)
+- [构建与打包](docs/development.zh-CN.md)
+- [测试与验证范围](docs/verification.zh-CN.md)
+- [合成测试模型](examples)
+
+## 开发
 
 ```powershell
 py -3.11 -m venv .venv
-.venv\Scripts\python -m pip install .\freeship_mcp-0.2.0-py3-none-win_amd64.whl
-.venv\Scripts\freeship-mcp --workspace C:\HullWork --check
+.venv\Scripts\python -m pip install -r requirements-dev.lock
+.venv\Scripts\python -m pip install --no-deps --no-build-isolation -e .
+scripts\bootstrap-toolchain.ps1
+scripts\build-engine.ps1
+.venv\Scripts\python -m pytest -q
+scripts\package-windows.ps1
 ```
 
-Python 安装方式的 MCP 配置示例：
+构建使用 Free Pascal 3.2.2 和 Lazarus 3.2。仓库包含固定版本的上游源码及构建说明，见 [UPSTREAM.json](UPSTREAM.json) 和[上游修改记录](docs/upstream-changes.md)。
 
-```json
-{
-  "mcpServers": {
-    "freeship": {
-      "command": "C:\\MCP\\venv\\Scripts\\freeship-mcp.exe",
-      "args": ["--workspace", "C:\\HullWork", "--timeout", "120"]
-    }
-  }
-}
-```
+## 许可证
 
-工作目录内的相对路径和绝对路径均可；解析后的目录联接目标也必须在工作目录内。
-所有输出使用新文件名，不覆盖原模型。通信使用标准输入输出，诊断写入标准错误流。
-
-## 使用顺序
-
-1. `engine_info` 检查引擎；`inspect_model` 读取模型；`validate_model` 检查拓扑、相邻法向和破口候选点。
-2. `scale_model` 缩放控制网格和项目尺度。旧交线的位置不会随之移动，需要下一步明确重建。
-
-   可选 `project_length_m`、`project_beam_m`、`project_draft_m` 在几何缩放后明确设置设计尺度；
-   `x_offset_m` 对缩放后的控制网格沿纵向平移。静水力结果另行返回实际水线范围，不能用设计尺度代替。
-   控制点坐标、上部平面高度变换、甲板开口边界及单独的项目基准系数见
-   [数值含义补充](docs/numerics.md#volume-mass-and-imperial-models)。
-3. `rebuild_hull` 输入目标排水量、浮心坐标及基准、参与变换的图层索引。程序不选择经验值。
-4. 查看 Lackenby 剖面积分残差及实际三维静水力残差，再决定是否采用。
-5. `generate_sections` 输入横剖线、水线、纵剖线的位置。11 个理论站位可取 `L*i/10`，`i=0..10`。
-6. `calculate_hydrostatics` 或 `calculate_hydrostatics_series` 计算指定吃水。
-7. `export_linesplan_dxf` 导出三视图；`export_hydrostatics` 导出 CSV 或带 8 张曲线图的 Excel。
-8. `save_model` 可转换 `.fbm`/`.ftm`，版本可保留或明确选取 335/462；不支持的降级会失败。
-
-对外单位统一为米、吨、平方米、立方米和度；模型的原单位另行报告。
-旧 FBM 的文字编码可选 `cp1252`、`cp1251` 或 `utf8`。数值字段不提前舍入；
-Excel 的小数位设置只影响显示。
-
-交线及静水力序列也支持 `[起点, 终点, 间距]`，单位为米；终点恰在网格上时会包含终点，
-否则按间距停在终点之前，不额外补点。
-
-浮心可选距艉垂线的米数 `aft_perpendicular_m`，或相对船中、向艏为正的船长比例
-`midship_forward_fraction`。例如比例 `0.02` 表示船中前方 `0.02L`。
-
-矩形箱体和合成船型由 `scripts/create_examples.py` 生成，可用于测试和熟悉接口。
-阻力、推进、螺旋桨及大倾角稳性不在本版范围内。
-
-## 当前版本
-
-0.2.0 新增统一目标验收和导出来源核对，现有 13 个工具。详见
-[目标验收与导出清单](docs/target-verification.md)。导出成果的 `.manifest.json`
-应一并保留；服务与引擎需要同时更新到协议 2。
-
-本版为预览版，已进行合成模型数值测试和本机 Windows 集成测试，实际船型的验证仍在继续。
-使用变换结果前，要检查实际尺度、系数的计算基准和返回的残差。
-目标参数及容差由调用者明确提供，程序不会代为选取。
-
-## 开发资料
-
-- [构建与打包](docs/development.zh-CN.md)
-- [单位、系数及数值含义](docs/numerics.zh-CN.md)
-- [验证范围](docs/verification.zh-CN.md)
-
-新代码使用 GPL-3.0-or-later，上游原始版权声明及许可证保留。项目是独立适配器，
-并非官方 FreeShip 发行版。
+[GPL-3.0-or-later](LICENSE)。原 FreeShip 及依赖组件的版权声明保留在 [NOTICE](NOTICE) 中。本项目为独立 FreeShip 适配器。

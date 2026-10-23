@@ -3,7 +3,7 @@ from __future__ import annotations
 import csv
 import json
 from pathlib import Path
-import ezdxf
+from .linesplan import linesplan_dxf
 from openpyxl import Workbook
 from openpyxl.chart import Reference, ScatterChart, Series
 from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
@@ -84,45 +84,3 @@ def hydrostatics_report(path: Path, rows: list[dict], display_decimals: int = 2,
     metadata.freeze_panes = "A2"
     book.save(path)
     return {"rows": len(rows), "charts": len(CHART_FIELDS)}
-
-
-def linesplan_dxf(path: Path, geometry: dict) -> dict:
-    curves = geometry["curves"]
-    if not curves:
-        raise ValueError("Model has no intersection curves; call generate_sections first")
-    doc = ezdxf.new("R2010")
-    doc.units = ezdxf.units.M
-    space = doc.modelspace()
-    length, beam = geometry["length_m"], geometry["beam_m"]
-    split = geometry["split_section_m"]
-    gap = max(beam * 0.5, 1.0)
-    plan_y = -beam - gap
-    body_x = length + gap + beam * 0.5
-    counts = {"PROFILE": 0, "PLAN": 0, "BODY": 0}
-    sections = {kind: set() for kind in ("station", "waterline", "buttock")}
-    for curve in curves:
-        kind = curve["kind"]
-        sections[kind].add(curve["section_index"])
-        points = curve["points_m"]
-        if len(points) < 2:
-            continue
-        # The native exporter uses profile (x,z), plan (x,y), body (+/-y,z).
-        # Separate views use nonoverlapping translations; physical coordinates remain m.
-        views = {"PROFILE": [(x, z) for x, y, z in points],
-                 "PLAN": [(x, plan_y + y) for x, y, z in points]}
-        if kind == "station":
-            side = -1 if curve["distance_m"] <= split else 1
-            views["BODY"] = [(body_x + side * y, z) for x, y, z in points]
-        for view, projected in views.items():
-            layer = f"{view}_{kind.upper()}_{curve['section_index']:03}"
-            if layer not in doc.layers:
-                doc.layers.add(layer, color={"station": 3, "waterline": 5, "buttock": 1}[kind])
-            space.add_lwpolyline(projected, dxfattribs={"layer": layer})
-            counts[view] += 1
-    doc.saveas(path)
-    # Read with ezdxf's independent DXF loader/auditor, not a homegrown text check.
-    check = ezdxf.readfile(path)
-    if check.audit().has_errors:
-        raise ValueError("Exported DXF failed independent audit")
-    return {"views": counts, "nonempty_sections": {k: len(v) for k, v in sections.items()},
-            "units": "m", "entities": len(check.modelspace()), "curve_sampling": "native 100 fragments plus knuckles"}

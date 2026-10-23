@@ -28,3 +28,12 @@ SAC/Bonjean report files. It does not alter hydrostatic or surface mathematics.
 `FreeSpline.inc` and the rest of the geometry method bodies remain unchanged from upstream.
 DXF curve sampling follows `FreeLinesplanFrme.AddSpline`; the portable writer arranges the
 three projections and serializes with ezdxf. XLSX/CSV writers consume native numeric results.
+
+## Adapter additions in 0.3.0
+
+`engine/HeadlessEditing.pas` calls the original subdivision point/edge/face methods.
+It adds selection, lock protection and result reporting; it does not replace the
+subdivision mathematics. `HeadlessModel.pas` exposes full control-net tables, sampled
+native knuckles, selected-layer subdivided boundaries/creases and view silhouettes.
+Preview section changes are in memory only. `quality.py` computes documented discrete
+sample diagnostics, not a replacement native hydrostatic or fairing solver.

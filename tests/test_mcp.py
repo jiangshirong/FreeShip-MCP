@@ -32,7 +32,7 @@ def test_real_stdio_full_chain(tmp_path, runtime):
             async with ClientSession(reader, writer) as client:
                 await client.initialize()
                 tools = await client.list_tools()
-                assert len(tools.tools) == 13
+                assert len(tools.tools) == 15
                 async def call(name, **kwargs):
                     result = await client.call_tool(name, kwargs)
                     assert not result.is_error, result
@@ -41,7 +41,24 @@ def test_real_stdio_full_chain(tmp_path, runtime):
                     return json.loads(result.content[0].text)
                 info = await call("engine_info")
                 assert info["headless"]
-                await call("inspect_model", model_path="hull.fbm")
+                net=await call("inspect_model", model_path="hull.fbm", include_control_net=True)
+                index=net['control_net_points'][0]['index']
+                x=net['control_net_points'][0]['coordinate_m'][0]
+                local=await call("edit_control_net",model_path="hull.fbm",output_path="local.fbm",
+                    expected_model_sha256=net['provenance']['model']['sha256'],
+                    edit={'action':'move_points','points':[{'index':index,'x_m':x-.01}]})
+                assert local['changed_points'][0]['after_m'][0]==pytest.approx(x-.01,abs=1e-6)
+                stale=await client.call_tool('edit_control_net',{'model_path':'local.fbm','output_path':'stale.fbm',
+                    'expected_model_sha256':net['provenance']['model']['sha256'],
+                    'edit':{'action':'translate_points','point_indices':[index],'dx_m':1}})
+                assert stale.is_error and not (tmp_path/'stale.fbm').exists()
+                quality=await call('analyze_hull_quality',model_path='local.fbm',stations_m=[10,20,30],
+                    waterlines_m=[1,2,3],buttocks_m=[1,2],max_turn_degrees=20,
+                    alignment_rules=[{'point_indices':[index],'axis':'x','value_m':x-.01,'tolerance_m':1e-5}])
+                assert quality['curve_count']>0 and quality['alignment_checks'][0]['status']=='passed'
+                partial=await call('analyze_hull_quality',model_path='local.fbm',stations_m=[1000],
+                    waterlines_m=[1],max_turn_degrees=180)
+                assert partial['status']=='incomplete' and partial['curve_checks']=='partial'
                 await call("validate_model", model_path="hull.fbm")
                 await call("save_model", model_path="hull.fbm", output_path="saved.ftm")
                 await call("scale_model", model_path="saved.ftm", output_path="scaled.fbm", x_factor=1.1, y_factor=1.1, z_factor=1.1)
@@ -61,8 +78,11 @@ def test_real_stdio_full_chain(tmp_path, runtime):
                 assert section["stations"] == 11
                 ranged = await call("calculate_hydrostatics_series", model_path="sections.fbm", draft_range_m=[0, 3, 1])
                 assert [row["draft_m"] for row in ranged["rows"]] == [0,1,2,3]
-                dx = await call("export_linesplan_dxf", model_path="sections.fbm", output_path="lines.dxf")
+                dx = await call("export_linesplan_dxf", model_path="sections.fbm", output_path="lines.dxf",
+                    options={"title":"Synthetic hull","body_split_x_m":22,"include_grid":True})
                 assert dx["views"]["BODY"] > 0
+                assert dx['boundary_entities']['PROFILE']>0 and dx['grid_entities']['BODY']>0
+                assert dx['nonempty_sections']['station']>=9
                 series = await call("calculate_hydrostatics_series", model_path="sections.fbm", drafts_m=[0, 1, 2, 3.3])
                 await call("export_hydrostatics", model_path="sections.fbm", output_path="hydro.xlsx", drafts_m=[0, 1, 2, 3.3])
                 await call("export_hydrostatics", model_path="sections.fbm", output_path="hydro.csv", drafts_m=[0, 1, 2, 3.3])

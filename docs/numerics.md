@@ -14,9 +14,9 @@ The adapter assumes the aft perpendicular is x=0, consistent with FreeShip proje
 settings. Geometry may extend beyond either perpendicular. It does not move the
 origin to the minimum mesh x-coordinate.
 
-浮心距艉垂线为 `lcb_ap_m`。比例基准的换算是
-`lcb_ap_m = (0.5 + midship_forward_fraction) * project_length_m`。
-这与相对船中的百分数不同；输入比例 `0.02`，而不是 `2`。
+The aft-perpendicular LCB coordinate is `lcb_ap_m`. The fraction-based conversion is
+`lcb_ap_m = (0.5 + midship_forward_fraction) * project_length_m`.
+The fraction is a dimensionless longitudinal offset divided by project length, not a percentage.
 
 Draft is measured above the model's lowest hydrostatic point. Native positive trim
 means bow-down: waterplane height is `lowest + draft - trim/2` at x=0 and

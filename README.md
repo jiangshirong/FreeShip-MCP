@@ -2,114 +2,103 @@
 
 [简体中文](README.zh-CN.md)
 
-Local Windows x64 MCP server for FreeShip model I/O, native Lackenby transformation,
-intersections, hydrostatics, DXF linesplans and CSV/XLSX reports. No desktop automation.
+A Windows MCP server for FreeShip model inspection, control-net editing, hull transformation, geometry diagnostics and engineering exports. Powered by the native FreeShip Plus engine.
 
-The calculation engine is built from FreeShip Plus commit
-`1de17e99fb2b1cc559cdf27c5cafb595a627a641`. It uses the original subdivision surface,
-intersection, hydrostatic and Lackenby mathematics with a nonvisual entry point.
+## Features
+
+- Read and write FBM/FTM models, including fv335 and fv462.
+- Edit control points, edges and faces; scale geometry and apply Lackenby transformations.
+- Generate stations, waterlines and buttocks at specified positions.
+- Inspect topology, sampled curve quality and coordinate constraints.
+- Calculate hydrostatics at individual drafts or across a draft range.
+- Export three-view DXF linesplans and CSV/XLSX reports with source manifests.
 
 ## Installation
 
-**Preview release:** [v0.2.0 downloads](https://github.com/jiangshirong/FreeShip-MCP/releases/tag/v0.2.0).
-The standalone `FreeShip-MCP-Windows-x64.zip` needs no Python installation. Extract it,
-point your MCP `command` at `freeship-mcp.exe` and pass `--workspace C:\HullWork`.
-It includes the Python runtime and native engine.
+**Platform:** Windows 10/11 x64. **Transport:** stdio.
 
-Alternatively, on Windows 10/11 x64 with Python 3.11+, install the **Windows wheel containing
-the engine** from a release or a local build:
+Download `FreeShip-MCP-Windows-x64.zip` from [Releases](https://github.com/jiangshirong/FreeShip-MCP/releases), then extract it. The standalone package includes the runtime and calculation engine.
+
+Alternatively, install the Windows wheel with Python 3.11 or later:
 
 ```powershell
 py -3.11 -m venv .venv
-.venv\Scripts\python -m pip install .\freeship_mcp-0.2.0-py3-none-win_amd64.whl
-.venv\Scripts\freeship-mcp --workspace C:\HullWork --check
+.venv\Scripts\python -m pip install .\freeship_mcp-0.3.0-py3-none-win_amd64.whl
 ```
 
-The workspace must exist. FreeShip desktop and Pascal are not runtime requirements.
-For a standalone Windows package, see [development and packaging](docs/development.md).
+## Configuration
 
-Use an AI client that supports local MCP servers over stdio. This download provides
-the calculation tools; it does not include an AI model or a chat application.
-
-## MCP configuration
+Create a workspace directory and add the server to your MCP client configuration:
 
 ```json
 {
   "mcpServers": {
     "freeship": {
-      "command": "C:\\MCP\\venv\\Scripts\\freeship-mcp.exe",
+      "command": "C:\\MCP\\freeship-mcp\\freeship-mcp.exe",
       "args": ["--workspace", "C:\\HullWork", "--timeout", "120"]
     }
   }
 }
 ```
 
-The server uses stdio. Diagnostics go to stderr. Paths may be relative to the configured
-workspace or absolute inside it. Existing files are never overwritten. Input models and
-all output files must remain inside that workspace, including resolved junction targets.
+For a wheel installation, use `.venv\Scripts\freeship-mcp.exe` as the command.
+
+| Option | Description |
+|---|---|
+| `--workspace` | Required existing directory containing input models and outputs |
+| `--timeout` | Native operation timeout in seconds; default `120` |
+| `--engine` | Optional path to a compatible native engine |
+| `--check` | Check engine compatibility and exit |
+
+Paths are restricted to the configured workspace. Outputs use new filenames. Logs are written to stderr.
 
 ## Tools
 
-| Tool | Purpose |
+| Tool | Description |
 |---|---|
-| `engine_info` | Check engine version and capabilities |
-| `inspect_model` | Stored dimensions, actual geometry bounds, layers, units and sections |
-| `validate_model` | Topology, adjacent face normals and native leak candidates |
-| `verify_model_targets` | Explicit tolerances, geometry/settings separation and coefficient bases |
-| `check_export_source` | Detect an export made from a different model or a modified artifact |
-| `save_model` | New FBM/FTM; preserve version or explicitly select 335/462 |
-| `scale_model` | Native XYZ mesh and project scaling |
-| `rebuild_hull` | Lackenby with explicit displacement, LCB and selected layer indices |
-| `generate_sections` | Native stations, waterlines and buttocks at explicit positions |
-| `calculate_hydrostatics` | One specified draft, trim and heel |
-| `calculate_hydrostatics_series` | Explicit draft list |
-| `export_linesplan_dxf` | Profile, plan and body views in metres |
-| `export_hydrostatics` | CSV or XLSX with numeric data and eight curves |
+| `engine_info` | Engine version, upstream revision and capabilities |
+| `inspect_model` | Project settings, geometry bounds, layers, units and control-net indices |
+| `validate_model` | Topology, adjacent face orientation and open-boundary diagnostics |
+| `edit_control_net` | Move, align or relax points; split edges/faces; add or delete faces; set creases |
+| `analyze_hull_quality` | Sampled curve diagnostics and explicit coordinate checks |
+| `verify_model_targets` | Compare model measurements with specified targets and tolerances |
+| `check_export_source` | Verify export and source-model hashes |
+| `save_model` | Save or convert FBM/FTM models |
+| `scale_model` | Scale geometry and project dimensions |
+| `rebuild_hull` | Apply a Lackenby transformation to selected layers |
+| `generate_sections` | Generate stations, waterlines and buttocks |
+| `calculate_hydrostatics` | Calculate at a specified draft, trim and heel |
+| `calculate_hydrostatics_series` | Calculate for a draft list or range |
+| `export_linesplan_dxf` | Export profile, plan and body views with outlines, grids and labels |
+| `export_hydrostatics` | Export CSV or XLSX data and charts |
 
-Physical API values use **metres, metric tonnes, m², m³ and degrees**, even for imperial
-models. Legacy model text encoding is explicit (`cp1252`, `cp1251` or `utf8`).
-See [units and numerical semantics](docs/numerics.md) before setting transform targets.
+API physical units are metres, metric tonnes and degrees; areas and volumes use m² and m³. Legacy FBM text encoding supports `cp1252`, `cp1251` and `utf8`.
 
-`scale_model` accepts explicit `project_length_m`, `project_beam_m`, and `project_draft_m`
-overrides after geometry scaling, plus `x_offset_m` for longitudinal translation.
-Existing section positions remain fixed and must be regenerated. Hydrostatics separately
-reports the actual waterline bounds; project metadata are not geometry verification.
-Explicit control-point and upper-plane edits, deck-edge clearance and separate
-project-basis coefficients are described in [numerical semantics](docs/numerics.md).
+Local edits require the model SHA-256 returned by inspection. Target values and tolerances are explicit inputs. Version 0.3.0 uses native protocol 3; update the server and engine together.
 
-## Example workflow
+## Documentation
 
-Generate the original synthetic examples with `python scripts/create_examples.py --output-dir C:\HullWork`
-after building the engine. Examples include a rectangular box and a synthetic hull.
+- [Local editing, diagnostics and DXF options](docs/local-editing.md)
+- [Units and numerical semantics](docs/numerics.md)
+- [Target verification and export manifests](docs/target-verification.md)
+- [Build and packaging](docs/development.md)
+- [Tests and validation coverage](docs/verification.md)
+- [Synthetic test models](examples)
 
-1. Inspect and validate a model.
-2. Scale its actual mesh to desired dimensions; regenerate section positions afterward.
-3. Supply displacement, LCB coordinate reference and layer indices to `rebuild_hull`.
-4. Check **both** SAC convergence and actual 3D hydrostatic residuals.
-5. Generate sections; for 11 theory stations use `L * i / 10`, `i = 0..10`.
-6. Export DXF and hydrostatic series. A station exactly at a point stem may have no curve;
-   the saved station count and nonempty curve count are reported separately.
+## Development
 
-Section and hydrostatic-series tools also accept ranges `[start_m, end_m, step_m]`.
-The endpoint is included when the step lands on it; an off-grid endpoint is not appended.
+```powershell
+py -3.11 -m venv .venv
+.venv\Scripts\python -m pip install -r requirements-dev.lock
+.venv\Scripts\python -m pip install --no-deps --no-build-isolation -e .
+scripts\bootstrap-toolchain.ps1
+scripts\build-engine.ps1
+.venv\Scripts\python -m pytest -q
+scripts\package-windows.ps1
+```
 
-## Scope
-
-See [target verification and export provenance](docs/target-verification.md) for
-the 0.2.0 acceptance API and export manifest format. Keep manifests beside exports.
-
-This is an early preview. Synthetic numerical tests and local Windows integration tests
-are provided; broader real-hull validation is ongoing. Review dimensions, coefficient
-references and both sets of residuals before using a transformed hull.
-
-No resistance, propulsion, propeller or large-angle stability tools. Empirical targets
-are supplied by the caller. Validation does not prove the absence of all surface
-self-intersections. A successful Lackenby SAC iteration is not a promise that a different
-3D integration method has identical residuals. See [verification](docs/verification.md).
+The build uses Free Pascal 3.2.2 and Lazarus 3.2. Pinned upstream sources and build instructions are included in the repository; see [UPSTREAM.json](UPSTREAM.json) and [upstream changes](docs/upstream-changes.md).
 
 ## License
 
-New integration code: GPL-3.0-or-later. Original FreeShip notices and licenses remain in
-`vendor/freeship`, [NOTICE](NOTICE) and [LICENSE](LICENSE). This is an independent adapter,
-not an official FreeShip release. Bundled binaries must be distributed with corresponding
-source and third-party notices; see [development](docs/development.md).
+[GPL-3.0-or-later](LICENSE). Original FreeShip and dependency notices are retained in [NOTICE](NOTICE). This project is an independent FreeShip adapter.

@@ -2,8 +2,8 @@
 unit HeadlessModel;
 {$mode objfpc}{$H+}
 interface
-uses SysUtils, Classes, Math, TypInfo, fpjson, FreeShipUnit, FreeGeometry,
-     FreeTypes, FreeVersionUnit, FreeFileBuffer, HeadlessLackenby;
+uses SysUtils, Classes, Math, TypInfo, fpjson, Contnrs, FreeShipUnit, FreeGeometry,
+     FreeTypes, FreeVersionUnit, FreeFileBuffer, HeadlessLackenby, HeadlessEditing;
 function ExecuteRequest(Request: TJSONObject): TJSONObject;
 implementation
 function CoordinateJSON(P: T3DCoordinate; Factor: Double): TJSONArray;
@@ -322,6 +322,12 @@ begin
   if R.Get('crease_edges',False) then
     for I:=0 to M.Surface.NumberOfControlEdges-1 do M.Surface.ControlEdge[I].Crease:=True;
   for I:=0 to M.Surface.NumberOfControlFaces-1 do M.Surface.ControlFace[I].Layer:=M.ActiveLayer;
+  if R.Find('locked_point_indices')<>nil then begin
+    V:=R.Arrays['locked_point_indices'];for I:=0 to V.Count-1 do begin
+      Index:=V.Integers[I];if (Index<0) or (Index>=M.Surface.NumberOfControlPoints) then raise Exception.Create('Invalid lock index');
+      M.Surface.ControlPoint[Index].Locked:=True;
+    end;
+  end;
   M.ProjectSettings.ProjectLength:=R.Get('length_m',0.0);
   M.ProjectSettings.ProjectBeam:=R.Get('beam_m',0.0);
   M.ProjectSettings.ProjectDraft:=R.Get('draft_m',0.0);
@@ -331,10 +337,11 @@ begin
   M.Precision:=fpVeryHigh;
   M.Surface.Rebuild;
 end;
-function Lines(M: TFreeShip): TJSONArray;
+function Lines(M: TFreeShip; SampleCount:Integer=100): TJSONArray;
 var Kind,I,J,K,N,Count: Integer; Section: TFreeIntersection; S: TFreeSpline;
     O: TJSONObject; Points: TJSONArray; Params: TFloatArray; Key: String; F: Double;
 begin
+  if (SampleCount<21) or (SampleCount>1001) then raise Exception.Create('sample_count must be 21..1001');
   Result:=TJSONArray.Create; F:=LengthFactor(M);
   for Kind:=0 to 2 do
   begin
@@ -350,18 +357,71 @@ begin
       for J:=0 to Section.Count-1 do
       begin
         S:=Section.Items[J]; S.Rebuild;
-        { Same 100 fragments + knuckle parameters as FreeLinesplanFrme.AddSpline. }
-        N:=0; SetLength(Params,S.NumberOfPoints+100);
+        { Default sampling as FreeLinesplanFrme.AddSpline; diagnostics may request more samples. }
+        N:=0; SetLength(Params,S.NumberOfPoints+SampleCount);
         for K:=1 to S.NumberOfPoints-2 do
           if S.Knuckle[K] then begin Params[N]:=S.Parameter[K]; Inc(N); end;
-        for K:=0 to 99 do begin Params[N]:=K/99; Inc(N); end;
+        for K:=0 to SampleCount-1 do begin Params[N]:=K/(SampleCount-1); Inc(N); end;
         SortFloatArray(Params,N); Points:=TJSONArray.Create;
         for K:=0 to N-1 do Points.Add(CoordinateJSON(S.Value(Params[K]),F));
         O:=TJSONObject.Create; O.Add('kind',Key); O.Add('section_index',I);
+        O.Add('knuckle_points_m',TJSONArray.Create);
+        for K:=1 to S.NumberOfPoints-2 do
+          if S.Knuckle[K] then O.Arrays['knuckle_points_m'].Add(CoordinateJSON(S.Value(S.Parameter[K]),F));
         O.Add('distance_m',Section.Distance*F); O.Add('points_m',Points); Result.Add(O);
       end;
     end;
   end;
+end;
+function ActiveLinesplanFaces(M:TFreeShip):TFPHashList;
+var I,J:Integer;CF:TFreeSubdivisionControlFace;
+begin
+ Result:=TFPHashList.Create;
+ for I:=0 to M.Surface.NumberOfControlFaces-1 do begin
+  CF:=M.Surface.ControlFace[I];if not CF.Layer.ShowInLinesplan then Continue;
+  for J:=0 to CF.ChildCount-1 do Result.Add(IntToHex(PtrUInt(CF.Child[J]),16),Pointer(1));
+ end;
+end;
+function BoundarySegments(M:TFreeShip;Creases:Boolean=False):TJSONArray;
+var I,J,N:Integer;E:TFreeSubdivisionEdge;Pair:TJSONArray;F:Double;Active:TFPHashList;
+begin
+ Result:=TJSONArray.Create;M.Surface.Rebuild;F:=LengthFactor(M);Active:=ActiveLinesplanFaces(M);
+ try
+  for I:=0 to M.Surface.NumberOfSubDivEdges-1 do begin
+   E:=M.Surface.SubDivEdge[I];N:=0;
+   for J:=0 to E.NumberOfFaces-1 do if Active.Find(IntToHex(PtrUInt(E.Face[J]),16))<>nil then Inc(N);
+   if (not Creases and (N<>1)) or (Creases and ((N<1) or not E.Crease)) then Continue;
+   Pair:=TJSONArray.Create;Pair.Add(CoordinateJSON(E.StartPoint.Coordinate,F));Pair.Add(CoordinateJSON(E.EndPoint.Coordinate,F));
+   Result.Add(Pair);
+  end;
+ finally Active.Free;end;
+end;
+function SilhouetteSegments(M:TFreeShip):TJSONObject;
+var Active:TFPHashList;I,Axis:Integer;Edge:TFreeSubdivisionEdge;
+ N1,N2:T3DCoordinate;A,B:Double;Pair:TJSONArray;Key:String;F:Double;
+ function VisibleFace(Face:TFreeSubdivisionFace):Boolean;
+ begin Result:=Active.Find(IntToHex(PtrUInt(Face),16))<>nil;end;
+ function Component(N:T3DCoordinate;Index:Integer):Double;
+ begin case Index of 0:Result:=N.Y;1:Result:=N.Z;else Result:=N.X;end;end;
+begin
+ Result:=TJSONObject.Create;Result.Add('PROFILE',TJSONArray.Create);Result.Add('PLAN',TJSONArray.Create);Result.Add('BODY',TJSONArray.Create);
+ F:=LengthFactor(M);M.Surface.Rebuild;Active:=ActiveLinesplanFaces(M);
+ try
+  for I:=0 to M.Surface.NumberOfSubDivEdges-1 do begin
+   Edge:=M.Surface.SubDivEdge[I];if Edge.NumberOfFaces<>2 then Continue;
+   if not VisibleFace(Edge.Face[0]) or not VisibleFace(Edge.Face[1]) then Continue;
+   N1:=Edge.Face[0].FaceNormal;N2:=Edge.Face[1].FaceNormal;
+   for Axis:=0 to 2 do begin
+    A:=Component(N1,Axis);B:=Component(N2,Axis);
+    if ((A>1e-7) and (B< -1e-7)) or ((B>1e-7) and (A< -1e-7)) or
+       ((Abs(A)<=1e-7) and (Abs(B)>1e-7)) or ((Abs(B)<=1e-7) and (Abs(A)>1e-7)) then begin
+     case Axis of 0:Key:='PROFILE';1:Key:='PLAN';else Key:='BODY';end;
+     Pair:=TJSONArray.Create;Pair.Add(CoordinateJSON(Edge.StartPoint.Coordinate,F));Pair.Add(CoordinateJSON(Edge.EndPoint.Coordinate,F));
+     Result.Arrays[Key].Add(Pair);
+    end;
+   end;
+  end;
+ finally Active.Free;end;
 end;
 function ExecuteRequest(Request: TJSONObject): TJSONObject;
 var M: TFreeShip; Op,Path: String; I,J: Integer; F,TargetVol,TargetMass,LCB,UpperCut,UpperFactor: Double;
@@ -371,11 +431,11 @@ begin
   Op:=Request.Get('operation','');
   if Op='engine_info' then
   begin
-    Result:=TJSONObject.Create; Result.Add('version','0.2.0'); Result.Add('protocol_version',2);
+    Result:=TJSONObject.Create; Result.Add('version','0.3.0'); Result.Add('protocol_version',3);
     Result.Add('upstream_commit','1de17e99fb2b1cc559cdf27c5cafb595a627a641'); Result.Add('headless',True);
     Result.Add('float_type','IEEE 754 single (upstream)');
     Result.Add('operations',TJSONArray.Create(['inspect_model','validate_model','save_model','scale_model',
-      'rebuild_hull','generate_sections','calculate_hydrostatics','calculate_hydrostatics_series','measure_section','linesplan_geometry','create_box','create_mesh'])); Exit;
+      'rebuild_hull','generate_sections','edit_control_net','calculate_hydrostatics','calculate_hydrostatics_series','measure_section','linesplan_geometry','create_box','create_mesh'])); Exit;
   end;
   M:=TFreeShip.Create(nil);
   try
@@ -397,11 +457,43 @@ begin
       Result:=TJSONObject.Create; Result.Add('rows',Results);
     end
     else if Op='validate_model' then Result:=Validate(M)
-    else if Op='linesplan_geometry' then begin Result:=Inspect(M); Result.Add('curves',Lines(M)); end
+    else if Op='linesplan_geometry' then
+    begin
+      if (Request.Find('stations_m')<>nil) or (Request.Find('waterlines_m')<>nil) or (Request.Find('buttocks_m')<>nil) then begin
+       H:=TJSONObject.Create;H.Add('replace_existing',False);
+       try
+        if Request.Find('stations_m')<>nil then begin
+         while M.NumberOfStations>0 do M.Station[0].Delete(False);H.Add('stations_m',Request.Arrays['stations_m'].Clone);end;
+        if Request.Find('waterlines_m')<>nil then begin
+         while M.NumberOfWaterlines>0 do M.Waterline[0].Delete(False);H.Add('waterlines_m',Request.Arrays['waterlines_m'].Clone);end;
+        if Request.Find('buttocks_m')<>nil then begin
+         while M.NumberOfButtocks>0 do M.Buttock[0].Delete(False);H.Add('buttocks_m',Request.Arrays['buttocks_m'].Clone);end;
+        AddSections(M,H);
+       finally H.Free;end;
+      end;
+      Result:=Inspect(M); Result.Add('curves',Lines(M,Request.Get('sample_count',100)));
+      H:=TJSONObject.Create;
+      H.Add('station',TJSONArray.Create);for I:=0 to M.NumberOfStations-1 do H.Arrays['station'].Add(M.Station[I].Distance*F);
+      H.Add('waterline',TJSONArray.Create);for I:=0 to M.NumberOfWaterlines-1 do H.Arrays['waterline'].Add(M.Waterline[I].Distance*F);
+      H.Add('buttock',TJSONArray.Create);for I:=0 to M.NumberOfButtocks-1 do H.Arrays['buttock'].Add(M.Buttock[I].Distance*F);
+      Result.Add('section_positions_m',H);
+      Result.Add('boundary_segments_m',BoundarySegments(M));
+      Result.Add('crease_segments_m',BoundarySegments(M,True));
+      Result.Add('silhouette_segments_m',SilhouetteSegments(M));
+      Result.Add('boundary_scope','Native subdivided boundary edges on linesplan-enabled layers; includes symmetry-plane edges');
+    end
     else
     begin
       Result:=nil;
-      if Op='scale_model' then
+      if Op='edit_control_net' then
+      begin
+        Result:=EditControlNet(M,Request);H:=Validate(M);Result.Add('topology',H);
+        if not H.Get('integrity',False) or (H.Get('nonmanifold_edges',0)>0) or
+          (H.Get('inconsistent_normal_edges',0)>0) or (H.Get('degenerate_faces',0)>0) then
+          raise Exception.Create('Edited model failed topology verification');
+        AddControlNet(M,Result);
+      end
+      else if Op='scale_model' then
       begin
         P:=SetPoint(Request.Get('x_factor',1.0),Request.Get('y_factor',1.0),Request.Get('z_factor',1.0));
         if (P.X<=0) or (P.Y<=0) or (P.Z<=0) then raise Exception.Create('Scale factors must be positive');
@@ -516,16 +608,7 @@ begin
       else if (Op<>'inspect_model') and (Op<>'save_model') and (Op<>'create_box') and (Op<>'create_mesh') then raise Exception.Create('Unknown engine operation');
       if Result=nil then Result:=Inspect(M) else Result.Add('model',Inspect(M));
       if (Op='inspect_model') and Request.Get('include_control_net',False) then
-      begin
-        Results:=TJSONArray.Create;
-        for I:=0 to M.Surface.NumberOfControlPoints-1 do
-        begin
-          H:=TJSONObject.Create;H.Add('index',I);
-          H.Add('coordinate_m',CoordinateJSON(M.Surface.ControlPoint[I].Coordinate,F));
-          H.Add('locked',M.Surface.ControlPoint[I].Locked);Results.Add(H);
-        end;
-        Result.Add('control_net_points',Results);
-      end;
+        AddControlNet(M,Result);
       if Op<>'inspect_model' then
       begin
         Path:=Request.Get('output_path',''); if Path='' then raise Exception.Create('output_path is required');

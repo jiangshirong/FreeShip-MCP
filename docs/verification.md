@@ -12,7 +12,7 @@ The tests use compiled Pascal calculations, not a Python replacement solver.
   hydrostatic residuals and saved-model reload check.
 - Dry hull, malformed file, infeasible target, timeout and cancellation produce no
   falsely successful output. Unicode Chinese/Cyrillic paths are exercised.
-- A real MCP stdio client initializes, discovers all 13 tools and calls the full chain,
+- A real MCP stdio client initializes, discovers all 15 tools and calls the full chain,
   including model conversion/scaling/transformation, sections, DXF and XLSX/CSV export.
 - DXF is reread/audited independently; Excel data and chart references are checked.
 
@@ -26,3 +26,17 @@ are supplied; a workflow file is not evidence that GitHub CI or a separate clean
 Transformation acceptance requires an explicit displacement and LCB target supplied
 by the caller. The server does not infer empirical targets or silently retain a
 prototype value as a design requirement.
+
+## Local editing and DXF additions / 局部编辑与型线图补充
+
+- Explicit point movement/alignment/translation and selected neighbour relaxation;
+  native edge split/crease, face split/add/delete, native reload and topology rejection.
+- Stale snapshot rejection, feature-protected relaxation, locked-point opt-in with lock
+  preservation, and local editing in imperial model storage.
+- Analytic circle curvature and straight/kink diagnostics with caller-selected limits;
+  explicit point-coordinate residuals, absent curve measurements not passed.
+- Real boundaries including upper edges, closed-box silhouettes, crease edges, body-view
+  horizontal/vertical grids, labels and empty-section reporting; independent DXF audit.
+- Python and standalone MCP discovery and calls for all 15 tools, without desktop control.
+
+See [local-editing.md](local-editing.md) and [中文说明](local-editing.zh-CN.md).
