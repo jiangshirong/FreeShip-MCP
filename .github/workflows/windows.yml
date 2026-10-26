@@ -6,7 +6,7 @@ on:
 permissions:
   contents: read
 jobs:
-  build-test-package:
+  build-and-test:
     runs-on: windows-2022
     steps:
       - uses: actions/checkout@v4
@@ -27,18 +27,6 @@ jobs:
           scripts/build-engine.ps1
           .venv/Scripts/python scripts/create_examples.py --output-dir examples
       - name: Native and stdio tests
-        run: .venv/Scripts/python -m pytest -q
-      - name: Build release packages
-        shell: pwsh
-        run: scripts/package-windows.ps1
-      - name: Standalone end-to-end test
-        run: .venv/Scripts/python -m pytest tests/test_mcp.py -q
+        run: .venv/Scripts/python -m pytest -q -k "not standalone"
       - name: Public snapshot checks
         run: .venv/Scripts/python scripts/audit_public.py
-      - uses: actions/upload-artifact@v4
-        with:
-          name: FreeShip-MCP-Windows-x64
-          path: |
-            dist/*.whl
-            dist/*.tar.gz
-            dist/*.zip

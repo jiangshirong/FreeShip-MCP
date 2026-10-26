@@ -17,13 +17,16 @@ A Windows MCP server for FreeShip model inspection, control-net editing, hull tr
 
 **Platform:** Windows 10/11 x64. **Transport:** stdio.
 
-Download `FreeShip-MCP-Windows-x64.zip` from [Releases](https://github.com/jiangshirong/FreeShip-MCP/releases), then extract it. The standalone package includes the runtime and calculation engine.
-
-Alternatively, install the Windows wheel with Python 3.11 or later:
+Install from source with Python 3.11 or later:
 
 ```powershell
+git clone https://github.com/jiangshirong/FreeShip-MCP.git
+cd FreeShip-MCP
 py -3.11 -m venv .venv
-.venv\Scripts\python -m pip install .\freeship_mcp-0.3.2-py3-none-win_amd64.whl
+.venv\Scripts\python -m pip install -r requirements-dev.lock
+.venv\Scripts\python -m pip install --no-deps --no-build-isolation -e .
+scripts\bootstrap-toolchain.ps1
+scripts\build-engine.ps1
 ```
 
 ## Configuration
@@ -34,14 +37,14 @@ Create a workspace directory and add the server to your MCP client configuration
 {
   "mcpServers": {
     "freeship": {
-      "command": "C:\\MCP\\freeship-mcp\\freeship-mcp.exe",
+      "command": "C:\\MCP\\FreeShip-MCP\\.venv\\Scripts\\freeship-mcp.exe",
       "args": ["--workspace", "C:\\HullWork", "--timeout", "120"]
     }
   }
 }
 ```
 
-For a wheel installation, use `.venv\Scripts\freeship-mcp.exe` as the command.
+Set `command` to the absolute path of `.venv\Scripts\freeship-mcp.exe` in your checkout.
 
 | Option | Description |
 |---|---|
@@ -96,7 +99,6 @@ py -3.11 -m venv .venv
 scripts\bootstrap-toolchain.ps1
 scripts\build-engine.ps1
 .venv\Scripts\python -m pytest -q
-scripts\package-windows.ps1
 ```
 
 The build uses Free Pascal 3.2.2 and Lazarus 3.2. Pinned upstream sources and build instructions are included in the repository; see [UPSTREAM.json](UPSTREAM.json) and [upstream changes](docs/upstream-changes.md).

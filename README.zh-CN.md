@@ -17,13 +17,16 @@
 
 **平台：** Windows 10/11 x64。**通信方式：** stdio。
 
-从 [Releases](https://github.com/jiangshirong/FreeShip-MCP/releases) 下载并解压 `FreeShip-MCP-Windows-x64.zip`。独立包包含运行环境和计算引擎。
-
-也可使用 Python 3.11 及以上版本安装 Windows wheel：
+使用 Python 3.11 及以上版本从源码安装：
 
 ```powershell
+git clone https://github.com/jiangshirong/FreeShip-MCP.git
+cd FreeShip-MCP
 py -3.11 -m venv .venv
-.venv\Scripts\python -m pip install .\freeship_mcp-0.3.2-py3-none-win_amd64.whl
+.venv\Scripts\python -m pip install -r requirements-dev.lock
+.venv\Scripts\python -m pip install --no-deps --no-build-isolation -e .
+scripts\bootstrap-toolchain.ps1
+scripts\build-engine.ps1
 ```
 
 ## 配置
@@ -34,14 +37,14 @@ py -3.11 -m venv .venv
 {
   "mcpServers": {
     "freeship": {
-      "command": "C:\\MCP\\freeship-mcp\\freeship-mcp.exe",
+      "command": "C:\\MCP\\FreeShip-MCP\\.venv\\Scripts\\freeship-mcp.exe",
       "args": ["--workspace", "C:\\HullWork", "--timeout", "120"]
     }
   }
 }
 ```
 
-使用 wheel 安装时，将 command 改为 `.venv\Scripts\freeship-mcp.exe` 的绝对路径。
+将 command 改为实际源码目录中 `.venv\Scripts\freeship-mcp.exe` 的绝对路径。
 
 | 参数 | 说明 |
 |---|---|
@@ -96,7 +99,6 @@ py -3.11 -m venv .venv
 scripts\bootstrap-toolchain.ps1
 scripts\build-engine.ps1
 .venv\Scripts\python -m pytest -q
-scripts\package-windows.ps1
 ```
 
 构建使用 Free Pascal 3.2.2 和 Lazarus 3.2。仓库包含固定版本的上游源码及构建说明，见 [UPSTREAM.json](UPSTREAM.json) 和[上游修改记录](docs/upstream-changes.md)。
