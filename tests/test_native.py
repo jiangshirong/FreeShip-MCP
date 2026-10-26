@@ -45,13 +45,13 @@ def test_native_boundary_export_includes_deck_without_sections(engine):
 
 def test_native_roundtrip_and_binary_identity(engine):
     original = engine.workspace / "箱体-Корпус.fbm"
-    result = run(engine.call("save_model", original.name, output_path="identity.fbm"))
+    result = run(engine.call("save_model", original.name, output_path="identity.fbm", output_version=0))
     assert result["byte_identical_native_roundtrip"]
     assert original.read_bytes() == (engine.workspace / "identity.fbm").read_bytes()
     for version in (335, 462):
         name = f"box-{version}.ftm"
         run(engine.call("save_model", original.name, output_path=name, output_version=version))
-        run(engine.call("save_model", name, output_path=f"box-{version}.fbm"))
+        run(engine.call("save_model", name, output_path=f"box-{version}.fbm", output_version=0))
         for saved in (name, f"box-{version}.fbm"):
             h = run(engine.call("calculate_hydrostatics", saved, draft_m=4))
             assert h["volume_geometry_m3"] == pytest.approx(480, rel=2e-6)

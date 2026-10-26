@@ -23,10 +23,10 @@ from .engine import file_identity
 
 
 def create_server(engine: Engine) -> MCPServer:
-    mcp = MCPServer("FreeShip MCP", version="0.3.1", instructions=(
+    mcp = MCPServer("FreeShip MCP", version="0.3.2", instructions=(
         "Native FreeShip geometry and hydrostatics on Windows. All public physical inputs use metres, "
         "metric tonnes and degrees. All paths are confined to the configured workspace. "
-        "Do not infer empirical values or LCB targets. Outputs never overwrite existing files."))
+        "Do not infer empirical values or LCB targets. Model outputs default to fv335. Output filenames are exactly those specified by output_path; do not append version labels. Outputs never overwrite existing files."))
 
     async def progress(ctx: Context, fraction: float, message: str):
         await ctx.report_progress(fraction, total=1, message=message)
@@ -59,7 +59,7 @@ def create_server(engine: Engine) -> MCPServer:
 
     @safe_tool()
     async def edit_control_net(model_path: str, output_path: str, expected_model_sha256: str,
-                               edit: LocalEdit, allow_locked: bool = False, encoding: str = "cp1252") -> dict:
+                               edit: LocalEdit, allow_locked: bool = False, encoding: str = "cp1252", output_version: int = 335) -> dict:
         """Apply one explicit local native edit to a new model, then validate and reload it.
         Inspect include_control_net first; use its provenance.model.sha256 and current point/edge/face indices.
         Supports point movement/alignment/relaxation, edge split/crease and face split/add/delete.
@@ -69,7 +69,7 @@ def create_server(engine: Engine) -> MCPServer:
         if not re.fullmatch(r"[0-9a-f]{64}",expected_model_sha256):
             raise ValueError("expected_model_sha256 must be the lowercase SHA-256 from inspect_model")
         return await engine.call("edit_control_net", model_path, output_path=output_path,
-            expected_model_sha256=expected_model_sha256, edit=edit.model_dump(exclude_none=True),
+            expected_model_sha256=expected_model_sha256, output_version=output_version, edit=edit.model_dump(exclude_none=True),
             allow_locked=allow_locked, encoding=encoding)
 
     @safe_tool()
@@ -139,8 +139,8 @@ def create_server(engine: Engine) -> MCPServer:
                 "scope": "Hash consistency only; not proof of geometry validity or manifest authenticity"}
 
     @safe_tool()
-    async def save_model(model_path: str, output_path: str, output_version: int = 0, encoding: str = "cp1252") -> dict:
-        """Save/reload a new FBM or FTM. Version 0 preserves; 335/462 are explicit. Unsupported downgrade fails."""
+    async def save_model(model_path: str, output_path: str, output_version: int = 335, encoding: str = "cp1252") -> dict:
+        """Save/reload a new model. Default format is fv335; output_path determines the filename and FBM/FTM extension. Explicit output_version=0 preserves, 462 selects fv462. Unsupported downgrade fails."""
         return await engine.call("save_model", model_path, output_path=output_path, output_version=output_version, encoding=encoding)
 
     @safe_tool()
@@ -151,7 +151,7 @@ def create_server(engine: Engine) -> MCPServer:
                           x_offset_m: float = 0, z_cut_m: float | None = None,
                           z_above_factor: float | None = None, project_name: str | None = None,
                           project_designer: str | None = None, project_comment: str | None = None,
-                          point_updates: list[dict] | None = None) -> dict:
+                          point_updates: list[dict] | None = None, output_version: int = 335) -> dict:
         """Native XYZ scaling. Optional project dimensions explicitly set design metadata after geometry scaling.
         Otherwise stored dimensions scale with the mesh. x_offset_m translates the scaled mesh along x.
         Existing sections remain fixed; regenerate explicitly.
@@ -191,7 +191,7 @@ def create_server(engine: Engine) -> MCPServer:
                     if key!="index":finite(value,key)
             settings["point_updates"]=point_updates
         return await engine.call("scale_model", model_path, output_path=output_path,
-                                 x_factor=x_factor, y_factor=y_factor, z_factor=z_factor,
+                                 x_factor=x_factor, y_factor=y_factor, z_factor=z_factor, output_version=output_version,
                                  allow_locked=allow_locked, scale_markers=scale_markers, encoding=encoding,
                                  x_offset_m=x_offset_m, **settings)
 
@@ -199,7 +199,7 @@ def create_server(engine: Engine) -> MCPServer:
     async def rebuild_hull(model_path: str, output_path: str, displacement_t: float, lcb_value: float,
                            lcb_reference: str, layer_indices: list[int], ctx: Context,
                            block_coefficient: float | None = None, max_iterations: int = 15,
-                           allow_locked: bool = False, encoding: str = "cp1252") -> dict:
+                           allow_locked: bool = False, encoding: str = "cp1252", output_version: int = 335) -> dict:
         """Native Lackenby transform. lcb_reference is aft_perpendicular_m or midship_forward_fraction.
         Select layers explicitly. Optional Cb must agree with target raw volume / stored LBT.
         Reports native SAC convergence separately from recalculated 3D hydrostatic residuals.
@@ -226,7 +226,7 @@ def create_server(engine: Engine) -> MCPServer:
                 raise ValueError(f"Conflicting targets: target displacement implies stored-dimension Cb={implied:.8g}")
         return await engine.call("rebuild_hull", model_path, output_path=output_path,
                                  displacement_t=displacement_t, lcb_ap_m=lcb_m, layer_indices=layer_indices,
-                                 max_iterations=max_iterations, allow_locked=allow_locked, encoding=encoding,
+                                 max_iterations=max_iterations, allow_locked=allow_locked, output_version=output_version, encoding=encoding,
                                  progress=lambda f, m: progress(ctx, f, m))
 
     @safe_tool()
@@ -235,7 +235,7 @@ def create_server(engine: Engine) -> MCPServer:
                                 station_range_m: list[float] | None = None,
                                 waterline_range_m: list[float] | None = None,
                                 buttock_range_m: list[float] | None = None,
-                                replace_existing: bool = True, encoding: str = "cp1252") -> dict:
+                                replace_existing: bool = True, encoding: str = "cp1252", output_version: int = 335) -> dict:
         """Native sections at x/z/y positions, or [start,end,step] ranges in metres. A range includes its end only if the grid hits it."""
         stations_m = positions(stations_m, station_range_m, "stations")
         waterlines_m = positions(waterlines_m, waterline_range_m, "waterlines")
@@ -244,7 +244,7 @@ def create_server(engine: Engine) -> MCPServer:
             raise ValueError("Provide at least one section position")
         return await engine.call("generate_sections", model_path, output_path=output_path,
                                  stations_m=stations_m, waterlines_m=waterlines_m, buttocks_m=buttocks_m,
-                                 replace_existing=replace_existing, encoding=encoding)
+                                 replace_existing=replace_existing, output_version=output_version, encoding=encoding)
 
     @safe_tool()
     async def calculate_hydrostatics(model_path: str, draft_m: float, trim_m: float = 0,

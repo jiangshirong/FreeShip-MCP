@@ -23,7 +23,7 @@ Alternatively, install the Windows wheel with Python 3.11 or later:
 
 ```powershell
 py -3.11 -m venv .venv
-.venv\Scripts\python -m pip install .\freeship_mcp-0.3.1-py3-none-win_amd64.whl
+.venv\Scripts\python -m pip install .\freeship_mcp-0.3.2-py3-none-win_amd64.whl
 ```
 
 ## Configuration
@@ -74,7 +74,9 @@ Paths are restricted to the configured workspace. Outputs use new filenames. Log
 
 API physical units are metres, metric tonnes and degrees; areas and volumes use m² and m³. Legacy FBM text encoding supports `cp1252`, `cp1251` and `utf8`.
 
-Local edits require the model SHA-256 returned by inspection. Target values and tolerances are explicit inputs. Version 0.3.1 uses native protocol 3; update the server and engine together.
+Local edits require the model SHA-256 returned by inspection. Target values and tolerances are explicit inputs. Version 0.3.2 uses native protocol 3; update the server and engine together.
+
+Model-writing tools default to `output_version: 335`. Use `0` to preserve the input version or `462` to select fv462. `output_path` is used exactly as specified, without version suffixes.
 
 ## Documentation
 

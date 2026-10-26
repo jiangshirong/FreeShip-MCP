@@ -29,8 +29,8 @@ ASCII 路径的目录联接，实际源码仍在原项目中，不移动原文�
 
 | 文件 | 内容 |
 |---|---|
-| `dist/freeship_mcp-0.3.1-py3-none-win_amd64.whl` | Python MCP 包、原生引擎和许可证 |
-| `dist/freeship_mcp-0.3.1.tar.gz` | 对应应用源码、上游源码及构建脚本 |
+| `dist/freeship_mcp-0.3.2-py3-none-win_amd64.whl` | Python MCP 包、原生引擎和许可证 |
+| `dist/freeship_mcp-0.3.2.tar.gz` | 对应应用源码、上游源码及构建脚本 |
 | `dist/FreeShip-MCP-Windows-x64.zip` | 可直接运行的程序，包含 Python 运行环境及引擎 |
 | `dist/FreeShip-MCP-corresponding-source.tar.gz` | 应用源码及构建所用 Lazarus/LCL、FPC 运行库与包源码 |
 

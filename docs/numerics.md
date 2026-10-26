@@ -108,3 +108,7 @@ JSON `\uXXXX` escape sequences represent the same path. Model paths support
 Unicode directory and file names; they are independent of the legacy FBM text
 encoding setting. Version 0.3.1 fixes truncation of consecutive Unicode escapes
 in the pinned FPC scanner; update the bundled native engine with the server.
+
+## Default model output format
+
+All model-writing MCP tools default to fv335. `output_version=0` preserves the input format; `462` explicitly selects fv462. The filename and FBM/FTM extension follow `output_path` unchanged. Unsupported downgrades fail instead of discarding data.

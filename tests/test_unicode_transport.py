@@ -32,7 +32,7 @@ def test_json_unicode_input_and_output_paths(tmp_path,native_engine,escaped,abso
     source=workspace/filename;shutil.copy2(ROOT/'examples/box.fbm',source)
     target=workspace/('另存-🚢-'+filename)
     request=dict(operation='save_model',model_path=str(source) if absolute else source.name,
-                 output_path=str(target) if absolute else target.name)
+                 output_path=str(target) if absolute else target.name,output_version=0)
     native(native_engine,workspace,request,escaped)
     assert target.read_bytes()==source.read_bytes()
     h=native(native_engine,workspace,dict(operation='calculate_hydrostatics',model_path=str(target) if absolute else target.name,draft_m=4),escaped)

@@ -13,6 +13,7 @@ from typing import Any, Awaitable, Callable
 
 UPSTREAM_COMMIT = "1de17e99fb2b1cc559cdf27c5cafb595a627a641"
 PROTOCOL_VERSION = 3
+MODEL_OUTPUT_OPERATIONS = frozenset({"save_model", "scale_model", "edit_control_net", "rebuild_hull", "generate_sections"})
 
 
 def file_identity(path: Path) -> dict:
@@ -121,6 +122,10 @@ class Engine:
         if encoding not in {"cp1251", "cp1252", "utf8"}:
             raise ValueError("encoding must be cp1251, cp1252, or utf8")
         model = self.path(model_path)
+        if operation in MODEL_OUTPUT_OPERATIONS:
+            version = params.setdefault("output_version", 335)
+            if type(version) is not int or version not in (0, 335, 462):
+                raise ValueError("output_version must be 0 (preserve), 335, or 462")
         identity = file_identity(model)
         expected = params.get("expected_model_sha256")
         if expected is not None and expected != identity["sha256"]:

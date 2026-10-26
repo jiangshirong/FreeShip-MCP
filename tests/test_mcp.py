@@ -33,6 +33,11 @@ def test_real_stdio_full_chain(tmp_path, runtime):
                 await client.initialize()
                 tools = await client.list_tools()
                 assert len(tools.tools) == 15
+                model_tools={'save_model','scale_model','edit_control_net','generate_sections','rebuild_hull'}
+                for tool in json.loads(tools.model_dump_json(by_alias=True))['tools']:
+                    if tool['name'] in model_tools:
+                        assert tool['inputSchema']['properties']['output_version']['default']==335
+                        assert 'output_path' in tool['inputSchema']['required']
                 async def call(name, **kwargs):
                     result = await client.call_tool(name, kwargs)
                     assert not result.is_error, result
@@ -60,7 +65,10 @@ def test_real_stdio_full_chain(tmp_path, runtime):
                     waterlines_m=[1],max_turn_degrees=180)
                 assert partial['status']=='incomplete' and partial['curve_checks']=='partial'
                 await call("validate_model", model_path="hull.fbm")
-                await call("save_model", model_path="hull.fbm", output_path="saved.ftm")
+                saved=await call("save_model", model_path="hull.fbm", output_path="saved.ftm")
+                assert saved['output_format_version']=='fv335' and Path(saved['output_path']).name=='saved.ftm'
+                override=await call('save_model',model_path='hull.fbm',output_path='explicit.fbm',output_version=462)
+                assert override['output_format_version']=='fv462'
                 await call("scale_model", model_path="saved.ftm", output_path="scaled.fbm", x_factor=1.1, y_factor=1.1, z_factor=1.1)
                 h = await call("calculate_hydrostatics", model_path="scaled.fbm", draft_m=3.3)
                 check = await call("verify_model_targets", model_path="scaled.fbm", draft_m=3.3,

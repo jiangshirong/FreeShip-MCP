@@ -322,6 +322,11 @@ begin
   if R.Get('crease_edges',False) then
     for I:=0 to M.Surface.NumberOfControlEdges-1 do M.Surface.ControlEdge[I].Crease:=True;
   for I:=0 to M.Surface.NumberOfControlFaces-1 do M.Surface.ControlFace[I].Layer:=M.ActiveLayer;
+  if R.Find('point_names')<>nil then begin
+    V:=R.Arrays['point_names'];
+    if V.Count<>M.Surface.NumberOfControlPoints then raise Exception.Create('Point name count mismatch');
+    for I:=0 to V.Count-1 do M.Surface.ControlPoint[I].Name:=V.Strings[I];
+  end;
   if R.Find('locked_point_indices')<>nil then begin
     V:=R.Arrays['locked_point_indices'];for I:=0 to V.Count-1 do begin
       Index:=V.Integers[I];if (Index<0) or (Index>=M.Surface.NumberOfControlPoints) then raise Exception.Create('Invalid lock index');
@@ -424,14 +429,14 @@ begin
  finally Active.Free;end;
 end;
 function ExecuteRequest(Request: TJSONObject): TJSONObject;
-var M: TFreeShip; Op,Path: String; I,J: Integer; F,TargetVol,TargetMass,LCB,UpperCut,UpperFactor: Double;
+var M: TFreeShip; Op,Path: String; I,J,OutputVersion: Integer; F,TargetVol,TargetMass,LCB,UpperCut,UpperFactor: Double;
     A: TJSONArray; Selected: array of Boolean; Transform: THeadlessLackenby; Success: Boolean;
     P: T3DCoordinate; H,PointUpdate: TJSONObject; Results: TJSONArray;
 begin
   Op:=Request.Get('operation','');
   if Op='engine_info' then
   begin
-    Result:=TJSONObject.Create; Result.Add('version','0.3.1'); Result.Add('protocol_version',3);
+    Result:=TJSONObject.Create; Result.Add('version','0.3.2'); Result.Add('protocol_version',3);
     Result.Add('upstream_commit','1de17e99fb2b1cc559cdf27c5cafb595a627a641'); Result.Add('headless',True);
     Result.Add('float_type','IEEE 754 single (upstream)');
     Result.Add('operations',TJSONArray.Create(['inspect_model','validate_model','save_model','scale_model',
@@ -612,7 +617,8 @@ begin
       if Op<>'inspect_model' then
       begin
         Path:=Request.Get('output_path',''); if Path='' then raise Exception.Create('output_path is required');
-        SaveModel(M,Path,Request.Get('output_version',0)); Result.Add('output_path',Path);
+        if (Op='create_box') or (Op='create_mesh') then OutputVersion:=0 else OutputVersion:=335;
+        SaveModel(M,Path,Request.Get('output_version',OutputVersion)); Result.Add('output_path',Path);
       end;
     end;
   finally M.Free; end;

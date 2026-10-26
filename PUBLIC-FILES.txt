@@ -185,6 +185,7 @@ tests/test_invariants.py
 tests/test_local_editing.py
 tests/test_mcp.py
 tests/test_native.py
+tests/test_output_defaults.py
 tests/test_unicode_transport.py
 tests/test_verification.py
 vendor-manifest.json

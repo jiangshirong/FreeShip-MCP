@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "freeship-mcp"
-version = "0.3.1"
+version = "0.3.2"
 description = "Windows local MCP for the native FreeShip hull geometry and hydrostatics engine"
 readme = "README.md"
 requires-python = ">=3.11"
