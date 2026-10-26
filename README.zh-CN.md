@@ -23,7 +23,7 @@
 
 ```powershell
 py -3.11 -m venv .venv
-.venv\Scripts\python -m pip install .\freeship_mcp-0.3.0-py3-none-win_amd64.whl
+.venv\Scripts\python -m pip install .\freeship_mcp-0.3.1-py3-none-win_amd64.whl
 ```
 
 ## 配置
@@ -74,7 +74,7 @@ py -3.11 -m venv .venv
 
 接口物理量使用米、吨和度，面积与体积使用平方米和立方米。旧 FBM 文本编码支持 `cp1252`、`cp1251`、`utf8`。
 
-局部编辑须携带模型检查返回的 SHA-256。目标值和容差由调用参数指定。0.3.0 使用原生协议 3，服务与引擎须配套更新。
+局部编辑须携带模型检查返回的 SHA-256。目标值和容差由调用参数指定。0.3.1 使用原生协议 3，服务与引擎须配套更新。
 
 ## 文档
 

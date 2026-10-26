@@ -1,0 +1,8 @@
+{
+  "component": "Free Pascal fcl-json jsonscanner",
+  "version": "3.2.2",
+  "original_source": "packages/fcl-json/src/jsonscanner.pp",
+  "original_normalized_sha256": "d9c6874d0c99a0031ca35d404bc652ea9e171a65359adc2c0f9915a58e04d8a6",
+  "patched_normalized_sha256": "cb98a2cd48abb3b58e6af658743df3cfda5575b4471583722d1a788f607a43ed",
+  "change": "Increase the Unicode escape-pair temporary buffer from 4 to 6 bytes. Two BMP Unicode code units can require 6 UTF-8 bytes."
+}

@@ -431,7 +431,7 @@ begin
   Op:=Request.Get('operation','');
   if Op='engine_info' then
   begin
-    Result:=TJSONObject.Create; Result.Add('version','0.3.0'); Result.Add('protocol_version',3);
+    Result:=TJSONObject.Create; Result.Add('version','0.3.1'); Result.Add('protocol_version',3);
     Result.Add('upstream_commit','1de17e99fb2b1cc559cdf27c5cafb595a627a641'); Result.Add('headless',True);
     Result.Add('float_type','IEEE 754 single (upstream)');
     Result.Add('operations',TJSONArray.Create(['inspect_model','validate_model','save_model','scale_model',

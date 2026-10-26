@@ -37,3 +37,12 @@ subdivision mathematics. `HeadlessModel.pas` exposes full control-net tables, sa
 native knuckles, selected-layer subdivided boundaries/creases and view silhouettes.
 Preview section changes are in memory only. `quality.py` computes documented discrete
 sample diagnostics, not a replacement native hydrostatic or fairing solver.
+
+## JSON transport fix in 0.3.1
+
+The pinned FPC 3.2.2 scanner truncates some consecutive JSON `\uXXXX` escapes.
+`vendor/fpc-json/jsonscanner.pp` increases its temporary escape-pair buffer from
+four to six bytes. The engine explicitly searches this unit before compiler
+units. Original and patched hashes, the single-line change and licenses are
+included in that folder. Geometry, hydrostatics and model text encodings are
+unchanged. Both literal UTF-8 and JSON-escaped paths are regression tested.

@@ -14,3 +14,5 @@ prune .build
 prune .venv
 prune dist
 prune build
+
+recursive-include vendor/fpc-json *.pp *.json *.md COPYING.*

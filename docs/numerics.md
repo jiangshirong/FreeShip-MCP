@@ -100,3 +100,11 @@ numbers with spreadsheet serialization precision and uses number formats for dis
 Validation reports native leak candidates, nonmanifold edges and inconsistent
 adjacent normals. It does not repair the model automatically or prove the absence
 of global self-intersections. Open deck edges above the requested waterplane can be valid.
+
+## JSON transport and file paths
+
+Native requests and responses use UTF-8 JSON. Literal Unicode characters and
+JSON `\uXXXX` escape sequences represent the same path. Model paths support
+Unicode directory and file names; they are independent of the legacy FBM text
+encoding setting. Version 0.3.1 fixes truncation of consecutive Unicode escapes
+in the pinned FPC scanner; update the bundled native engine with the server.

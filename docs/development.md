@@ -29,8 +29,8 @@ or deletes the original project.
 
 ## Outputs
 
-- `dist/freeship_mcp-0.3.0-py3-none-win_amd64.whl`: Python MCP package with engine and notices.
-- `dist/freeship_mcp-0.3.0.tar.gz`: matching application source, vendored FreeShip and build scripts.
+- `dist/freeship_mcp-0.3.1-py3-none-win_amd64.whl`: Python MCP package with engine and notices.
+- `dist/freeship_mcp-0.3.1.tar.gz`: matching application source, vendored FreeShip and build scripts.
 - `dist/FreeShip-MCP-Windows-x64.zip`: standalone program, bundled Python runtime and native engine.
 - `dist/standalone/freeship-mcp/freeship-mcp.exe`: unpacked standalone entry point.
 - `dist/FreeShip-MCP-corresponding-source.tar.gz`: matching application archive plus the

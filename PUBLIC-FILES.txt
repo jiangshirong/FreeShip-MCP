@@ -185,8 +185,14 @@ tests/test_invariants.py
 tests/test_local_editing.py
 tests/test_mcp.py
 tests/test_native.py
+tests/test_unicode_transport.py
 tests/test_verification.py
 vendor-manifest.json
+vendor/fpc-json/COPYING.FPC
+vendor/fpc-json/COPYING.LGPL
+vendor/fpc-json/PATCH.json
+vendor/fpc-json/README.md
+vendor/fpc-json/jsonscanner.pp
 vendor/freeship/.gitignore
 vendor/freeship/COPYING
 vendor/freeship/Cursors/colorpicker-32.cur

@@ -4,3 +4,6 @@ Upstream: https://github.com/markmal/freeship-plus-in-lazarus
 Commit: 1de17e99fb2b1cc559cdf27c5cafb595a627a641
 Original per-file copyright and license notices remain authoritative.
 See vendor/freeship/copyright, COPYING, and license texts.
+
+Contains the Free Pascal 3.2.2 fcl-json scanner with a UTF-8 escape-buffer fix.
+See vendor/fpc-json/PATCH.json, COPYING.FPC and COPYING.LGPL.

@@ -23,7 +23,7 @@ from .engine import file_identity
 
 
 def create_server(engine: Engine) -> MCPServer:
-    mcp = MCPServer("FreeShip MCP", version="0.3.0", instructions=(
+    mcp = MCPServer("FreeShip MCP", version="0.3.1", instructions=(
         "Native FreeShip geometry and hydrostatics on Windows. All public physical inputs use metres, "
         "metric tonnes and degrees. All paths are confined to the configured workspace. "
         "Do not infer empirical values or LCB targets. Outputs never overwrite existing files."))

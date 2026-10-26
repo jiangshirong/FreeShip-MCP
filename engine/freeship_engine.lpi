@@ -16,7 +16,7 @@
     <Target><Filename Value="../src/freeship_mcp/bin/freeship-engine.exe"/></Target>
     <SearchPaths>
       <IncludeFiles Value="../vendor/freeship;../vendor/freeship/Units;../vendor/freeship/Forms"/>
-      <OtherUnitFiles Value="../vendor/freeship/Units;../vendor/freeship/Forms"/>
+      <OtherUnitFiles Value="../vendor/fpc-json;../vendor/freeship/Units;../vendor/freeship/Forms"/>
       <UnitOutputDirectory Value="../.build/units"/>
     </SearchPaths>
     <Parsing><SyntaxOptions><SyntaxMode Value="objfpc"/></SyntaxOptions></Parsing>

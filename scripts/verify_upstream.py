@@ -14,3 +14,11 @@ for name in ("FreeHydrostaticCalc.inc", "FreeIntersection.inc", "FreeSubdivision
     if item["sha256"] != item["upstream_sha256"]:
         raise SystemExit(f"Numerical source changed: {name}")
 print(f"Verified {len(manifest['files'])} vendor files and unchanged native numerical methods")
+
+patch = json.loads((ROOT / "vendor/fpc-json/PATCH.json").read_text(encoding="utf-8"))
+scanner = (ROOT / "vendor/fpc-json/jsonscanner.pp").read_text(encoding="utf-8")
+assert hashlib.sha256(scanner.encode()).hexdigest() == patch["patched_normalized_sha256"]
+assert scanner.count("S : String[6];") == 1
+original_scanner = scanner.replace("S : String[6];", "S : String[4];")
+assert hashlib.sha256(original_scanner.encode()).hexdigest() == patch["original_normalized_sha256"]
+print("Verified the isolated fcl-json Unicode escape buffer patch")
