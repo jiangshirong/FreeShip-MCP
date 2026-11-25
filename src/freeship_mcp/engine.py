@@ -13,6 +13,7 @@ from typing import Any, Awaitable, Callable
 
 UPSTREAM_COMMIT = "1de17e99fb2b1cc559cdf27c5cafb595a627a641"
 PROTOCOL_VERSION = 3
+MAX_MODEL_BYTES = 256 * 1024 * 1024
 MODEL_OUTPUT_OPERATIONS = frozenset({"save_model", "scale_model", "edit_control_net", "rebuild_hull", "generate_sections"})
 
 
@@ -25,18 +26,19 @@ class EngineError(RuntimeError):
     """A native calculation or its verification failed."""
 
 
-class Engine:
-    def __init__(self, workspace: Path, executable: Path | None = None, timeout: float = 120):
+class LocalEngine:
+    def __init__(self, workspace: Path, executable: Path, timeout: float):
         self.workspace = workspace.resolve(strict=True)
         if not self.workspace.is_dir():
             raise ValueError("Workspace must be a directory")
-        self.executable = executable or Path(__file__).parent / "bin" / "freeship-engine.exe"
-        self.executable = self.executable.resolve(strict=True)
+        self.executable = executable.resolve(strict=True)
+        if not self.executable.is_file():
+            raise ValueError("Engine executable must be a file")
         if not 0 < timeout <= 3600:
             raise ValueError("Timeout must be in (0, 3600] seconds")
         self.timeout = timeout
 
-    def path(self, name: str, *, output: bool = False, suffixes: tuple[str, ...] = (".fbm", ".ftm")) -> Path:
+    def path(self, name: str, *, output: bool = False, suffixes: tuple[str, ...] | None = (".fbm", ".ftm")) -> Path:
         if not name or "\x00" in name:
             raise ValueError("A nonempty file path is required")
         p = Path(name)
@@ -45,16 +47,21 @@ class Engine:
         p = p.resolve(strict=False)
         if not p.is_relative_to(self.workspace) or p == self.workspace:
             raise ValueError("File must be inside the configured workspace")
-        if p.suffix.lower() not in suffixes:
+        if suffixes is not None and p.suffix.lower() not in suffixes:
             raise ValueError(f"Expected one of: {', '.join(suffixes)}")
         if output:
             if not p.parent.is_dir():
                 raise ValueError("Output parent directory must already exist")
             if p.exists():
                 raise FileExistsError("Output exists; choose a new filename")
-        elif not p.is_file() or p.stat().st_size > 256 * 1024 * 1024:
+        elif not p.is_file() or p.stat().st_size > MAX_MODEL_BYTES:
             raise ValueError("Input must be a regular file of at most 256 MiB")
         return p
+
+
+class Engine(LocalEngine):
+    def __init__(self, workspace: Path, executable: Path | None = None, timeout: float = 120):
+        super().__init__(workspace, executable or Path(__file__).parent / "bin" / "freeship-engine.exe", timeout)
 
     async def raw(self, request: dict[str, Any], progress: Callable[[float, str], Awaitable[None]] | None = None) -> dict:
         # The engine is a console binary. No desktop application or UI API is used.

@@ -10,16 +10,193 @@ from pathlib import Path
 import sys
 import tempfile
 from functools import wraps
+from typing import Literal
 from mcp.server import MCPServer
 from mcp.server.mcpserver import Context
 from mcp.server.mcpserver.exceptions import ToolError
 from .engine import Engine, EngineError, finite, positions
+from .fs26 import FS26Engine
+from .fs26_analysis import Angles, LoadingBook, PerformanceMethod, ResistanceMethod, SpeedRange, Values
+from .fs26_editing import Dimension, EntityIds, FS26Edit, GridSize, Lackenby
+from .fs26_workflow import DesignBrief, run_design_brief as assess_design_brief
 from .exporters import hydrostatics_report, linesplan_dxf
 from .verification import Target, verify_targets
 from .editing import LocalEdit
 from .quality import AlignmentRule, analyze_geometry
 from .linesplan import LinesplanOptions
 from .engine import file_identity
+
+
+def tool_registration(mcp: MCPServer):
+    def register(function):
+        @wraps(function)
+        async def guarded(*args, **kwargs):
+            try:
+                return await function(*args, **kwargs)
+            except (ValueError, OSError, EngineError) as exc:
+                raise ToolError(str(exc)) from exc
+        return mcp.tool()(guarded)
+    return register
+
+
+def create_fs26_server(engine: FS26Engine) -> MCPServer:
+    mcp = MCPServer("FreeShip 26 MCP", version="0.3.2", instructions=(
+        "FreeShip 26 native hull modeling and calculations. All files must be inside the configured workspace. "
+        "Inspect the source file for entity IDs, units and its SHA-256 before editing. Model outputs use new "
+        "FBM filenames. Coordinates, draft and trim use the model's metres or feet."
+    ))
+    tool = tool_registration(mcp)
+
+    @tool
+    async def engine_info() -> dict:
+        """Identify the FS26 backend, adapter API and supported operations."""
+        return await engine.check()
+
+    @tool
+    async def inspect_model(model_path: str, include_control_net: bool = False,
+                            include_lackenby_reference: bool = False) -> dict:
+        """Read a FS26 FBM or FTM. Optionally include the current entity IDs and native Lackenby target reference."""
+        return await engine.inspect(model_path, include_control_net, include_lackenby_reference)
+
+    @tool
+    async def validate_model(model_path: str) -> dict:
+        """Check native file parsing, document load and snapshot structure. Return native format warnings."""
+        return await engine.validate(model_path)
+
+    @tool
+    async def calculate_hydrostatics(model_path: str, draft: float, trim: float = 0,
+                                     heel_degrees: float = 0) -> dict:
+        """Calculate one native FS26 case. Draft is above the keel datum; draft and trim use model units."""
+        return await engine.hydrostatics(model_path, draft, trim, heel_degrees)
+
+    @tool
+    async def create_hull(output_path: str, length: Dimension, beam: Dimension, draft: Dimension,
+                          columns: GridSize, rows: GridSize, units: Literal["metric", "imperial"] = "metric") -> dict:
+        """Generate the native FS26 parametric hull template and verify a reloaded FBM. Columns run along the hull."""
+        return await engine.write_model(output_path, creation={
+            "length": length, "beam": beam, "draft": draft, "columns": columns, "rows": rows,
+            "units": 0 if units == "metric" else 1,
+        })
+
+    @tool
+    async def edit_control_net(model_path: str, output_path: str, expected_model_sha256: str, edit: FS26Edit) -> dict:
+        """Apply one native point, edge or face edit and save a new FBM after reloading and checking it.
+
+        Use the SHA-256 and IDs from inspect_model for this exact input file. Reinspect each output for its new IDs.
+        Position vectors use the document units. A split edge is divided at its midpoint. Relaxation averages
+        selected interior points toward their neighbours, preserving corners, creases and open boundaries.
+        """
+        return await engine.write_model(output_path, model_path=model_path,
+                                        expected_model_sha256=expected_model_sha256, edit=edit)
+
+    @tool
+    async def save_model(model_path: str, output_path: str, expected_model_sha256: str) -> dict:
+        """Save a FBM copy or convert an FTM to FBM. Verify the save receipt and reopen before publishing."""
+        return await engine.write_model(output_path, model_path=model_path, expected_model_sha256=expected_model_sha256)
+
+    @tool
+    async def rebuild_hull(model_path: str, output_path: str, expected_model_sha256: str, layer_ids: EntityIds,
+                           displacement: float, lcb: float, iterations: int = 30) -> dict:
+        """Apply native FS26 Lackenby to selected layers and return measurements from the reopened FBM.
+
+        Supply an explicit target displacement (metric tonnes or imperial long tons) and LCB (world X in
+        document units). Obtain a same-method baseline with inspect_model(include_lackenby_reference=true).
+        """
+        edit = Lackenby(layer_ids=layer_ids, displacement=displacement, lcb=lcb, iterations=iterations)
+        return await engine.write_model(output_path, model_path=model_path,
+                                        expected_model_sha256=expected_model_sha256, edit=edit)
+
+    @tool
+    async def export_linesplan_dxf(model_path: str, output_path: str) -> dict:
+        """Export the complete native FS26 lines plan using the file's stored section definitions."""
+        target = engine.path(output_path, output=True, suffixes=(".dxf",))
+        drawing, provenance = await engine.linesplan(model_path)
+        if engine.path(output_path, output=True, suffixes=(".dxf",)) != target:
+            raise EngineError("Output location changed during the request")
+        return await write_export(target, lambda path: {"bytes": path.write_bytes(drawing)}, provenance)
+
+    @tool
+    async def inspect_loading_book(model_path: str) -> dict:
+        """Read the native loading workbook saved in this FBM, including its format version."""
+        return await engine.inspect_loading(model_path)
+
+    @tool
+    async def save_loading_book(model_path: str, output_path: str, expected_model_sha256: str,
+                                loading_book: LoadingBook) -> dict:
+        """Store explicitly supplied load cases in a new, rechecked FBM without changing hull geometry.
+
+        Mass uses metric tonnes; coordinates, tank dimensions and GZ criteria use metres even on imperial hulls.
+        For a fixed item XYZ is the centre of gravity; for a tank it is the centre of its bottom.
+        Fill is a percentage and density is in t/m³.
+        """
+        return await engine.write_model(output_path, model_path=model_path, expected_model_sha256=expected_model_sha256,
+                                        loading_book=loading_book.native())
+
+    @tool
+    async def calculate_stability(model_path: str, heel_angles_degrees: Angles, free_trim: bool, trim: float = 0,
+                                  loading_book: LoadingBook | None = None) -> dict:
+        """Run native intact stability for each case. Use the saved book if no explicit book is supplied.
+
+        Trim and returned lengths and masses use native model units. The solver may add zero heel and
+        criterion angles. Rows that fail equilibrium carry status=error and retain the native explanation.
+        """
+        return await engine.stability(model_path, heel_angles_degrees, trim, free_trim,
+                                      loading_book.native() if loading_book is not None else None)
+
+    @tool
+    async def inspect_performance_inputs(model_path: str, calculator: PerformanceMethod,
+                                         extract: bool = False, values: Values | None = None) -> dict:
+        """List the FS26 solver fields with units, ranges, choices and effective values.
+
+        Use extract with resistance methods to obtain native hull measurements.
+        The resistance and propeller matching data is passed between stages by calculate_propulsion_chain.
+        """
+        return await engine.performance(model_path, calculator, values or {}, extract, defaults=True)
+
+    @tool
+    async def calculate_performance(model_path: str, calculator: PerformanceMethod,
+                                    values: Values, extract: bool = False) -> dict:
+        """Evaluate an explicit FS26 native resistance or Wageningen B-series calculation.
+
+        Consult inspect_performance_inputs for the native field names. Resistance uses
+        StartSpeedBox/EndSpeedBox/StepSpeedBox for the minimum, design and maximum speed in knots.
+        With extract enabled the native hull measurements replace the corresponding manual values.
+        """
+        return await engine.performance(model_path, calculator, values, extract)
+
+    @tool
+    async def calculate_propulsion_chain(model_path: str, resistance: ResistanceMethod, speeds: SpeedRange,
+                                         resistance_values: Values, propeller_values: Values,
+                                         passport_values: Values | None = None, extract_hull: bool = True) -> dict:
+        """Calculate resistance, B-series propeller matching and the propulsion operating curves in one FS26 session.
+
+        Specify the operating assumptions, including propeller count for resistance and RPM, blade count
+        and area ratio for matching. The native measured resistance and selected propeller feed the next stage.
+        """
+        return await engine.propulsion_chain(model_path, resistance, speeds, resistance_values, propeller_values,
+                                             passport_values or {}, extract_hull)
+
+    @tool
+    async def compare_resistance(baseline_path: str, candidate_path: str, calculator: ResistanceMethod,
+                                 speeds: SpeedRange, values: Values) -> dict:
+        """Extract geometry separately from two hulls, then compare resistance and effective power at a common speed.
+
+        Method, speed range and other effective calculation inputs must match. Native applicability limits apply.
+        """
+        return await engine.compare_resistance(baseline_path, candidate_path, calculator, speeds, values)
+
+    @tool
+    async def run_design_brief(model_path: str, output_directory: str, brief: DesignBrief, ctx: Context) -> dict:
+        """Evaluate edited variants of a metric seed hull against explicit preliminary design targets.
+
+        Assess the same loading cases for each variant. Run Fung resistance and B-series propulsion at the
+        selected load's upright midpoint draft, using the brief's trim and upright GZ limits for the even-keel
+        approximation. Select the lowest design-speed resistance among passing variants. Publish a fresh
+        directory with the brief, trace, candidate FBMs and the selected hull's native DXF if there is a pass.
+        """
+        return await assess_design_brief(engine, model_path, output_directory, brief, ctx.report_progress)
+
+    return mcp
 
 
 def create_server(engine: Engine) -> MCPServer:
@@ -31,33 +208,24 @@ def create_server(engine: Engine) -> MCPServer:
     async def progress(ctx: Context, fraction: float, message: str):
         await ctx.report_progress(fraction, total=1, message=message)
 
-    def safe_tool():
-        def register(function):
-            @wraps(function)
-            async def guarded(*args, **kwargs):
-                try:
-                    return await function(*args, **kwargs)
-                except (ValueError, OSError, EngineError) as exc:
-                    raise ToolError(str(exc)) from exc
-            return mcp.tool()(guarded)
-        return register
+    tool = tool_registration(mcp)
 
-    @safe_tool()
+    @tool
     async def engine_info() -> dict:
         """Return native engine version, pinned upstream revision and capabilities."""
         return await engine.check()
 
-    @safe_tool()
+    @tool
     async def inspect_model(model_path: str, encoding: str = "cp1252", include_control_net: bool = False) -> dict:
         """Read FBM/FTM. Separate project dimensions, geometry bounds and layer flags. include_control_net returns point/edge/face indices. encoding affects legacy FBM text."""
         return await engine.call("inspect_model", model_path, encoding=encoding, include_control_net=include_control_net)
 
-    @safe_tool()
+    @tool
     async def validate_model(model_path: str, encoding: str = "cp1252") -> dict:
         """Check topology, adjacent normals and native open-boundary leak candidates. Open deck above water is not automatically a defect."""
         return await engine.call("validate_model", model_path, encoding=encoding)
 
-    @safe_tool()
+    @tool
     async def edit_control_net(model_path: str, output_path: str, expected_model_sha256: str,
                                edit: LocalEdit, allow_locked: bool = False, encoding: str = "cp1252", output_version: int = 335) -> dict:
         """Apply one explicit local native edit to a new model, then validate and reload it.
@@ -72,7 +240,7 @@ def create_server(engine: Engine) -> MCPServer:
             expected_model_sha256=expected_model_sha256, output_version=output_version, edit=edit.model_dump(exclude_none=True),
             allow_locked=allow_locked, encoding=encoding)
 
-    @safe_tool()
+    @tool
     async def analyze_hull_quality(model_path: str, stations_m: list[float] | None = None,
                                    waterlines_m: list[float] | None = None, buttocks_m: list[float] | None = None,
                                    alignment_rules: list[AlignmentRule] | None = None,
@@ -106,7 +274,7 @@ def create_server(engine: Engine) -> MCPServer:
         result['sample_count']=sample_count
         return result
 
-    @safe_tool()
+    @tool
     async def verify_model_targets(model_path: str, draft_m: float, targets: list[Target],
                                    trim_m: float = 0, heel_degrees: float = 0,
                                    encoding: str = "cp1252") -> dict:
@@ -117,7 +285,7 @@ def create_server(engine: Engine) -> MCPServer:
         """
         return await verify_targets(engine, model_path, draft_m, targets, trim_m, heel_degrees, encoding)
 
-    @safe_tool()
+    @tool
     async def check_export_source(model_path: str, export_path: str) -> dict:
         """Compare an export's manifest hashes with the current model and artifact. Missing manifest is unverified."""
         model = engine.path(model_path)
@@ -138,12 +306,12 @@ def create_server(engine: Engine) -> MCPServer:
                 "provenance": manifest["provenance"],
                 "scope": "Hash consistency only; not proof of geometry validity or manifest authenticity"}
 
-    @safe_tool()
+    @tool
     async def save_model(model_path: str, output_path: str, output_version: int = 335, encoding: str = "cp1252") -> dict:
         """Save/reload a new model. Default format is fv335; output_path determines the filename and FBM/FTM extension. Explicit output_version=0 preserves, 462 selects fv462. Unsupported downgrade fails."""
         return await engine.call("save_model", model_path, output_path=output_path, output_version=output_version, encoding=encoding)
 
-    @safe_tool()
+    @tool
     async def scale_model(model_path: str, output_path: str, x_factor: float, y_factor: float,
                           z_factor: float, allow_locked: bool = False, scale_markers: bool = True,
                           encoding: str = "cp1252", project_length_m: float | None = None,
@@ -195,7 +363,7 @@ def create_server(engine: Engine) -> MCPServer:
                                  allow_locked=allow_locked, scale_markers=scale_markers, encoding=encoding,
                                  x_offset_m=x_offset_m, **settings)
 
-    @safe_tool()
+    @tool
     async def rebuild_hull(model_path: str, output_path: str, displacement_t: float, lcb_value: float,
                            lcb_reference: str, layer_indices: list[int], ctx: Context,
                            block_coefficient: float | None = None, max_iterations: int = 15,
@@ -229,7 +397,7 @@ def create_server(engine: Engine) -> MCPServer:
                                  max_iterations=max_iterations, allow_locked=allow_locked, output_version=output_version, encoding=encoding,
                                  progress=lambda f, m: progress(ctx, f, m))
 
-    @safe_tool()
+    @tool
     async def generate_sections(model_path: str, output_path: str, stations_m: list[float] | None = None,
                                 waterlines_m: list[float] | None = None, buttocks_m: list[float] | None = None,
                                 station_range_m: list[float] | None = None,
@@ -246,7 +414,7 @@ def create_server(engine: Engine) -> MCPServer:
                                  stations_m=stations_m, waterlines_m=waterlines_m, buttocks_m=buttocks_m,
                                  replace_existing=replace_existing, output_version=output_version, encoding=encoding)
 
-    @safe_tool()
+    @tool
     async def calculate_hydrostatics(model_path: str, draft_m: float, trim_m: float = 0,
                                      heel_degrees: float = 0, encoding: str = "cp1252") -> dict:
         """Calculate native hydrostatics. Draft is above the hull's lowest hydrostatic point; trim is fore-aft draft difference, positive bow down."""
@@ -254,7 +422,7 @@ def create_server(engine: Engine) -> MCPServer:
         return await engine.call("calculate_hydrostatics", model_path, draft_m=draft_m,
                                  trim_m=trim_m, heel_degrees=heel_degrees, encoding=encoding)
 
-    @safe_tool()
+    @tool
     async def calculate_hydrostatics_series(model_path: str, ctx: Context,
                                             drafts_m: list[float] | None = None,
                                             draft_range_m: list[float] | None = None,
@@ -271,7 +439,7 @@ def create_server(engine: Engine) -> MCPServer:
                                  trim_m=trim_m, heel_degrees=heel_degrees, encoding=encoding,
                                  progress=lambda f, m: progress(ctx, f, m))
 
-    @safe_tool()
+    @tool
     async def export_linesplan_dxf(model_path: str, output_path: str, encoding: str = "cp1252",
                                    options: LinesplanOptions | None = None) -> dict:
         """Export three views with native curves, true surface boundaries, mesh silhouettes, grids and labels.
@@ -285,7 +453,7 @@ def create_server(engine: Engine) -> MCPServer:
         provenance={**geometry['provenance'],'export':{'format':'.dxf','options':options.model_dump()}}
         return await write_export(target, lambda p: linesplan_dxf(p, geometry, options), provenance)
 
-    @safe_tool()
+    @tool
     async def export_hydrostatics(model_path: str, output_path: str, ctx: Context,
                                  drafts_m: list[float] | None = None,
                                  draft_range_m: list[float] | None = None,
@@ -337,7 +505,9 @@ async def write_export(target: Path, writer, provenance: dict) -> dict:
 def main():
     parser = argparse.ArgumentParser(description="Windows local FreeShip MCP (stdio)")
     parser.add_argument("--workspace", type=Path, required=True)
-    parser.add_argument("--engine", type=Path)
+    backend = parser.add_mutually_exclusive_group()
+    backend.add_argument("--engine", type=Path, help="Path to the legacy Lazarus engine")
+    backend.add_argument("--fs26-service", type=Path, help="Path to FreeShipDocumentService.exe in its FS26 runtime directory")
     parser.add_argument("--timeout", type=float, default=120)
     parser.add_argument("--check", action="store_true", help="Print engine compatibility check and exit")
     args = parser.parse_args()
@@ -345,14 +515,19 @@ def main():
         parser.error("This release supports Windows x64 only")
     logging.basicConfig(level=logging.INFO, stream=sys.stderr)
     try:
-        engine = Engine(args.workspace, args.engine, args.timeout)
+        if args.fs26_service is not None:
+            engine = FS26Engine(args.workspace, args.fs26_service, args.timeout)
+            factory = create_fs26_server
+        else:
+            engine = Engine(args.workspace, args.engine, args.timeout)
+            factory = create_server
         info = asyncio.run(engine.check())
     except (OSError, ValueError, RuntimeError) as exc:
-        parser.exit(2, f"FreeShip engine startup failed: {exc}. Install the matching Windows wheel.\n")
+        parser.exit(2, f"FreeShip engine startup failed: {exc}\n")
     if args.check:
         print(json.dumps(info, ensure_ascii=False, indent=2))
         return
-    create_server(engine).run(transport="stdio")
+    factory(engine).run(transport="stdio")
 
 
 if __name__ == "__main__":

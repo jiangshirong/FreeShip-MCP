@@ -1,0 +1,138 @@
+{
+  "title": "40 米排水型工作船初步设计",
+  "vessel_type": "排水型工作船",
+  "seed_model_sha256": "a2899d0887b21d444e68d7966f1af129bc07c0c80bed6be22dc75deaaa6fe8bd",
+  "variants": [
+    {
+      "name": "baseline",
+      "edit": null
+    },
+    {
+      "name": "widened",
+      "edit": {
+        "action": "move_points",
+        "moves": [
+          {
+            "point_id": 31,
+            "position": [
+              20.0,
+              2.85,
+              0.0
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "loading_book": {
+    "shared_items": [
+      {
+        "name": "空船",
+        "x": 20.0,
+        "y": 0.0,
+        "z": 2.1,
+        "kind": "fixed",
+        "mass": 400.0
+      }
+    ],
+    "cases": [
+      {
+        "name": "设计装载",
+        "items": [
+          {
+            "name": "载荷",
+            "x": 20.0,
+            "y": 0.0,
+            "z": 2.6,
+            "kind": "fixed",
+            "mass": 60.0
+          }
+        ]
+      },
+      {
+        "name": "减载",
+        "items": [
+          {
+            "name": "载荷",
+            "x": 20.15,
+            "y": 0.0,
+            "z": 2.6,
+            "kind": "fixed",
+            "mass": 30.0
+          }
+        ]
+      }
+    ],
+    "criteria": [
+      [
+        20.0,
+        0.15
+      ],
+      [
+        30.0,
+        0.25
+      ]
+    ]
+  },
+  "heel_angles_degrees": [
+    0.0,
+    5.0,
+    10.0,
+    15.0,
+    20.0,
+    25.0,
+    30.0
+  ],
+  "performance_case": "设计装载",
+  "speeds": {
+    "start_kn": 6.0,
+    "design_kn": 8.0,
+    "end_kn": 10.0
+  },
+  "resistance_values": {
+    "NpBox": 1.0,
+    "DpBox": 3.0,
+    "FungWake": 0.1,
+    "FungDeduction": 0.1,
+    "FungEtaR": 1.0,
+    "FungTransomDraftRatio": 0.0
+  },
+  "propeller_values": {
+    "Edit2": 130.0,
+    "Edit3": 200.0,
+    "Edit12": 1.0,
+    "Edit13": 4.0,
+    "Edit14": 0.6
+  },
+  "acceptance": {
+    "max_upright_immersion_m": 3.08,
+    "max_performance_trim_m": 0.05,
+    "max_performance_upright_gz_m": 0.005,
+    "max_design_resistance_kn": 12.55,
+    "min_matched_speed_kn": 9.0
+  },
+  "drawing_sections": {
+    "stations_m": [
+      4.0,
+      8.0,
+      12.0,
+      16.0,
+      20.0,
+      24.0,
+      28.0,
+      32.0,
+      36.0
+    ],
+    "waterlines_m": [
+      1.0,
+      2.0,
+      3.0,
+      4.0
+    ],
+    "buttocks_m": [
+      1.0,
+      2.0,
+      3.0
+    ]
+  }
+}

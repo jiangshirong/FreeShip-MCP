@@ -9,3 +9,10 @@ software regression fixture, not a design recommendation or a real ship.
 
 Both use fv462 and contain no third-party model data or personal information.
 Regenerate using `python scripts/create_examples.py --output-dir examples`.
+
+## FreeShip 26 design brief
+
+`workboat-brief.json` compares the original synthetic hull with a variant whose amidships
+control point moves 50 mm outboard. It defines the loading, stability, resistance and
+propulsion checks used by `run_design_brief`. The [quick start](../README.md#start) shows how
+to configure the service and the [example study](../README.md#workboat) explains how to run it.

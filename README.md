@@ -1,108 +1,94 @@
-# FreeShip MCP
+<a id="top"></a>
 
-[简体中文](README.zh-CN.md)
+<p align="right"><a href="README.zh-CN.md">简体中文</a> · <strong>English</strong></p>
 
-A Windows MCP server for FreeShip model inspection, control-net editing, hull transformation, geometry diagnostics and engineering exports. Powered by the native FreeShip Plus engine.
+<p align="center">
+  <img src="docs/assets/hero.png" width="100%" alt="FreeShip MCP with profile, waterlines and transverse sections from the example workboat">
+</p>
 
-## Features
+**FreeShip MCP connects an AI client to the native FreeShip 26 document service.** Read or edit a hull, compare loading and performance, and deliver an FBM model, DXF lines plan and a traceable assessment.
 
-- Read and write FBM/FTM models, including fv335 and fv462.
-- Edit control points, edges and faces; scale geometry and apply Lackenby transformations.
-- Generate stations, waterlines and buttocks at specified positions.
-- Inspect topology, sampled curve quality and coordinate constraints.
-- Calculate hydrostatics at individual drafts or across a draft range.
-- Export three-view DXF linesplans and CSV/XLSX reports with source manifests.
+<p align="center">
+  <a href="#start"><strong>Quick start</strong></a> &nbsp;·&nbsp;
+  <a href="#workboat">40 m workboat</a> &nbsp;·&nbsp;
+  <a href="#tools">MCP tools</a> &nbsp;·&nbsp;
+  <a href="#development">Development</a>
+</p>
 
-## Installation
+<p align="center">
+  <a href="https://github.com/jiangshirong/FreeShip-26/releases/latest">FreeShip 26 for Windows</a> &nbsp;·&nbsp;
+  <a href="https://github.com/jiangshirong/FreeShip-MCP/tree/legacy/lazarus">Lazarus edition</a>
+</p>
 
-**Platform:** Windows 10/11 x64. **Transport:** stdio.
+<a id="workboat"></a>
 
-Install from source with Python 3.11 or later:
+## From a design brief to a selected hull
 
-```powershell
-git clone https://github.com/jiangshirong/FreeShip-MCP.git
-cd FreeShip-MCP
+<p align="center">
+  <img src="docs/assets/workboat-en.png" width="100%" alt="Computed GZ curves and resistance comparison for the 40 m synthetic workboat">
+</p>
+
+The [example brief](examples/workboat-brief.json) evaluates two variants of the same synthetic hull. The baseline exceeds the **12.55 kN** resistance limit at **8 kn**. Moving one amidships control point **50 mm** outboard changes the computed resistance from **12.63 to 12.50 kN**. The revised hull passes all ten brief checks. The selected hull's B-series match gives **9.17 kn** at **130 kW and 200 rpm**.
+
+To reproduce it, copy [synthetic-hull.fbm](examples/synthetic-hull.fbm) into the configured workspace. Give your client the example brief and call `run_design_brief` with `model_path: "synthetic-hull.fbm"` and a fresh `output_directory`, such as `workboat-study`. The server records the exact brief, candidate FBMs, calculation evidence and the selected hull's native DXF. The brief contains illustrative acceptance limits for preliminary design. Class rules, structural checks and real-vessel validation are separate work.
+
+<a id="start"></a>
+
+## Quick start
+
+Use **Windows x64**, **Python 3.11+** and an installed [FreeShip 26 Windows runtime](https://github.com/jiangshirong/FreeShip-26/releases/latest). Point to `FreeShipDocumentService.exe` inside its installation directory so the service can find its companion executables and Qt libraries.
+
+~~~powershell
+git clone https://github.com/jiangshirong/FreeShip-MCP.git C:\MCP\FreeShip-MCP
+cd C:\MCP\FreeShip-MCP
 py -3.11 -m venv .venv
-.venv\Scripts\python -m pip install -r requirements-dev.lock
-.venv\Scripts\python -m pip install --no-deps --no-build-isolation -e .
-scripts\bootstrap-toolchain.ps1
-scripts\build-engine.ps1
-```
+.\.venv\Scripts\python.exe -m pip install -r requirements-dev.lock
+.\.venv\Scripts\python.exe -m pip install --no-deps --no-build-isolation -e .
+New-Item -ItemType Directory -Force C:\HullWork
+Copy-Item examples\synthetic-hull.fbm C:\HullWork\
+~~~
 
-## Configuration
+Add a local stdio server in your MCP client. Adjust the paths to match your installation.
 
-Create a workspace directory and add the server to your MCP client configuration:
-
-```json
+~~~json
 {
   "mcpServers": {
     "freeship": {
-      "command": "C:\\MCP\\FreeShip-MCP\\.venv\\Scripts\\freeship-mcp.exe",
-      "args": ["--workspace", "C:\\HullWork", "--timeout", "120"]
+      "command": "C:\\MCP\\FreeShip-MCP\\.venv\\Scripts\\python.exe",
+      "args": [
+        "-m", "freeship_mcp.server",
+        "--workspace", "C:\\HullWork",
+        "--fs26-service", "C:\\Users\\YourName\\AppData\\Local\\Programs\\FreeShip26Qt\\FreeShipDocumentService.exe"
+      ]
     }
   }
 }
-```
+~~~
 
-Set `command` to the absolute path of `.venv\Scripts\freeship-mcp.exe` in your checkout.
+Run the same command with `--check` to verify that the FS26 service starts and list the available tools. Try asking the client to inspect `synthetic-hull.fbm` and calculate hydrostatics at a draft of **3 m**. File paths are scoped to the workspace. Saved artifacts use new names and carry source provenance.
 
-| Option | Description |
-|---|---|
-| `--workspace` | Required existing directory containing input models and outputs |
-| `--timeout` | Native operation timeout in seconds; default `120` |
-| `--engine` | Optional path to a compatible native engine |
-| `--check` | Check engine compatibility and exit |
+<a id="tools"></a>
 
-Paths are restricted to the configured workspace. Outputs use new filenames. Logs are written to stderr.
+## MCP tools
 
-## Tools
+| Task | Tools |
+| --- | --- |
+| Read and verify models | `engine_info`, `inspect_model`, `validate_model` |
+| Model and refine a hull | `create_hull`, `edit_control_net`, `rebuild_hull`, `save_model` |
+| Calculate hydrostatics and stability | `calculate_hydrostatics`, `inspect_loading_book`, `save_loading_book`, `calculate_stability` |
+| Compare performance and match a propeller | `inspect_performance_inputs`, `calculate_performance`, `compare_resistance`, `calculate_propulsion_chain` |
+| Deliver a design study | `export_linesplan_dxf`, `run_design_brief` |
 
-| Tool | Description |
-|---|---|
-| `engine_info` | Engine version, upstream revision and capabilities |
-| `inspect_model` | Project settings, geometry bounds, layers, units and control-net indices |
-| `validate_model` | Topology, adjacent face orientation and open-boundary diagnostics |
-| `edit_control_net` | Move, align or relax points; split edges/faces; add or delete faces; set creases |
-| `analyze_hull_quality` | Sampled curve diagnostics and explicit coordinate checks |
-| `verify_model_targets` | Compare model measurements with specified targets and tolerances |
-| `check_export_source` | Verify export and source-model hashes |
-| `save_model` | Save or convert FBM/FTM models |
-| `scale_model` | Scale geometry and project dimensions |
-| `rebuild_hull` | Apply a Lackenby transformation to selected layers |
-| `generate_sections` | Generate stations, waterlines and buttocks |
-| `calculate_hydrostatics` | Calculate at a specified draft, trim and heel |
-| `calculate_hydrostatics_series` | Calculate for a draft list or range |
-| `export_linesplan_dxf` | Export profile, plan and body views with outlines, grids and labels |
-| `export_hydrostatics` | Export CSV or XLSX data and charts |
+`inspect_model(include_control_net=true)` returns the entity IDs and SHA-256 for the current file. Use that hash on edits, then inspect the saved copy before applying further edits. Model coordinates follow the model's units. Loading-book weights are in metric tonnes, coordinates and tank dimensions in metres, and tank fill in percent.
 
-API physical units are metres, metric tonnes and degrees; areas and volumes use m² and m³. Legacy FBM text encoding supports `cp1252`, `cp1251` and `utf8`.
+The FS26 backend exposes native van Oortmerssen, Hollenbach and Fung resistance methods and Wageningen B-series propulsion. `inspect_performance_inputs` lists the solver fields, units and ranges. The design-brief workflow uses Fung at the named load case's upright midpoint draft, within the brief's trim and upright GZ limits.
 
-Local edits require the model SHA-256 returned by inspection. Target values and tolerances are explicit inputs. Version 0.3.2 uses native protocol 3; update the server and engine together.
+<a id="development"></a>
 
-Model-writing tools default to `output_version: 335`. Use `0` to preserve the input version or `462` to select fv462. `output_path` is used exactly as specified, without version suffixes.
+## Development and credits
 
-## Documentation
+- **FS26 integration tests.** Set `FREESHIP_MCP_TEST_FS26_SERVICE` to the full path of the installed document service, then run `.\.venv\Scripts\python.exe -m pytest -q -k "not standalone"` after building the legacy test engine. Its instructions and historical verification records are in the [development guide](docs/development.md) and [verification notes](docs/verification.md).
+- **Legacy behavior.** Existing launches without `--fs26-service` select the Lazarus engine. This path requires the legacy engine built from source. The [Lazarus branch](https://github.com/jiangshirong/FreeShip-MCP/tree/legacy/lazarus) preserves the previous edition and its setup.
+- **License.** [GPL-3.0-or-later](LICENSE). See [NOTICE](NOTICE) for FreeShip, FreeShip Plus and dependency attributions. The [original examples](examples/README.md) use synthetic geometry.
 
-- [Local editing, diagnostics and DXF options](docs/local-editing.md)
-- [Units and numerical semantics](docs/numerics.md)
-- [Target verification and export manifests](docs/target-verification.md)
-- [Build and packaging](docs/development.md)
-- [Tests and validation coverage](docs/verification.md)
-- [Synthetic test models](examples)
-
-## Development
-
-```powershell
-py -3.11 -m venv .venv
-.venv\Scripts\python -m pip install -r requirements-dev.lock
-.venv\Scripts\python -m pip install --no-deps --no-build-isolation -e .
-scripts\bootstrap-toolchain.ps1
-scripts\build-engine.ps1
-.venv\Scripts\python -m pytest -q
-```
-
-The build uses Free Pascal 3.2.2 and Lazarus 3.2. Pinned upstream sources and build instructions are included in the repository; see [UPSTREAM.json](UPSTREAM.json) and [upstream changes](docs/upstream-changes.md).
-
-## License
-
-[GPL-3.0-or-later](LICENSE). Original FreeShip and dependency notices are retained in [NOTICE](NOTICE). This project is an independent FreeShip adapter.
+[Back to top](#top)

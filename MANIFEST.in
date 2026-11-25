@@ -4,7 +4,7 @@ recursive-include .github *.yml
 recursive-include engine *.pas *.lpr *.lpi
 recursive-include scripts *.py *.ps1
 recursive-include scripts *.spec
-recursive-include docs *.md *.json
+recursive-include docs *.md *.json *.png
 recursive-include tests *.py
 recursive-include examples *.fbm *.ftm *.json *.md
 recursive-include vendor/freeship *

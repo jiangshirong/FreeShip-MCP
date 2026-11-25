@@ -8,6 +8,9 @@ PUBLIC-FILES.txt
 README.md
 README.zh-CN.md
 UPSTREAM.json
+docs/assets/hero.png
+docs/assets/workboat-en.png
+docs/assets/workboat-zh-CN.png
 docs/development.md
 docs/development.zh-CN.md
 docs/local-editing.md
@@ -27,6 +30,7 @@ engine/freeship_engine.lpr
 examples/README.md
 examples/box.fbm
 examples/synthetic-hull.fbm
+examples/workboat-brief.json
 pyproject.toml
 requirements-dev.lock
 requirements.lock
@@ -48,6 +52,11 @@ src/freeship_mcp/__init__.py
 src/freeship_mcp/editing.py
 src/freeship_mcp/engine.py
 src/freeship_mcp/exporters.py
+src/freeship_mcp/fs26.py
+src/freeship_mcp/fs26_analysis.py
+src/freeship_mcp/fs26_editing.py
+src/freeship_mcp/fs26_service.py
+src/freeship_mcp/fs26_workflow.py
 src/freeship_mcp/licenses/FPC-RTL-COPYING.FPC
 src/freeship_mcp/licenses/FPC-RTL-COPYING.txt
 src/freeship_mcp/licenses/FreeShip-MCP-GPL-3.0.txt
@@ -180,6 +189,9 @@ src/freeship_mcp/linesplan.py
 src/freeship_mcp/quality.py
 src/freeship_mcp/server.py
 src/freeship_mcp/verification.py
+tests/test_fs26.py
+tests/test_fs26_analysis.py
+tests/test_fs26_workflow.py
 tests/test_invariants.py
 tests/test_local_editing.py
 tests/test_mcp.py
